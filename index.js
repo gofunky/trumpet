@@ -1,9 +1,9 @@
 var sax = require('sax');
-var Stream = require('stream').Stream;
+var select = require('./lib/select');
 
 module.exports = function (fn) {
     var parser = sax.parser(false);
-    var stream = new Stream;
+    var stream = select();
     
     function write (buf) {
         stream.emit('data', buf);
@@ -17,9 +17,6 @@ module.exports = function (fn) {
             write : write,
         };
     }
-    
-    stream.writable = true;
-    stream.readable = true;
     
     var buffered = '';
     var pos = 0;
@@ -51,7 +48,6 @@ module.exports = function (fn) {
             var s = buffered.slice(0, parser.position - pos);
             fn(makeNode('text', s));
         }
-        
         stream.emit('end');
     };
     
