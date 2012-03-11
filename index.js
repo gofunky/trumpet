@@ -15,6 +15,7 @@ module.exports = function (fn) {
             source : src,
             parser : parser,
             write : write,
+            name : tag && tag.name,
             attributes  : tag && tag.attributes,
         };
     }

@@ -1,4 +1,4 @@
-var transit = require('./');
+var transit = require('../');
 var tr = transit(function (node) {
     if (node.type === 'open' || node.type === 'close') {
         node.write('(' + node.source.slice(1, -1) + ')');
@@ -10,4 +10,4 @@ var tr = transit(function (node) {
 tr.pipe(process.stdout, { end : false });
 
 var fs = require('fs');
-fs.createReadStream(__dirname + '/x.html').pipe(tr);
+fs.createReadStream(__dirname + '/ex.html').pipe(tr);

@@ -1,7 +1,7 @@
 {
     "name" : "trumpet",
     "version" : "0.0.0",
-    "description" : "streaming html parser and transformer with css selectors",
+    "description" : "parse and transform streaming html using css selectors",
     "main" : "index.js",
     "directories" : {
         "lib" : ".",
