@@ -1,0 +1,39 @@
+{
+    "name" : "trumpet",
+    "version" : "0.0.0",
+    "description" : "streaming html parser and transformer with css selectors",
+    "main" : "index.js",
+    "directories" : {
+        "lib" : ".",
+        "example" : "example",
+        "test" : "test"
+    },
+    "dependencies" : {
+        "sax" : "~0.3.5"
+    },
+    "devDependencies" : {
+        "tap" : "~0.2.3"
+    },
+    "scripts" : {
+        "test" : "tap test/*.js"
+    },
+    "repository" : {
+        "type" : "git",
+        "url" : "http://github.com/substack/node-trumpet.git"
+    },
+    "keywords" : [
+        "html",
+        "streaming",
+        "parser",
+        "transform",
+        "selectors",
+        "css"
+    ],
+    "author" : {
+        "name" : "James Halliday",
+        "email" : "mail@substack.net",
+        "url" : "http://substack.net"
+    },
+    "license" : "MIT/X11",
+    "engine" : { "node" : ">=0.4" }
+}
