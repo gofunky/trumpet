@@ -4,6 +4,16 @@ var Stream = require('stream').Stream;
 module.exports = function (fn) {
     var parser = sax.parser(false);
     var stream = new Stream;
+    function makeNode (type, src) {
+        return {
+            type : type,
+            source : src,
+            parser : parser,
+            write : function (buf) {
+                stream.emit('data', buf);
+            },
+        };
+    };
     
     stream.writable = true;
     stream.readable = true;
@@ -22,14 +32,7 @@ module.exports = function (fn) {
         var src = buffered.slice(0, len);
         buffered = buffered.slice(len);
         
-        if (fn) fn({
-            type : type,
-            source : src,
-            parser : parser,
-            write : function (buf) {
-                stream.emit('data', buf);
-            },
-        });
+        if (fn) fn(makeNode(type, src))
     };
     
     stream.write = function (buf) {
@@ -40,6 +43,11 @@ module.exports = function (fn) {
     
     stream.end = function (buf) {
         if (buf !== undefined) stream.write(buf);
+        
+        if (pos < parser.position) {
+            fn(makeNode('text', buffered.slice(0, parser.position - pos)));
+        }
+        
         stream.emit('end');
     };
     

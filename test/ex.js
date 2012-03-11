@@ -1,6 +1,5 @@
 var test = require('tap').test;
 var transit = require('../');
-
 var fs = require('fs');
 
 test(function (t) {
