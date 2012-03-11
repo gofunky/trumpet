@@ -1,6 +1,6 @@
 var transit = require('./');
 var tr = transit(function (node) {
-    if (node.name === 'open' || node.name === 'close') {
+    if (node.type === 'open' || node.type === 'close') {
         node.write('(' + node.source.slice(1, -1) + ')');
     }
     else {
