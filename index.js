@@ -10,8 +10,8 @@ module.exports = function (fn) {
     
     var buffered = '';
     var pos = 0;
-    var update = function (name) {
-        if (name === 'text') {
+    var update = function (type) {
+        if (type === 'text') {
             var len = parser.startTagPosition - pos - 1;
         }
         else {
@@ -19,11 +19,17 @@ module.exports = function (fn) {
         }
         pos = parser.position;
         
-        var s = buffered.slice(0, len);
+        var src = buffered.slice(0, len);
         buffered = buffered.slice(len);
         
-        //console.dir([ name, parser.startTagPosition, parser.position, s ]);
-        stream.emit('data', s);
+        if (fn) fn({
+            type : type,
+            source : src,
+            parser : parser,
+            write : function (buf) {
+                stream.emit('data', buf);
+            },
+        });
     };
     
     stream.write = function (buf) {
