@@ -34,6 +34,8 @@ module.exports = function (fn) {
         buffered = buffered.slice(len);
         
         if (fn) fn(makeNode(type, src, tag))
+        stream.raw(src);
+        return src;
     };
     
     stream.write = function (buf) {
@@ -53,18 +55,18 @@ module.exports = function (fn) {
     };
     
     parser.onopentag = function (tag) {
-        update('open', tag);
-        stream.update('open', tag);
+        var src = update('open', tag);
+        stream.update('open', tag, src);
     };
     
     parser.onclosetag = function (name) {
-        update('close');
         stream.update('close', name);
+        update('close');
     };
     
     parser.ontext = function (text) {
-        update('text');
-        stream.update('text', text);
+        var src = update('text');
+        stream.update('text', text, src);
     };
     
     return stream;
