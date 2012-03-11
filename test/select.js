@@ -12,16 +12,16 @@ test('select', function (t) {
     
     tr.select('.b span', function (node) {
         t.deepEqual(node.attributes, {});
-        node.text(function (text) {
-            t.equal(text, spans.shift());
+        node.html(function (html) {
+            t.equal(html, spans.shift());
         });
     });
     
     var as = [ '¡¡¡', '!!!' ];
     tr.select('.a', function (node) {
         t.deepEqual(node.attributes, { class : 'a' });
-        node.text(function (text) {
-            t.equal(text, as.shift());
+        node.html(function (html) {
+            t.equal(html, as.shift());
         });
     });
 });
