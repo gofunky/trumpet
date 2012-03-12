@@ -3,7 +3,7 @@ var trumpet = require('../');
 var fs = require('fs');
 
 test('select', function (t) {
-    t.plan(5 - 2);
+    //t.plan(5 - 2);
     
     var tr = trumpet();
     fs.createReadStream(__dirname + '/selectors.html').pipe(tr);
@@ -25,20 +25,18 @@ test('select', function (t) {
         t.fail('there are no divs inside spans');
     });
     
-    /*
     tr.select('.b + .c', function (node) {
         node.html(function (html) {
             t.equal(html, 'C');
         });
     });
     
-    tr.select('.y + .z', function (node) {
-console.dir(node);
+    tr.select('.d + .e .y + .z', function (node) {
         node.html(function (html) {
             t.equal(html, 'Z');
+            t.end();
         });
     });
-    */
     
     tr.select('.b + .d', function (node) {
         t.fail('b is not an immediate sibling of d');
