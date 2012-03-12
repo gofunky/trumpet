@@ -1,9 +1,12 @@
 var sax = require('sax');
 var select = require('./lib/select');
 
-module.exports = function () {
+module.exports = function (opts) {
+    if (!opts) opts = {};
+    if (!opts.special) opts.special = [ 'input', 'img', 'br', 'hr' ];
+    
     var parser = sax.parser(false);
-    var stream = select(parser);
+    var stream = select(parser, opts);
     
     function write (buf) {
         stream.emit('data', buf);
