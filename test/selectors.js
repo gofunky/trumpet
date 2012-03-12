@@ -6,7 +6,7 @@ test('select', function (t) {
     t.plan(1);
     
     var tr = trumpet();
-    fs.createReadStream(__dirname + '/select.html').pipe(tr);
+    fs.createReadStream(__dirname + '/selectors.html').pipe(tr);
     
     tr.select('.b * u', function (node) {
         t.fail('* should only go 1 level');
