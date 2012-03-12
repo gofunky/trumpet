@@ -1,5 +1,5 @@
-var transit = require('../');
-var tr = transit();
+var trumpet = require('../');
+var tr = trumpet();
 
 tr.select('.b span', function (node) {
     node.html(function (html) {

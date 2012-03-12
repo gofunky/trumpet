@@ -12,8 +12,8 @@ select
 ------
 
 ``` js
-var transit = require('trumpet');
-var tr = transit();
+var trumpet = require('trumpet');
+var tr = trumpet();
 
 tr.select('.b span', function (node) {
     node.html(function (html) {

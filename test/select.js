@@ -1,11 +1,11 @@
 var test = require('tap').test;
-var transit = require('../');
+var trumpet = require('../');
 var fs = require('fs');
 
 test('select', function (t) {
     t.plan(6 + 4);
     
-    var tr = transit();
+    var tr = trumpet();
     fs.createReadStream(__dirname + '/select.html').pipe(tr);
     
     var spans = [ 'tacos', 'y', 'burritos' ];

@@ -1,11 +1,11 @@
 var test = require('tap').test;
-var transit = require('../');
+var trumpet = require('../');
 var fs = require('fs');
 
 test('update', function (t) {
     var html = fs.readFileSync(__dirname + '/update_target.html', 'utf8');
     
-    var tr = transit();
+    var tr = trumpet();
     fs.createReadStream(__dirname + '/update.html').pipe(tr);
     
     var spans = [ 'tacos', 'y', 'burritos' ];
