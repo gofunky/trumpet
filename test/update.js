@@ -11,8 +11,8 @@ test('update', function (t) {
     var spans = [ 'tacos', 'y', 'burritos' ];
     
     tr.select('.b span', function (node) {
-        node.update(function (html, emit) {
-            emit(html.toUpperCase());
+        node.update(function (html) {
+            return html.toUpperCase();
         });
     });
     
