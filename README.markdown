@@ -3,6 +3,8 @@ trumpet
 
 Parse and transform streaming html using css selectors.
 
+![trumpet](http://substack.net/images/trumpet.png)
+
 example
 =======
 
