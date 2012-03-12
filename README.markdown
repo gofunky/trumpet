@@ -3,6 +3,8 @@ trumpet
 
 Parse and transform streaming html using css selectors.
 
+[![build status](https://secure.travis-ci.org/substack/node-trumpet.png)](http://travis-ci.org/substack/node-trumpet)
+
 ![trumpet](http://substack.net/images/trumpet.png)
 
 example
