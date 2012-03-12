@@ -3,7 +3,12 @@ var select = require('./lib/select');
 
 module.exports = function (opts) {
     if (!opts) opts = {};
-    if (!opts.special) opts.special = [ 'input', 'img', 'br', 'hr' ];
+    if (!opts.special) {
+        opts.special = [
+            'area', 'base', 'basefont', 'br', 'col',
+            'hr', 'input', 'img', 'link', 'meta'
+        ];
+    }
     opts.special = opts.special.map(function (x) { return x.toUpperCase() });
     
     var parser = sax.parser(false);

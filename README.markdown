@@ -135,8 +135,8 @@ methods
 
 var trumpet = require('trumpet')
 
-var tr = trumpet()
-------------------
+var tr = trumpet(opts)
+----------------------
 
 Create a new trumpet stream. This stream is readable and writable.
 Pipe an html stream into `tr` and get back a transformed html stream.
