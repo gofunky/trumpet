@@ -8,13 +8,22 @@ test('select', function (t) {
     var tr = trumpet();
     fs.createReadStream(__dirname + '/selectors.html').pipe(tr);
     
-    tr.select('.b * u', function (node) {
-        t.fail('* should only go 1 level');
+    /*
+    tr.select('* u', function (node) {
+        t.equal(node.name, 'b');
+        node.html(function (html) {
+            t.equal('<u>y</u>');
+        });
     });
+    */
     
     tr.select('.b > i', function (node) {
         node.html(function (html) {
             t.equal(html, 'burritos');
         });
+    });
+    
+    tr.select('span > div', function (node) {
+        t.fail('there are no divs inside spans');
     });
 });
