@@ -28,7 +28,7 @@ test('update', function (t) {
     tr.on('data', function (buf) { data += buf });
     
     tr.on('end', function () {
-        t.equal(html, data);
+        t.equal(data, html);
         t.end();
     });
 });
