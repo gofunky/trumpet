@@ -51,6 +51,83 @@ span: y
 span: burritos
 ```
 
+update
+------
+
+``` js
+var trumpet = require('trumpet');
+var tr = trumpet();
+ 
+tr.select('.b span', function (node) {
+    node.update(function (html) {
+        return html.toUpperCase();
+    });
+});
+
+tr.select('.c', function (node) {
+    node.update('---');
+});
+
+tr.select('.d', function (node) {
+    node.remove();
+});
+
+var fs = require('fs');
+tr.pipe(process.stdout, { end : false });
+fs.createReadStream(__dirname + '/update.html').pipe(tr);
+```
+
+``` html
+<html>
+  <head>
+    <title>beep</title>
+  </head>
+  <body>
+    <div class="a">¡¡¡</div>
+    <div class="b">
+      <span>tacos</span>
+      <span>y</span>
+      <span>burritos</span>
+    </div>
+    <div class="a">!!!</div>
+    
+    <div class="c">
+        <span>beep</span>
+        <span>boop</span>
+    </div>
+    
+    <div class="d">
+        <span>x</span>
+        <span>y</span>
+    </div>
+  </body>
+</html>
+```
+
+output:
+
+```
+$ node example/update.js
+<html>
+  <head>
+    <title>beep</title>
+  </head>
+  <body>
+    <div class="a">¡¡¡</div>
+    <div class="b">
+      <span>TACOS</span>
+      <span>Y</span>
+      <span>BURRITOS</span>
+    </div>
+    <div class="a">!!!</div>
+    
+    <div class="c">---</div>
+    
+    
+  </body>
+</html>
+```
+
 methods
 =======
 
