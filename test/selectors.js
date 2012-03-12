@@ -3,7 +3,7 @@ var trumpet = require('../');
 var fs = require('fs');
 
 test('select', function (t) {
-    t.plan(5);
+    t.plan(6);
     
     var tr = trumpet();
     fs.createReadStream(__dirname + '/selectors.html').pipe(tr);
@@ -39,5 +39,11 @@ test('select', function (t) {
     
     tr.select('.b + .d', function (node) {
         t.fail('b is not an immediate sibling of d');
+    });
+    
+    tr.select('.q > .s .m + .n * .v + .u v + w', function (node) {
+        node.html(function (html) {
+            t.equal(html, 'www');
+        });
     });
 });
