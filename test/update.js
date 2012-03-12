@@ -28,6 +28,10 @@ test('update', function (t) {
         node.remove();
     });
     
+    tr.select('.f', function (node) {
+        node.replace('<b>NOTHING TO SEE HERE</b>');
+    });
+    
     var data = '';
     tr.on('data', function (buf) { data += buf });
     
