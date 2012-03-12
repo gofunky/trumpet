@@ -3,19 +3,17 @@ var trumpet = require('../');
 var fs = require('fs');
 
 test('select', function (t) {
-    t.plan(1);
+    t.plan(3);
     
     var tr = trumpet();
     fs.createReadStream(__dirname + '/selectors.html').pipe(tr);
     
-    /*
     tr.select('* u', function (node) {
-        t.equal(node.name, 'b');
+        t.equal(node.name, 'u');
         node.html(function (html) {
-            t.equal('<u>y</u>');
+            t.equal(html, 'y');
         });
     });
-    */
     
     tr.select('.b > i', function (node) {
         node.html(function (html) {
