@@ -51,6 +51,7 @@ module.exports = function (fn) {
         if (pos < parser.position) {
             var s = buffered.slice(0, parser.position - pos);
             if (fn) fn(makeNode('text', s));
+            stream.raw(s);
         }
         stream.emit('end');
     };
