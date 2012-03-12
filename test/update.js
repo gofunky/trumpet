@@ -25,7 +25,7 @@ test('update', function (t) {
     });
     
     tr.select('.e', function (node) {
-        node.replace('<b>BEEPITY</b>');
+        node.remove();
     });
     
     var data = '';
