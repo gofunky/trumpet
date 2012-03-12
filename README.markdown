@@ -56,24 +56,11 @@ methods
 
 var trumpet = require('trumpet')
 
-var tr = trumpet(fn)
---------------------
+var tr = trumpet()
+------------------
 
 Create a new trumpet stream. This stream is readable and writable.
 Pipe an html stream into `tr` and get back a transformed html stream.
-
-Optionally supply a function `fn(node)` that will get raw parsing events.
-
-`node` is an object with these keys:
-
-* type - 'open', 'close', or 'text'
-* source - source string of the present parse event from the input stream
-* name - name of the html element (div, span, ...)
-* attributes - attributes from the html element
-* write(s) - write text to the output stream
-* parser - the raw [sax](https://github.com/isaacs/sax-js) parser object
-
-These nodes are different from the higher-level nodes you get with `.select()`.
 
 tr.select(selector, fn)
 -----------------------
