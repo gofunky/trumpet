@@ -56,18 +56,21 @@ module.exports = function (fn) {
     };
     
     parser.onopentag = function (tag) {
-        var src = update('open', tag);
-        stream.update('open', tag, src);
+        stream.pre('open', tag);
+        update('open', tag);
+        stream.post('open', tag);
     };
     
     parser.onclosetag = function (name) {
-        stream.update('close', name);
+        stream.pre('close', name);
         update('close');
+        stream.post('close', name);
     };
     
     parser.ontext = function (text) {
-        var src = update('text');
-        stream.update('text', text, src);
+        stream.pre('text', text);
+        update('text');
+        stream.post('text', text);
     };
     
     return stream;
