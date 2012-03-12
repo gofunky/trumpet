@@ -1,6 +1,6 @@
 {
     "name" : "trumpet",
-    "version" : "0.0.0",
+    "version" : "0.1.0",
     "description" : "parse and transform streaming html using css selectors",
     "main" : "index.js",
     "directories" : {
