@@ -217,6 +217,19 @@ node.remove()
 
 Remove a node completely from the output stream.
 
+selector syntax
+===============
+
+Presently these [css selectors](http://www.w3.org/TR/CSS2/selector.html) work:
+
+* *
+* E
+* E F
+* E > F
+* E + F
+* E.class
+* E#id
+
 install
 =======
 
