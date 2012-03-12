@@ -102,6 +102,21 @@ Get the inner text and html for the element, which may not have arrived yet.
 
 `cb(text)` fires when the inner contents are ready.
 
+node.update(cb)
+---------------
+
+Replace the node's inner contents with the string return value from `cb(html)`.
+
+node.update(html)
+-----------------
+
+Replace the node's inner contents with a string `html`.
+
+node.remove()
+-------------
+
+Remove a node completely from the output stream.
+
 install
 =======
 
