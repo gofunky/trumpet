@@ -141,6 +141,16 @@ var tr = trumpet(opts)
 Create a new trumpet stream. This stream is readable and writable.
 Pipe an html stream into `tr` and get back a transformed html stream.
 
+
+By default, trumpet uses this list of
+[self-closing tags](http://stackoverflow.com/questions/97522/what-are-all-the-valid-self-closing-tags-in-xhtml-as-implemented-by-the-major-b):
+
+``` js
+[ 'area', 'base', 'basefont', 'br', 'col', 'hr', 'input', 'img', 'link', 'meta' ]
+```
+
+You can specify a custom list by setting `opts.special`.
+
 tr.select(selector, fn)
 -----------------------
 
