@@ -24,6 +24,10 @@ test('update', function (t) {
         node.remove();
     });
     
+    tr.select('.e', function (node) {
+        node.replace('<b>BEEPITY</b>');
+    });
+    
     var data = '';
     tr.on('data', function (buf) { data += buf });
     
