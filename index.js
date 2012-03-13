@@ -21,7 +21,10 @@ module.exports = function (opts) {
     var buffered = '';
     var pos = 0;
     var update = function (type, tag) {
-        if (type === 'text') {
+        if (type === 'script') {
+            var len = tag.length;
+        }
+        else if (type === 'text') {
             var len = parser.startTagPosition - pos - 1;
         }
         else {
@@ -68,6 +71,12 @@ module.exports = function (opts) {
         stream.pre('text', text);
         update('text');
         stream.post('text', text);
+    };
+    
+    parser.onscript = function (src) {
+        stream.pre('script', src);
+        update('script', src);
+        stream.post('script', src);
     };
     
     return stream;
