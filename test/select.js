@@ -3,7 +3,7 @@ var trumpet = require('../');
 var fs = require('fs');
 
 test('select', function (t) {
-    t.plan(6 + 4);
+    t.plan(11);
     
     var tr = trumpet();
     fs.createReadStream(__dirname + '/select.html').pipe(tr);
@@ -22,6 +22,12 @@ test('select', function (t) {
         t.deepEqual(node.attributes, { class : 'a' });
         node.html(function (html) {
             t.equal(html, as.shift());
+        });
+    });
+    
+    tr.select('.c', function (node) {
+        node.html(function (html) {
+            t.equal(html, '<b>beep</b><i>boop</i>');
         });
     });
 });
