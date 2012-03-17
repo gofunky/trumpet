@@ -3,7 +3,7 @@ var trumpet = require('../');
 var fs = require('fs');
 
 test('special tags', function (t) {
-    t.plan(5);
+    t.plan(6);
     
     var tr = trumpet();
     fs.createReadStream(__dirname + '/special.html').pipe(tr);
@@ -20,7 +20,7 @@ test('special tags', function (t) {
         });
     });
     
-    var types = [ 'text', 'password', 'submit' ];
+    var types = [ 'text', 'text', 'password', 'submit' ];
     tr.select('input', function (node) {
         t.equal(node.attributes.type, types.shift());
     });
