@@ -29,7 +29,7 @@ test('special tags', function (t) {
         t.equal(node.attributes.type, 'submit');
     });
     
-    tr.select('input + .d', function (node) {
+    tr.select('br + .d', function (node) {
         node.html(function (html) {
             t.equal(html, 'wooo');
         });
