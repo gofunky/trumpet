@@ -141,6 +141,7 @@ var tr = trumpet(opts)
 Create a new trumpet stream. This stream is readable and writable.
 Pipe an html stream into `tr` and get back a transformed html stream.
 
+Parse errors are emitted by `tr` in an `'error'` event.
 
 By default, trumpet uses this list of
 [self-closing tags](http://stackoverflow.com/questions/97522/what-are-all-the-valid-self-closing-tags-in-xhtml-as-implemented-by-the-major-b):
