@@ -27,6 +27,10 @@ module.exports = function (opts) {
         else if (type === 'text') {
             var len = parser.startTagPosition - pos - 1;
         }
+        else if (type === 'open' && tag && tag.name === 'SCRIPT'
+        && tag.attributes.src) {
+            var len = 0;
+        }
         else {
             var len = parser.position - parser.startTagPosition + 1;
         }
