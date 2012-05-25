@@ -3,6 +3,7 @@ var trumpet = require('../');
 var fs = require('fs');
 
 test('update', function (t) {
+    t.plan(2);
     var html = fs.readFileSync(__dirname + '/update_target.html', 'utf8');
     
     var tr = trumpet();
@@ -32,11 +33,17 @@ test('update', function (t) {
         node.replace('<b>NOTHING TO SEE HERE</b>');
     });
     
+    tr.select('.g', function (node) {
+        node.replace(function (html) {
+            t.equal(html, '<div class="g">EVERYTHING IS TERRIBLE</div>');
+            return '<blink>TERRIBLE</blink>';
+        });
+    });
+    
     var data = '';
     tr.on('data', function (buf) { data += buf });
     
     tr.on('end', function () {
         t.equal(data, html);
-        t.end();
     });
 });
