@@ -205,7 +205,7 @@ node.replace(cb)
 ----------------
 
 Replace the node's outer content with the string return value from
-`cb(html)`. The `html` will be the inner contents.
+`cb(html)`. The `html` will be the outer contents.
 
 node.replace(html)
 ------------------
