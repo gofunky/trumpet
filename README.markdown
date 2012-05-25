@@ -204,18 +204,18 @@ Replace the node's inner contents with a string `html`.
 node.replace(cb)
 ----------------
 
-Replace completely the node's inner context with the string return value from
+Replace the node's outer content with the string return value from
 `cb(html)`. The `html` will be the inner contents.
 
 node.replace(html)
 ------------------
 
-Replace completely the node's contents with a string `html`.
+Replace the node's outer contents with a string `html`.
 
 node.remove()
 -------------
 
-Remove a node completely from the output stream.
+Remove a node from the output stream.
 
 selector syntax
 ===============
