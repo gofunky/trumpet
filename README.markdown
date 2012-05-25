@@ -191,26 +191,20 @@ Get the inner text and html for the element, which may not have arrived yet.
 
 `cb(text)` fires when the inner contents are ready.
 
-node.update(cb)
----------------
+node.update(cb, attr), node.update(html, attr)
+----------------------------------------------
 
-Replace the node's inner contents with the string return value from `cb(html)`.
+Replace the node's inner contents with the string `html` or the string return
+value from `cb(html)`.
 
-node.update(html)
------------------
+If `attr` is specified, these will be used in the output stream as the new tag
+attributes instead of `node.attributes`.
 
-Replace the node's inner contents with a string `html`.
+node.replace(cb), node.replace(html)
+------------------------------------
 
-node.replace(cb)
-----------------
-
-Replace the node's outer content with the string return value from
-`cb(html)`. The `html` will be the outer contents.
-
-node.replace(html)
-------------------
-
-Replace the node's outer contents with a string `html`.
+Replace the node's outer content with the string `html` or the return value from
+`cb(html)`. The `html` passed to `cb` will be the outer contents.
 
 node.remove()
 -------------
