@@ -3,7 +3,7 @@ var trumpet = require('../');
 var fs = require('fs');
 
 test('update', function (t) {
-    t.plan(5);
+    t.plan(6);
     var html = fs.readFileSync(__dirname + '/update_target.html', 'utf8');
     
     var tr = trumpet();
@@ -12,7 +12,7 @@ test('update', function (t) {
     var spans = [ 'tacos', 'y', 'burritos' ];
     
     tr.update('.b span', function (html, node) {
-        t.equal(node.name, 'div');
+        t.equal(node.name, 'span');
         t.same(node.attributes, { class : 'b' });
         return html.toUpperCase();
     });
