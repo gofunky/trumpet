@@ -154,6 +154,28 @@ Fire `fn(node)` for every element in the html stream that matches the css
 
 The nodes are described in the nodes section of this document.
 
+tr.update(selector, fn)
+-----------------------
+
+Calls `node.update(fn)` on the nodes that match the `selector`
+except that `fn` gets the `node` as a second argument.
+
+To update attributes you'll need to use the long-form of calling `tr.select()`
+then `node.update(fn, attrs)` inside the callback.
+
+tr.replace(selector, fn)
+------------------------
+
+Calls `node.replace(fn)` on the nodes that match the `selector`
+except that `fn` gets the `node` as a second argument.
+
+tr.remove(selector, fn)
+-----------------------
+
+Calls `node.remove()` on nodes that match the `selector`.
+
+If `fn` is provided, it will be called after an element is removed.
+
 nodes
 =====
 
