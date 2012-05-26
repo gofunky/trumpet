@@ -13,7 +13,6 @@ test('update', function (t) {
     
     tr.update('.b span', function (html, node) {
         t.equal(node.name, 'span');
-        t.same(node.attributes, { class : 'b' });
         return html.toUpperCase();
     });
     
@@ -24,6 +23,7 @@ test('update', function (t) {
     
     tr.replace('.g', function (html, node) {
         t.equal(node.name, 'div');
+        t.same(node.attributes, { class : 'g' });
         t.equal(html, '<div class="g">EVERYTHING IS TERRIBLE</div>');
         return '<blink>TERRIBLE</blink>';
     });
