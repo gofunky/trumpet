@@ -60,19 +60,13 @@ update
 var trumpet = require('trumpet');
 var tr = trumpet();
  
-tr.select('.b span', function (node) {
-    node.update(function (html) {
-        return html.toUpperCase();
-    });
+tr.update('.b span', function (html, node) {
+    return html.toUpperCase();
 });
 
-tr.select('.c', function (node) {
-    node.update('---');
-});
-
-tr.select('.d', function (node) {
-    node.remove();
-});
+tr.update('.c', '---');
+tr.remove('.d');
+tr.remove('.e');
 
 var fs = require('fs');
 tr.pipe(process.stdout, { end : false });
