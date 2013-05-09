@@ -9,7 +9,7 @@ test('multiclass', function (t) {
     fs.createReadStream(__dirname + '/multiclass.html').pipe(tr);
     
     tr.select('.one', function (node) {
-        t.deepEqual(node.attributes, {});
+        t.deepEqual(node.attributes, { 'class': 'one two' });
         node.html(function (html) {
             t.equal(html, 'xxx');
         });
