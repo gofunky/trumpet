@@ -29,8 +29,9 @@ module.exports = function (opts) {
     var scriptStart = 0;
     
     var update = function (type, tag) {
-        var len;
+        var len, src;
         if (type === 'script') {
+            src = tag;
             len = tag.length;
             scriptLen += len;
             inScript = true;
@@ -56,7 +57,7 @@ module.exports = function (opts) {
         
         pos = parser.position;
         
-        var src = buffered.slice(0, len);
+        src = src || buffered.slice(0, len);
         buffered = buffered.slice(len);
         
         stream.raw(src);
