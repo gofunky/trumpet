@@ -3,7 +3,7 @@ var trumpet = require('../');
 var fs = require('fs');
 
 test('multiclass', function (t) {
-    t.plan(8);
+    t.plan(10);
     
     var tr = trumpet();
     fs.createReadStream(__dirname + '/multiclass.html').pipe(tr);
@@ -42,5 +42,15 @@ test('multiclass', function (t) {
     
     tr.select('.one.eleven', function (node) {
         t.fail('should not have matched');
+    });
+    
+    tr.select('.twelve#zero.thirteen', function (node) {
+        t.deepEqual(node.attributes, {
+            id: 'zero',
+            'class': 'twelve thirteen'
+        });
+        node.html(function (html) {
+            t.equal(html, 'www');
+        });
     });
 });
