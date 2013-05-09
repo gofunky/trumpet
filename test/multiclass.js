@@ -3,7 +3,7 @@ var trumpet = require('../');
 var fs = require('fs');
 
 test('multiclass', function (t) {
-    t.plan(1);
+    t.plan(2);
     
     var tr = trumpet();
     fs.createReadStream(__dirname + '/multiclass.html').pipe(tr);
