@@ -21,4 +21,8 @@ test('multiclass', function (t) {
             t.equal(html, 'xxx');
         });
     });
+    
+    tr.select('.one.eleven', function (node) {
+        t.fail('should not have matched');
+    });
 });
