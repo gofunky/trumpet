@@ -24,20 +24,36 @@ module.exports = function (opts) {
     
     var buffered = '';
     var pos = 0;
+    var inScript = false;
+    var scriptLen = 0;
+    var scriptStart = 0;
+    
     var update = function (type, tag) {
+        var len;
         if (type === 'script') {
-            var len = tag.length;
+            len = tag.length;
+            scriptLen += len;
+            inScript = true;
         }
         else if (type === 'text') {
-            var len = parser.startTagPosition - pos - 1;
+            len = parser.startTagPosition - pos - 1;
         }
         else if (type === 'open' && tag && tag.name === 'SCRIPT'
         && tag.attributes.src) {
-            var len = 0;
+            len = 0;
+        }
+        else if (inScript) {
+            len = parser.position - scriptLen - parser.startTagPosition + 1;
+            scriptLen = 0;
+            inScript = false;
         }
         else {
-            var len = parser.position - parser.startTagPosition + 1;
+            len = parser.position - parser.startTagPosition + 1;
         }
+        if (type === 'open' && tag && tag.name === 'SCRIPT') {
+            scriptLen = len;
+        }
+        
         pos = parser.position;
         
         var src = buffered.slice(0, len);
