@@ -80,14 +80,15 @@ module.exports = function (opts) {
         stream.emit('end');
     };
     
+    var lastOpen;
     parser.onopentag = function (tag) {
+        lastOpen = tag.name;
+        
         stream.pre('open', tag);
         update('open', tag);
         stream.post('open', tag);
         if (opts.special.indexOf(tag.name) >= 0) {
             stream.pre('close', tag.name);
-            update('close');
-            stream.post('close', tag.name);
         }
     };
     
