@@ -84,6 +84,11 @@ module.exports = function (opts) {
         stream.pre('open', tag);
         update('open', tag);
         stream.post('open', tag);
+        if (opts.special.indexOf(tag.name) >= 0) {
+            stream.pre('close', tag.name);
+            update('close');
+            stream.post('close', tag.name);
+        }
     };
     
     parser.onclosetag = function (name) {

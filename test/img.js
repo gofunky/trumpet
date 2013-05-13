@@ -15,6 +15,6 @@ test('img src', function (t) {
     var data = '';
     tr.on('data', function (buf) { data += buf });
     tr.on('end', function () {
-        t.equal(data, '<img src="/robot.png">');
+        t.equal(data, '<img src="/robot.png">\n');
     });
 });
