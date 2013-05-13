@@ -48,9 +48,13 @@ module.exports = function (opts) {
             scriptLen = 0;
             inScript = false;
         }
+        else if (type === 'special') {
+            len = 0;
+        }
         else {
             len = parser.position - parser.startTagPosition + 1;
         }
+        
         if (type === 'open' && tag && tag.name === 'SCRIPT') {
             scriptLen = len;
         }
@@ -89,6 +93,8 @@ module.exports = function (opts) {
         stream.post('open', tag);
         if (opts.special.indexOf(tag.name) >= 0) {
             stream.pre('close', tag.name);
+            update('special');
+            stream.post('close', tag.name);
         }
     };
     
