@@ -12,14 +12,24 @@ module.exports = function (opts) {
     opts.special = opts.special.map(function (x) { return x.toUpperCase() });
     
     var parser = sax.parser(false);
-    var stream = select(parser, opts);
-
-    parser.onerror = function (err) {
-        stream.emit("error", err)
-    }
+    var stream = select(parser, opts, write, end);
     
     function write (buf) {
-        stream.emit('data', buf);
+        var s = buf.toString();
+        buffered += s;
+        parser.write(buf.toString());
+    }
+    
+    function end () {
+        if (pos < parser.position) {
+            var s = buffered.slice(0, parser.position - pos);
+            stream.raw(s);
+        }
+        this.queue(null);
+    }
+    
+    parser.onerror = function (err) {
+        stream.emit("error", err)
     }
     
     var buffered = '';
@@ -66,22 +76,6 @@ module.exports = function (opts) {
         
         stream.raw(src);
         return src;
-    };
-    
-    stream.write = function (buf) {
-        var s = buf.toString();
-        buffered += s;
-        parser.write(buf.toString());
-    };
-    
-    stream.end = function (buf) {
-        if (buf !== undefined) stream.write(buf);
-        
-        if (pos < parser.position) {
-            var s = buffered.slice(0, parser.position - pos);
-            stream.raw(s);
-        }
-        stream.emit('end');
     };
     
     var lastOpen;
