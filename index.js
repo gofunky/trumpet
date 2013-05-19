@@ -25,7 +25,7 @@ module.exports = function (opts) {
             var s = buffered.slice(0, parser.position - pos);
             stream.raw(s);
         }
-        this.queue(null);
+        stream.queue(null);
     }
     
     parser.onerror = function (err) {
