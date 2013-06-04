@@ -96,7 +96,7 @@ module.exports = function (opts) {
         src = buffered.slice(0, comment.length + 7)
         buffered = buffered.slice(comment.length + 7)
         stream.raw(src)
-    }
+    };
     
     parser.onclosetag = function (name) {
         stream.pre('close', name);
