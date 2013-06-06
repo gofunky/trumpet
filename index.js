@@ -61,8 +61,11 @@ module.exports = function (opts) {
         else if (type === 'special') {
             len = 0;
         }
+        else if (type === 'doctype') {
+            len = tag.length + 10;
+        }
         else {
-            len = parser.position - parser.startTagPosition + 1;
+            len = parser.position - (parser.startTagPosition || 0) + 1;
         }
         
         if (type === 'open' && tag && tag.name === 'SCRIPT') {
@@ -114,6 +117,12 @@ module.exports = function (opts) {
         stream.pre('script', src);
         update('script', src);
         stream.post('script', src);
+    };
+    
+    parser.ondoctype = function (t) {
+        stream.pre('doctype', t);
+        update('doctype', t);
+        stream.post('doctype', t);
     };
     
     return stream;
