@@ -1,10 +1,39 @@
 var sax = require('sax');
-var select = require('./lib/select');
+var through = require('through');
+var throughout = require('throughout');
 
 module.exports = function (opts) {
+    var output = through();
+    var parser = sax.createStream(false);
+    
+    parser.on('opentag', function (tag) {
+    });
+    
+    parser.on('attribute', function (attribute) {
+    });
+    
+    parser.on('opencdata', function (attribute) {
+    });
+    
+    parser.on('closecdata', function (attribute) {
+    });
+    
+    parser.on('closetag', function (tag) {
+    });
+    
+    parser.on('script', function (script) {
+    });
+    
+    parser.on('comment', function (comment) {
+    });
+    
+    parser.on('text', function (text) {
+    });
+    
+    return throughout(parser, output);
+    
     if (!opts) opts = {};
     
-    var parser = sax.parser(false);
     var stream = select(parser, opts, write, end);
     
     function write (buf) {
@@ -92,7 +121,6 @@ module.exports = function (opts) {
     };
     
     parser.onclosetag = function (name) {
-console.dir([ 'close', name ]);
         stream.pre('close', name);
         update('close');
         stream.post('close', name);
@@ -108,6 +136,12 @@ console.dir([ 'close', name ]);
         stream.pre('script', src);
         update('script', src);
         stream.post('script', src);
+    };
+    
+    parser.onattribute = function (attr) {
+        stream.pre('attribute', attr);
+        update('attribute');
+        stream.post('attribute', attr);
     };
     
     return stream;
