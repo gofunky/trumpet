@@ -3,13 +3,6 @@ var select = require('./lib/select');
 
 module.exports = function (opts) {
     if (!opts) opts = {};
-    if (!opts.special) {
-        opts.special = [
-            'area', 'base', 'basefont', 'br', 'col',
-            'hr', 'input', 'img', 'link', 'meta'
-        ];
-    }
-    opts.special = opts.special.map(function (x) { return x.toUpperCase() });
     
     var parser = sax.parser(false);
     var stream = select(parser, opts, write, end);
@@ -85,7 +78,7 @@ module.exports = function (opts) {
         stream.pre('open', tag);
         update('open', tag);
         stream.post('open', tag);
-        if (opts.special.indexOf(tag.name) >= 0) {
+        if (!tag.isSelfClosing) {
             stream.pre('close', tag.name);
             update('special');
             stream.post('close', tag.name);
@@ -99,6 +92,7 @@ module.exports = function (opts) {
     };
     
     parser.onclosetag = function (name) {
+console.dir([ 'close', name ]);
         stream.pre('close', name);
         update('close');
         stream.post('close', name);
