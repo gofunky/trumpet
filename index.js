@@ -78,7 +78,7 @@ module.exports = function (opts) {
                     offset = attrIndex;
                 });
                 
-                lexer.queue([ 'tag-end', buf.slice(offset) ]);
+                lexer.queue([ 'tag-end', Buffer(str.slice(offset)) ]);
                 attrs = [];
             }
             else lexer.queue([ evname, buf ]);
