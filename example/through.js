@@ -9,4 +9,4 @@ tr.pipe(through(function (lex) {
 //})).pipe(process.stdout);;
 
 var fs = require('fs');
-fs.createReadStream(__dirname + '/select.html').pipe(tr);
+fs.createReadStream(__dirname + '/through.html').pipe(tr);
