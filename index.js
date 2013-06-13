@@ -30,19 +30,19 @@ module.exports = function (opts) {
                 return attrs.push([ x, pos ]);
             }
             
-            var buf, len, posLen;
+            var buf, len, byteLen;
             
             if (evname === 'text') {
-                len = Buffer(x).length;
-                posLen = x.length;
+                byteLen = Buffer(x).length;
+                len = x.length;
             }
             else {
                 len = parser._parser.position - position;
-                posLen = len;
+                byteLen = len;
             }
             
-            buf = bufs.slice(0, len);
-            bufs.splice(0, len);
+            buf = bufs.slice(0, byteLen);
+            bufs.splice(0, byteLen);
             
             if (evname === 'opentag') {
                 for (var offset = 0; offset < buf.length; offset++) {
@@ -72,7 +72,7 @@ module.exports = function (opts) {
             }
             else lexer.queue([ evname, buf ]);
             
-            position += posLen;
+            position += len;
         });
     });
     
