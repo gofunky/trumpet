@@ -30,41 +30,52 @@ module.exports = function (opts) {
                 return attrs.push([ x, pos ]);
             }
             
-            var buf, len, byteLen;
-            
+            var len;
             if (evname === 'text') {
-                byteLen = Buffer(x).length;
                 len = x.length;
             }
             else {
                 len = parser._parser.position - position;
-                byteLen = len;
             }
             
-            buf = bufs.slice(0, byteLen);
+            var byteLen = 0;
+            for (var i = 0; i < len; i++) {
+                var b = bufs.get(byteLen);
+                if (b >= 192) {
+                    if (b >= 252) byteLen += 6;
+                    else if (b >= 248) byteLen += 5;
+                    else if (b >= 240) byteLen += 4;
+                    else if (b >= 224) byteLen += 3;
+                    else byteLen += 2;
+                }
+                else byteLen ++;
+            }
+            
+            var buf = bufs.slice(0, byteLen);
             bufs.splice(0, byteLen);
             
             if (evname === 'opentag') {
-                for (var offset = 0; offset < buf.length; offset++) {
-                    if (/[\s>]/.test(String.fromCharCode(buf[offset]))) break;
-                }
+                var str = buf.toString('utf8');
+                var m = /<\S+\s*/.exec(str);
                 
-                lexer.queue([ 'tag-begin', buf.slice(0, offset) ]);
+                lexer.queue([ 'tag-begin', Buffer(m[0]) ]);
+                var offset = m[0].length;
                 
                 attrs.forEach(function (attr) {
-                    var abuf = buf.slice(offset, attr[1]);
-                    for (var ix = 0; ix < abuf.length; ix++) {
-                        if (/\S/.test(String.fromCharCode(abuf[ix]))) break;
-                    }
+                    var attrIndex = attr[1];
                     
-                    if (ix) {
-                        lexer.queue([ 'tag-space', abuf.slice(0, ix) ]);
-                        lexer.queue([ 'attribute', abuf.slice(ix) ]);
-                    }
-                    else {
+                    var s = str.slice(offset, attrIndex);
+                    var wm = /^\s+/.exec(s);
+                    
+                    if (wm) {
+                        lexer.queue([ 'tag-space', Buffer(wm[0]) ]);
+                        var abuf = Buffer(s.slice(wm[0].length));
                         lexer.queue([ 'attribute', abuf ]);
                     }
-                    offset = attr[1];
+                    else {
+                        lexer.queue([ 'attribute', Buffer(s) ]);
+                    }
+                    offset = attrIndex;
                 });
                 
                 lexer.queue([ 'tag-end', buf.slice(offset) ]);
