@@ -22,17 +22,17 @@ module.exports = function (opts) {
     var attrs = [];
     
     EVENTS.forEach(function (evname) {
-        parser.on(evname, function (x) {
+        parser.on(evname, function (arg) {
             if (evname === 'attribute') {
                 var pos = parser._parser.position
                     - parser._parser.startTagPosition + 1
                 ;
-                return attrs.push([ x, pos ]);
+                return attrs.push([ arg, pos ]);
             }
             
             var len;
             if (evname === 'text') {
-                len = x.length;
+                len = arg.length;
             }
             else {
                 len = parser._parser.position - position;
@@ -58,7 +58,7 @@ module.exports = function (opts) {
                 var str = buf.toString('utf8');
                 var m = /<\S+\s*/.exec(str);
                 
-                lexer.queue([ 'tag-begin', Buffer(m[0]) ]);
+                lexer.queue([ 'tag-begin', Buffer(m[0]), arg ]);
                 var offset = m[0].length;
                 
                 attrs.forEach(function (attr) {
@@ -70,10 +70,10 @@ module.exports = function (opts) {
                     if (wm) {
                         lexer.queue([ 'tag-space', Buffer(wm[0]) ]);
                         var abuf = Buffer(s.slice(wm[0].length));
-                        lexer.queue([ 'attribute', abuf ]);
+                        lexer.queue([ 'attribute', abuf, attr[0] ]);
                     }
                     else {
-                        lexer.queue([ 'attribute', Buffer(s) ]);
+                        lexer.queue([ 'attribute', Buffer(s), attr[0] ]);
                     }
                     offset = attrIndex;
                 });
