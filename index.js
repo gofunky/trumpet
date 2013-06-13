@@ -19,13 +19,51 @@ module.exports = function (opts) {
         function () { parser.end() }
     );
     var position = 0;
+    var attrs = [];
     
     EVENTS.forEach(function (evname) {
-        parser.on(evname, function () {
-            var buf = bufs.splice(0, parser._parser.position - position);
-            position = parser._parser.position;
+        parser.on(evname, function (x) {
+            if (evname === 'attribute') {
+                return attrs.push([ x, parser._parser.position ]);
+            }
             
-            lexer.queue([ evname, buf, arguments ]);
+            var buf, len;
+            
+            if (evname === 'text') {
+                len = x.length;
+            }
+            else {
+                len = parser._parser.position - position;
+            }
+            
+            buf = bufs.slice(0, len);
+            bufs.splice(0, len);
+            
+            if (evname === 'opentag') {
+                var m = /^<[^\s>]+\s*/.exec(buf.toString('utf8'));
+                lexer.queue([ 'tag-begin', m && m[0] ]);
+                var offset = m[0] && m[0].length || 0;
+                
+                attrs.forEach(function (attr) {
+                    var abuf = buf.slice(offset, attr[1]);
+                    var m = /^\s+/.exec(abuf.toString('utf8'));
+                    
+                    if (m) {
+                        lexer.queue([ 'tag-space', m[0] ]);
+                        lexer.queue([ 'attribute', abuf.slice(m[0].length) ]);
+                    }
+                    else {
+                        lexer.queue([ 'attribute', abuf ]);
+                    }
+                    offset = attr[1];
+                });
+                
+                lexer.queue([ 'tag-end', buf.slice(offset) ]);
+                attrs = [];
+            }
+            else lexer.queue([ evname, buf ]);
+            
+            position += len;
         });
     });
     
