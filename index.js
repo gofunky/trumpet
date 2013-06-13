@@ -2,7 +2,7 @@ var sax = require('sax');
 var through = require('through');
 var buffers = require('buffers');
 var duplexer = require('duplexer');
-var createLexer = require('./lib/lexer.js');
+var tokenize = require('./lib/tokenize.js');
 
 var EVENTS = [
     'opentag', 'attribute', 'opencdata', 'closecdata',
@@ -10,8 +10,8 @@ var EVENTS = [
 ];
 
 module.exports = function (opts) {
-    var lexer = createLexer();
-    var dup = duplexer(lexer, lexer.pipe(through(function (lex) {
+    var tokens = tokenize();
+    var dup = duplexer(tokens, tokens.pipe(through(function (lex) {
         this.queue(lex[1]);
         //console.dir([ lex[0], lex[1] + '' ]);
     })));
