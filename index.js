@@ -24,33 +24,42 @@ module.exports = function (opts) {
     EVENTS.forEach(function (evname) {
         parser.on(evname, function (x) {
             if (evname === 'attribute') {
-                return attrs.push([ x, parser._parser.position ]);
+                var pos = parser._parser.position
+                    - parser._parser.startTagPosition + 1
+                ;
+                return attrs.push([ x, pos ]);
             }
             
-            var buf, len;
+            var buf, len, posLen;
             
             if (evname === 'text') {
-                len = x.length;
+                len = Buffer(x).length;
+                posLen = x.length;
             }
             else {
                 len = parser._parser.position - position;
+                posLen = len;
             }
             
             buf = bufs.slice(0, len);
             bufs.splice(0, len);
             
             if (evname === 'opentag') {
-                var m = /^<[^\s>]+\s*/.exec(buf.toString('utf8'));
-                lexer.queue([ 'tag-begin', m && m[0] ]);
-                var offset = m[0] && m[0].length || 0;
+                for (var offset = 0; offset < buf.length; offset++) {
+                    if (/[\s>]/.test(String.fromCharCode(buf[offset]))) break;
+                }
+                
+                lexer.queue([ 'tag-begin', buf.slice(0, offset) ]);
                 
                 attrs.forEach(function (attr) {
                     var abuf = buf.slice(offset, attr[1]);
-                    var m = /^\s+/.exec(abuf.toString('utf8'));
+                    for (var ix = 0; ix < abuf.length; ix++) {
+                        if (/\S/.test(String.fromCharCode(abuf[ix]))) break;
+                    }
                     
-                    if (m) {
-                        lexer.queue([ 'tag-space', m[0] ]);
-                        lexer.queue([ 'attribute', abuf.slice(m[0].length) ]);
+                    if (ix) {
+                        lexer.queue([ 'tag-space', abuf.slice(0, ix) ]);
+                        lexer.queue([ 'attribute', abuf.slice(ix) ]);
                     }
                     else {
                         lexer.queue([ 'attribute', abuf ]);
@@ -63,7 +72,7 @@ module.exports = function (opts) {
             }
             else lexer.queue([ evname, buf ]);
             
-            position += len;
+            position += posLen;
         });
     });
     
