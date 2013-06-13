@@ -64,6 +64,9 @@ module.exports = function (opts) {
         else if (type === 'doctype') {
             len = tag.length + 10;
         }
+        else if (type === 'attribute') {
+            len = 0;
+        }
         else {
             len = parser.position - (parser.startTagPosition || 0) + 1;
         }
@@ -123,6 +126,12 @@ module.exports = function (opts) {
         stream.pre('doctype', t);
         update('doctype', t);
         stream.post('doctype', t);
+    };
+    
+    parser.onattribute = function (attr) {
+        //stream.pre('attribute', attr);
+        update('attribute', attr);
+        //stream.post('attribute', attr);
     };
     
     return stream;
