@@ -2,6 +2,7 @@ var sax = require('sax');
 var through = require('through');
 var duplexer = require('duplexer');
 var buffers = require('buffers');
+var throughout = require('throughout');
 
 var EVENTS = [
     'opentag', 'attribute', 'opencdata', 'closecdata',
@@ -11,7 +12,8 @@ var EVENTS = [
 module.exports = function (opts) {
     var parser = sax.createStream(false);
     var bufs = buffers();
-    var lexer = through(
+    var lexer = through();
+    var input = through(
         function (buf) {
             bufs.push(buf);
             return parser.write(buf);
@@ -25,7 +27,10 @@ module.exports = function (opts) {
         parser['on' + evname] = function (arg) { makeFn(evname, arg) };
     });
     
-    return lexer;
+    return duplexer(input, lexer.pipe(through(function (lex) {
+        this.queue(lex[1]);
+        //console.dir([ lex[0], lex[1] + '' ]);
+    })));
     
     function makeFn (evname, arg) {
         if (evname === 'attribute') {
