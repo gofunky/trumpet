@@ -1,14 +1,8 @@
 var trumpet = require('../');
 
 var tr = trumpet();
-tr.select('div.a').setAttribute('id', 'XYZ!!!!!!!!!');
+tr.select('div#z').setAttribute('class', 'WOOOOOOOOOOOOOOOOOo');
 tr.pipe(process.stdout);
-
-/*
-tr.select('div.a').getAttribute('id', function (value) {
-    console.log('value=' + value);
-});
-*/
 
 // tr.createWriteStream('.a')
 // tr.select('.a').createWriteStream()
