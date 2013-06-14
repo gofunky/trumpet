@@ -13,7 +13,7 @@ module.exports = function (opts) {
             s._at(lex[0], lex[2]);
         });
         //this.queue(lex[0]);
-        console.dir([ lex[0], lex[1] + '' ]);
+        //console.dir([ lex[0], lex[1] + '' ]);
     })));
     
     dup.select = function (sel) {
@@ -25,8 +25,16 @@ module.exports = function (opts) {
 };
 
 function Result (sel) {
-    this._setAttr = {};
-    this._matcher = matcher(parseSelector(sel));
+    var self = this;
+    self._setAttr = {};
+    self._getAttr = {};
+    self._matcher = matcher(parseSelector(sel));
+    self._matcher.on('open', function (node) {
+    });
+    self._matcher.on('attribute', function (node) {
+        var f = self._getAttr[node.name];
+        if (f) f(node.value);
+    });
 }
 
 Result.prototype._at = function (kind, x) {
@@ -34,8 +42,12 @@ Result.prototype._at = function (kind, x) {
 };
 
 Result.prototype.setAttribute = function (key, value) {
-    this._setAttr[key] = value;
+    this._setAttr[key.toUpperCase()] = [ key, value ];
     return this;
+};
+
+Result.prototype.getAttribute = function (key, cb) {
+    this._getAttr[key.toUpperCase()] = cb;
 };
 
 Result.prototype.createWriteStream = function () {
