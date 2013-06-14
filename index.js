@@ -3,17 +3,24 @@ var duplexer = require('duplexer');
 var tokenize = require('./lib/tokenize.js');
 var parseSelector = require('./lib/selector.js');
 var matcher = require('./lib/matcher.js');
+var ent = require('ent');
 
 module.exports = function (opts) {
     var tokens = tokenize();
     var selectors = [];
     
     var dup = duplexer(tokens, tokens.pipe(through(function (lex) {
+        var sub;
         selectors.forEach(function (s) {
             s._at(lex[0], lex[2]);
+            if (s._substitute !== undefined) {
+                sub = s._substitute;
+                s._substitute = undefined;
+            }
         });
-        //this.queue(lex[0]);
-        //console.dir([ lex[0], lex[1] + '' ]);
+        
+        if (sub !== undefined) this.queue(sub)
+        else this.queue(lex[1])
     })));
     
     dup.select = function (sel) {
@@ -30,10 +37,13 @@ function Result (sel) {
     self._getAttr = {};
     self._matcher = matcher(parseSelector(sel));
     self._matcher.on('open', function (node) {
+        
     });
     self._matcher.on('attribute', function (node) {
         var f = self._getAttr[node.name];
         if (f) f(node.value);
+        var v = self._setAttr[node.name];
+        if (v !== undefined) self._substitute = v;
     });
 }
 
@@ -42,7 +52,8 @@ Result.prototype._at = function (kind, x) {
 };
 
 Result.prototype.setAttribute = function (key, value) {
-    this._setAttr[key.toUpperCase()] = [ key, value ];
+    var sub = Buffer(ent.encode(key) + '="' + ent.encode(value) + '"');
+    this._setAttr[key.toUpperCase()] = sub;
     return this;
 };
 
