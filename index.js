@@ -14,11 +14,6 @@ module.exports = function (opts) {
         function () { tokens.end() }
     );
     
-    tokens.on('data', function () {});
-    tokens.on('end', function () { console.log('END') });
-    
-    tokens.pipe(through(write, end));
-    
     tr.select = function (sel) {
         var r = new Result(sel);
         selectors.push(r);
