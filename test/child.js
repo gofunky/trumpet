@@ -1,6 +1,7 @@
 var trumpet = require('../');
 var fs = require('fs');
 var test = require('tape');
+var through = require('through');
 
 test('child selector', function (t) {
     t.plan(1);
@@ -17,6 +18,9 @@ test('child no-match selector', function (t) {
     t.plan(1);
     
     var tr = trumpet();
+    tr.pipe(through(null, function () {
+        t.ok(true);
+    }));
     var elem = tr.select('.b > input[type=text]');
     elem.getAttribute('value', function (value) {
         t.fail('should not have matched');

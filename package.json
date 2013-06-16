@@ -15,6 +15,7 @@
     },
     "devDependencies" : {
         "tap" : "~0.4.0",
+        "tape" : "~1.0.4",
         "concat-stream" : "~1.0.0"
     },
     "scripts" : {
