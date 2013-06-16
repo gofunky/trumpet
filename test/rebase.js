@@ -3,6 +3,7 @@ var fs = require('fs');
 var test = require('tape');
 var through = require('through');
 
+/*
 test('wonky duplicated classes selector', function (t) {
     t.plan(1);
     
@@ -13,7 +14,9 @@ test('wonky duplicated classes selector', function (t) {
     });
     fs.createReadStream(__dirname + '/rebase.html').pipe(tr);
 });
+*/
 
+/*
 test('rebase selector', function (t) {
     t.plan(1);
     
@@ -24,7 +27,9 @@ test('rebase selector', function (t) {
     });
     fs.createReadStream(__dirname + '/rebase.html').pipe(tr);
 });
+//*/
 
+//*
 test('too many ancestors selector', function (t) {
     t.plan(1);
     
@@ -38,3 +43,4 @@ test('too many ancestors selector', function (t) {
     });
     fs.createReadStream(__dirname + '/rebase.html').pipe(tr);
 });
+//*/
