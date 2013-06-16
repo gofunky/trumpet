@@ -24,3 +24,17 @@ test('rebase selector', function (t) {
     });
     fs.createReadStream(__dirname + '/rebase.html').pipe(tr);
 });
+
+test('too many ancestors selector', function (t) {
+    t.plan(1);
+    
+    var tr = trumpet();
+    tr.pipe(through(null, function () {
+        t.ok(true);
+    }));
+    var elem = tr.select('.a > .b > * > .d');
+    elem.getAttribute('class', function (value) {
+        t.fail('should not have matched');
+    });
+    fs.createReadStream(__dirname + '/rebase.html').pipe(tr);
+});
