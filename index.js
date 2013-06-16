@@ -1,15 +1,32 @@
 var through = require('through');
-var duplexer = require('duplexer');
 var tokenize = require('./lib/tokenize.js');
 var parseSelector = require('./lib/selector.js');
 var matcher = require('./lib/matcher.js');
 var ent = require('ent');
 
 module.exports = function (opts) {
-    var tokens = tokenize();
     var selectors = [];
+    var tokens = tokenize();
+    tokens.pipe(through(write, end));
     
-    var dup = duplexer(tokens, tokens.pipe(through(function (lex) {
+    var tr = through(
+        function (buf) { tokens.write(buf) },
+        function () { tokens.end() }
+    );
+    
+    tokens.on('data', function () {});
+    tokens.on('end', function () { console.log('END') });
+    
+    tokens.pipe(through(write, end));
+    
+    tr.select = function (sel) {
+        var r = new Result(sel);
+        selectors.push(r);
+        return r;
+    };
+    return tr;
+    
+    function write (lex) {
         var sub;
         selectors.forEach(function (s) {
             s._at(lex[0], lex[2]);
@@ -19,16 +36,13 @@ module.exports = function (opts) {
             }
         });
         
-        if (sub !== undefined) this.queue(sub)
-        else this.queue(lex[1])
-    })));
+        if (sub !== undefined) tr.queue(sub)
+        else tr.queue(lex[1])
+    }
     
-    dup.select = function (sel) {
-        var r = new Result(sel);
-        selectors.push(r);
-        return r;
-    };
-    return dup;
+    function end () {
+        tr.queue(null);
+    }
 };
 
 function Result (sel) {

@@ -11,7 +11,10 @@ test('set attribute', function (t) {
     elem.setAttribute('value', 'abc');
     
     tr.pipe(concat(function (src) {
-        t.equal(src, '<div class="a"><input type="text" value="abc"></div>\n');
+        t.equal(
+            String(src),
+            '<div class="a"><input type="text" value="abc"></div>\n'
+        );
     }));
     fs.createReadStream(__dirname + '/set_attr.html').pipe(tr);
 });
