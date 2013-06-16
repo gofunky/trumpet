@@ -27,3 +27,17 @@ test('child no-match selector', function (t) {
     });
     fs.createReadStream(__dirname + '/child.html').pipe(tr);
 });
+
+test('child start then no match selector', function (t) {
+    t.plan(1);
+    
+    var tr = trumpet();
+    tr.pipe(through(null, function () {
+        t.ok(true);
+    }));
+    var elem = tr.select('.b > .d');
+    elem.getAttribute('class', function (value) {
+        t.fail('should not have matched');
+    });
+    fs.createReadStream(__dirname + '/child.html').pipe(tr);
+});
