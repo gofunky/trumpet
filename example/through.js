@@ -2,7 +2,8 @@ var trumpet = require('../');
 
 var tr = trumpet();
 //tr.select('div#z').setAttribute('class', 'WOOOOOOOOOOOOOOOOOo');
-tr.select('input[type|=text]').getAttribute('value', function (value) {
+var elem = tr.select('.b input[type=text]');
+elem.getAttribute('value', function (value) {
     console.log('value=' + value);
 });
 //tr.pipe(process.stdout);
