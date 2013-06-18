@@ -52,13 +52,16 @@ test('get all class names', function (t) {
 });
 
 test('all class name pairs', function (t) {
-    t.plan(6);
-    var names = [ 'b', 'a', 'b', 'c', 'd' ];
+    t.plan(1);
     var tr = trumpet();
+    var names = [];
+    tr.pipe(through(null, function () {
+        t.deepEqual(names, [ 'b', 'a', 'b', 'c', 'd' ]);
+    }));
     
     var elem = tr.select('div > div');
     elem.getAttribute('class', function (value) {
-        t.equal(value, names.shift());
+        names.push(value);
     });
     fs.createReadStream(__dirname + '/rebase.html').pipe(tr);
 });
