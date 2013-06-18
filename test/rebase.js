@@ -37,3 +37,16 @@ test('too many ancestors selector', function (t) {
     });
     fs.createReadStream(__dirname + '/rebase.html').pipe(tr);
 });
+
+test('get all class names', function (t) {
+    t.plan(6);
+    var names = [ 'a', 'b', 'a', 'b', 'c', 'd' ];
+    
+    var tr = trumpet();
+    
+    var elem = tr.select('div');
+    elem.getAttribute('class', function (value) {
+        t.equal(value, names.shift());
+    });
+    fs.createReadStream(__dirname + '/rebase.html').pipe(tr);
+});
