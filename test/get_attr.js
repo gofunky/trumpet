@@ -12,3 +12,26 @@ test('get attribute', function (t) {
     });
     fs.createReadStream(__dirname + '/get_attr.html').pipe(tr);
 });
+
+test('get 1 div', function (t) {
+    t.plan(1);
+    
+    var tr = trumpet();
+    var elem = tr.select('div');
+    elem.getAttribute('class', function (value) {
+        t.equal(value, 'a');
+    });
+    fs.createReadStream(__dirname + '/get_attr.html').pipe(tr);
+});
+
+test('get all divs', function (t) {
+    t.plan(2);
+    var names = [ 'a', 'b' ];
+    
+    var tr = trumpet();
+    var elem = tr.selectAll('div');
+    elem.getAttribute('class', function (value) {
+        t.equal(value, names.shift());
+    });
+    fs.createReadStream(__dirname + '/get_attr.html').pipe(tr);
+});

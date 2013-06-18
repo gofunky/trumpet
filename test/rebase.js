@@ -44,7 +44,7 @@ test('get all class names', function (t) {
     
     var tr = trumpet();
     
-    var elem = tr.select('div');
+    var elem = tr.selectAll('div');
     elem.getAttribute('class', function (value) {
         t.equal(value, names.shift());
     });
@@ -59,7 +59,7 @@ test('all class name pairs', function (t) {
         t.deepEqual(names, [ 'b', 'a', 'b', 'c', 'd' ]);
     }));
     
-    var elem = tr.select('div > div');
+    var elem = tr.selectAll('div > div');
     elem.getAttribute('class', function (value) {
         names.push(value);
     });

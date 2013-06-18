@@ -16,9 +16,20 @@ module.exports = function (opts) {
     
     tr.select = function (sel) {
         var r = new Result(sel);
+        r._matcher.on('unmatch', function () {
+            var ix = selectors.indexOf(r);
+            if (ix >= 0) selectors.splice(ix, 1);
+        });
         selectors.push(r);
         return r;
     };
+    
+    tr.selectAll = function (sel) {
+        var r = new Result(sel);
+        selectors.push(r);
+        return r;
+    };
+    
     return tr;
     
     function write (lex) {
