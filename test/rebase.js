@@ -16,7 +16,7 @@ test('wonky duplicated classes selector', function (t) {
 });
 */
 
-/*
+//*
 test('rebase selector', function (t) {
     t.plan(1);
     
@@ -29,7 +29,7 @@ test('rebase selector', function (t) {
 });
 //*/
 
-//*
+/*
 test('too many ancestors selector', function (t) {
     t.plan(1);
     

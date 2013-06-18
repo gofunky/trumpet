@@ -45,9 +45,11 @@ function Result (sel) {
     self._setAttr = {};
     self._getAttr = {};
     self._matcher = matcher(parseSelector(sel));
+    
     self._matcher.on('open', function (node) {
         
     });
+    
     self._matcher.on('attribute', function (node) {
         var f = self._getAttr[node.name];
         if (f) f(node.value);
