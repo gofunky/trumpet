@@ -50,3 +50,15 @@ test('get all class names', function (t) {
     });
     fs.createReadStream(__dirname + '/rebase.html').pipe(tr);
 });
+
+test('all class name pairs', function (t) {
+    t.plan(6);
+    var names = [ 'b', 'a', 'b', 'c', 'd' ];
+    var tr = trumpet();
+    
+    var elem = tr.select('div > div');
+    elem.getAttribute('class', function (value) {
+        t.equal(value, names.shift());
+    });
+    fs.createReadStream(__dirname + '/rebase.html').pipe(tr);
+});
