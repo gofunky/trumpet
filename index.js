@@ -44,33 +44,18 @@ function Result (sel) {
     var self = this;
     self._setAttr = {};
     self._getAttr = {};
-    self._matchers = [ matcher(parseSelector(sel)) ];
+    self._matcher = matcher(parseSelector(sel));
     
-    self._matchers[0].on('fork', onfork);
-    self._matchers[0].on('attribute', onattribute);
-    
-    function onfork (matcher) {
-        matcher.on('attribute', onattribute);
-        matcher.on('fork', onfork);
-        matcher.on('leave', function () {
-            var ix = self._matchers.indexOf(matcher);
-            if (ix >= 0) self._matchers.splice(ix, 1);
-        });
-        self._matchers.push(matcher);
-    }
-    
-    function onattribute (node) {
+    self._matcher.on('attribute', function (node) {
         var f = self._getAttr[node.name];
         if (f) f(node.value);
         var v = self._setAttr[node.name];
         if (v !== undefined) self._substitute = v;
-    }
+    });
 }
 
 Result.prototype._at = function (kind, x) {
-    for (var i = 0; i < this._matchers.length; i++) {
-        this._matchers[i].at(kind, x);
-    }
+    this._matcher.at(kind, x);
 };
 
 Result.prototype.setAttribute = function (key, value) {
