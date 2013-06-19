@@ -7,9 +7,9 @@ test('stream all divs', function (t) {
     t.plan(3);
     
     var html = [
-        '\n<div class="b">\n<div class="c">\n</div>\n</div>\n',
-        '\n<div class="c">\n</div>\n',
         '\n',
+        '\n<div class="c">\n</div>\n',
+        '\n<div class="b">\n<div class="c">\n</div>\n</div>\n',
     ];
     
     var tr = trumpet();
