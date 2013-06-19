@@ -15,7 +15,7 @@ test('stream all divs', function (t) {
     var tr = trumpet();
     var divs = tr.selectAll('div');
     
-    divs.on('readStream', function (stream) {
+    divs.on('read-stream', function (stream) {
         stream.pipe(concat(function (src) {
             t.equal(src.toString(), html.shift());
         }));

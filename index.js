@@ -72,7 +72,7 @@ function Result (sel) {
     self._matcher = matcher(parseSelector(sel));
     
     self._matcher.on('tag-end', function (m) {
-        var rsl = self.listeners('readStream');
+        var rsl = self.listeners('read-stream');
         if (self._readStreams.length || rsl.length) {
             self._writing = true;
             self._readMatcher = m;

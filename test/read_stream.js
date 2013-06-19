@@ -57,7 +57,7 @@ test('stream all divs', function (t) {
         t.equal(c, classes.shift());
     });
     
-    divs.on('readStream', function (stream) {
+    divs.on('read-stream', function (stream) {
         stream.pipe(concat(function (src) {
             t.equal(src.toString(), html.shift());
         }));
