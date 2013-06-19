@@ -34,6 +34,7 @@ module.exports = function (opts) {
     
     tr.selectAll = function (sel) {
         var r = new Result(sel);
+        r.createReadStream = undefined;
         selectors.push(r);
         return r;
     };
@@ -71,10 +72,17 @@ function Result (sel) {
     self._matcher = matcher(parseSelector(sel));
     
     self._matcher.on('tag-end', function (m) {
-        if (self._readStreams.length) {
+        var rsl = self.listeners('readStream');
+        if (self._readStreams.length || rsl.length) {
             self._writing = true;
             self._readMatcher = m;
             self._readLevel = m.stack.length;
+            
+            for (var i = 0; i < rsl.length; i++) {
+                var stream = through();
+                rsl[i](stream);
+                self._readStreams.push(stream);
+            }
         }
     });
     
@@ -94,6 +102,7 @@ Result.prototype._at = function (lex) {
             for (var i = 0; i < this._readStreams.length; i++) {
                 this._readStreams[i].queue(null);
             }
+            this._readStreams.splice(0);
             this.emit('read-close');
         }
         else {
@@ -116,12 +125,10 @@ Result.prototype.getAttribute = function (key, cb) {
 };
 
 Result.prototype.createWriteStream = function () {
-    // pipe data into this selector!
     // doesn't work with selectAll()
 };
 
 Result.prototype.createReadStream = function () {
-    // pipe data FROM this selector!
     // doesn't work with selectAll()
     var stream = through();
     this._readStreams.push(stream);

@@ -45,3 +45,23 @@ test('overlapping read streams', function (t) {
     
     fs.createReadStream(__dirname + '/read_stream.html').pipe(tr);
 });
+
+test('stream all divs', function (t) {
+    t.plan(6);
+    var html = [ 'AAA', 'X<b>Y</b>Z', 'CCC' ];
+    var classes = [ 'a', 'b', 'c' ];
+    
+    var tr = trumpet();
+    var divs = tr.selectAll('div');
+    divs.getAttribute('class', function (c) {
+        t.equal(c, classes.shift());
+    });
+    
+    divs.on('readStream', function (stream) {
+        stream.pipe(concat(function (src) {
+            t.equal(src.toString(), html.shift());
+        }));
+    });
+    
+    fs.createReadStream(__dirname + '/read_stream.html').pipe(tr);
+});
