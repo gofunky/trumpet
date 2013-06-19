@@ -8,6 +8,80 @@ parse and transform streaming html using css selectors
 
 # example
 
+## table
+
+input html:
+
+``` html
+<table>
+  <tbody>blah blah blah</tbody>
+  <tr><td>there</td></tr>
+  <tr><td>it</td></tr>
+  <tr><td>is</td></tr>
+</table>
+```
+
+``` js
+var trumpet = require('trumpet');
+var tr = trumpet();
+tr.pipe(process.stdout);
+ 
+var ws = tr.select('tbody').createWriteStream();
+ws.end('<tr><td>rawr</td></tr>');
+
+var fs = require('fs');
+fs.createReadStream(__dirname + '/html/table.html').pipe(tr);
+```
+
+output:
+
+``` html
+<table>
+  <tbody><tr><td>rawr</td></tr></tbody>
+  <tr><td>there</td></tr>
+  <tr><td>it</td></tr>
+  <tr><td>is</td></tr>
+</table>
+```
+
+## read all
+
+input html:
+
+``` html
+<html>
+  <head>
+    <title>beep</title>
+  </head>
+  <body>
+    <div class="a">¡¡¡</div>
+    <div class="b">
+      <span>tacos</span>
+      <span> y </span>
+      <span>burritos</span>
+    </div>
+    <div class="a">!!!</div>
+  </body>
+</html>
+```
+
+``` js
+var trumpet = require('trumpet');
+var tr = trumpet();
+
+tr.selectAll('.b span', function (span) {
+    span.createReadStream().pipe(process.stdout);
+});
+
+var fs = require('fs');
+fs.createReadStream(__dirname + '/html/read_all.html').pipe(tr);
+```
+
+output:
+
+``` html
+tacos y burritos
+```
 
 # methods
 
