@@ -1,10 +1,9 @@
 var trumpet = require('../');
 var tr = trumpet();
 
-tr.select('.b span', function (node) {
-    node.html(function (html) {
-        console.log(node.name + ': ' + html);
-    });
+tr.selectAll('.b span', function (span) {
+console.dir(span);
+    //span.createReadStream().pipe(process.stdout);
 });
 
 var fs = require('fs');

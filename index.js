@@ -82,6 +82,7 @@ module.exports = function (opts) {
             };
             
             node.createReadStream = Result.prototype.createReadStream.bind(r);
+            node.createWriteStream = Result.prototype.createWriteStream.bind(r);
             
             r.emit('element', node);
         });
@@ -168,7 +169,6 @@ Result.prototype._at = function (lex) {
                     s.queue(null);
                     removed ++;
                     this._readStreams.splice(i, 1);
-                    i --;
                 }
             }
             if (this._readStreams.length === 0) {

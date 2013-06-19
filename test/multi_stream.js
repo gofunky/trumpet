@@ -5,7 +5,7 @@ var through = require('through');
 var concat = require('concat-stream');
 
 test('multiple read streams', function (t) {
-    t.plan(4);
+    t.plan(7);
     var tr = trumpet();
     tr.pipe(through(null, function () { output.end() }));
     
