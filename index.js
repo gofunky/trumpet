@@ -19,7 +19,7 @@ module.exports = function (opts) {
     tr.select = function (sel) {
         var r = new Result(sel);
         r._matcher.once('unmatch', function () {
-            if (!r._writing) {
+            if (!r._reading) {
                 var ix = selectors.indexOf(r);
                 if (ix >= 0) selectors.splice(ix, 1);
             }
@@ -32,8 +32,9 @@ module.exports = function (opts) {
         return r;
     };
     
-    tr.selectAll = function (sel) {
+    tr.selectAll = function (sel, cb) {
         var r = new Result(sel);
+        if (cb) r.on('element', cb);
         
         r._matcher.on('open', function (node) {
             node.getAttribute = function (name, cb) {
@@ -88,14 +89,15 @@ function Result (sel) {
     self._setAttr = {};
     self._getAttr = {};
     self._readStreams = [];
+    self._writeStreams = [];
     
-    self._writing = false;
+    self._reading = false;
     self._matcher = matcher(parseSelector(sel));
     
     self._matcher.on('tag-end', function (m) {
         var rsl = self.listeners('read-stream');
         if (self._readStreams.length || rsl.length) {
-            self._writing = true;
+            self._reading = true;
             self._readMatcher = m;
             self._readLevel = m.stack.length;
             
@@ -121,7 +123,7 @@ function Result (sel) {
 }
 
 Result.prototype._at = function (lex) {
-    if (this._writing) {
+    if (this._reading) {
         if (lex[0] === 'closetag') {
             var level = this._matcher.matchers[0].stack.length;
             var removed = 0;
@@ -136,7 +138,7 @@ Result.prototype._at = function (lex) {
                 }
             }
             if (this._readStreams.length === 0) {
-                this._writing = false;
+                this._reading = false;
             }
             if (removed > 0) this.emit('read-close');
         }
@@ -159,6 +161,9 @@ Result.prototype.getAttribute = function (key, cb) {
 
 Result.prototype.createWriteStream = function () {
     // doesn't work with selectAll()
+    var stream = through();
+    this._writeStreams.push(stream);
+    return stream;
 };
 
 Result.prototype.createReadStream = function () {
