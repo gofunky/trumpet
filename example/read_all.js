@@ -6,4 +6,4 @@ tr.selectAll('.b span', function (span) {
 });
 
 var fs = require('fs');
-fs.createReadStream(__dirname + '/select.html').pipe(tr);
+fs.createReadStream(__dirname + '/html/read_all.html').pipe(tr);
