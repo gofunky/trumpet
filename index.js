@@ -9,7 +9,7 @@ var inherits = require('inherits');
 module.exports = function (opts) {
     var selectors = [];
     var tokens = tokenize();
-    var writing = false;
+    var skipping = false;
     
     tokens.pipe(through(write, end));
     
@@ -33,7 +33,7 @@ module.exports = function (opts) {
         
         r.on('_write-begin', function (stream) {
             tokens.pause();
-            writing = true;
+            skipping = true;
             stream.pipe(through(write, end));
             stream.resume();
             
@@ -49,12 +49,13 @@ module.exports = function (opts) {
                 }
             }
             function end () {
-                writing = false;
                 tokens.resume();
             }
         });
         
-        r.on('_write-end', function () {});
+        r.on('_write-end', function () {
+            skipping = false;
+        });
         
         selectors.push(r);
         return r;
@@ -95,8 +96,6 @@ module.exports = function (opts) {
     return tr;
     
     function write (lex) {
-        if (writing) return;
-        
         var sub;
         selectors.forEach(function (s) {
             s._at(lex);
@@ -105,6 +104,8 @@ module.exports = function (opts) {
                 s._substitute = undefined;
             }
         });
+        
+        if (skipping) return;
         
         if (sub !== undefined) tr.queue(sub)
         else tr.queue(lex[1])
