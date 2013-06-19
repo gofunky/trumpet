@@ -87,13 +87,14 @@ module.exports = function (opts) {
                 });
             };
             
-            node.createStream = Result.prototype.createStream.bind(r);
-            node.createReadStream = Result.prototype.createReadStream.bind(r);
-            node.createWriteStream = Result.prototype.createWriteStream.bind(r);
+            node.createStream = RP.createStream.bind(r);
+            node.createReadStream = RP.createReadStream.bind(r);
+            node.createWriteStream = RP.createWriteStream.bind(r);
             
             r.emit('element', node);
         });
         
+        var RP = Result.prototype;
         r.createStream = undefined;
         r.createReadStream = undefined;
         r.createWriteStream = undefined;
@@ -226,8 +227,8 @@ Result.prototype.createReadStream = function () {
 };
 
 Result.prototype.createStream = function () {
-    var ws = this.createWriteStream();
+    var ws = Result.prototype.createWriteStream.call(this);
     ws._skipping = false;
-    var rs = this.createReadStream();
+    var rs = Result.prototype.createReadStream.call(this);
     return duplexer(ws, rs);
 };
