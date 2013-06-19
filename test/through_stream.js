@@ -22,3 +22,25 @@ test('through stream', function (t) {
     
     fs.createReadStream(__dirname + '/through_stream.html').pipe(tr);
 });
+
+test('delayed through stream', function (t) {
+    t.plan(1);
+    
+    var tr = trumpet();
+    var ts = tr.select('div').createStream();
+    ts.pipe(through(function (buf) {
+        var self = this;
+        setTimeout(function () {
+            self.queue(buf.toString().toUpperCase());
+        }, 100);
+    })).pipe(ts);
+    
+    tr.pipe(concat(function (body) {
+        t.equal(
+            body.toString(),
+            '<html>\n<body>\n<div>XYZ</div>\n</body>\n</html>\n'
+        );
+    }));
+    
+    fs.createReadStream(__dirname + '/through_stream.html').pipe(tr);
+});
