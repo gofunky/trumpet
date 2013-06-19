@@ -5,10 +5,12 @@ var matcher = require('./lib/matcher.js');
 var ent = require('ent');
 var EventEmitter = require('events').EventEmitter;
 var inherits = require('inherits');
+var duplexer = require('duplexer');
 
 module.exports = function (opts) {
     var selectors = [];
     var tokens = tokenize();
+    var tokenBuffer = null;
     var skipping = false;
     
     tokens.pipe(through(write, end));
@@ -32,7 +34,9 @@ module.exports = function (opts) {
         });
         
         r.on('_write-begin', function (stream) {
-            tokens.pause();
+            if (stream._skipping !== false) {
+                tokens.pause();
+            }
             skipping = true;
             stream.pipe(through(write, end));
             stream.resume();
@@ -49,7 +53,9 @@ module.exports = function (opts) {
                 }
             }
             function end () {
-                tokens.resume();
+                if (stream._skipping !== false) {
+                    tokens.resume();
+                }
             }
         });
         
@@ -81,12 +87,14 @@ module.exports = function (opts) {
                 });
             };
             
+            node.createStream = Result.prototype.createStream.bind(r);
             node.createReadStream = Result.prototype.createReadStream.bind(r);
             node.createWriteStream = Result.prototype.createWriteStream.bind(r);
             
             r.emit('element', node);
         });
         
+        r.createStream = undefined;
         r.createReadStream = undefined;
         r.createWriteStream = undefined;
         
@@ -215,4 +223,11 @@ Result.prototype.createReadStream = function () {
     var stream = through();
     this._readStreams.push(stream);
     return stream;
+};
+
+Result.prototype.createStream = function () {
+    var ws = this.createWriteStream();
+    ws._skipping = false;
+    var rs = this.createReadStream();
+    return duplexer(ws, rs);
 };
