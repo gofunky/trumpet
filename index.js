@@ -34,6 +34,27 @@ module.exports = function (opts) {
     
     tr.selectAll = function (sel) {
         var r = new Result(sel);
+        
+        r._matcher.on('open', function (node) {
+            node.getAttribute = function (name, cb) {
+                r.getAttribute(name, function (value) {
+                    delete r._getAttr[name.toUpperCase()];
+                    cb.call(this, value);
+                });
+            };
+            node.setAttribute = function (name, value) {
+                r.setAttribute(name, value);
+                r._matcher.on('attribute', function (node) {
+                    if (node.name === name.toUpperCase()) {
+                        delete r._setAttr[name.toUpperCase()];
+                    }
+                });
+            };
+            node.createReadStream = Result.prototype.createReadStream.bind(r);
+            
+            r.emit('element', node);
+        });
+        
         r.createReadStream = undefined;
         selectors.push(r);
         return r;

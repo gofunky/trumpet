@@ -47,18 +47,20 @@ test('overlapping read streams', function (t) {
 });
 
 test('stream all divs', function (t) {
-    t.plan(6);
+    t.plan(9);
     var html = [ 'AAA', 'X<b>Y</b>Z', 'CCC' ];
     var classes = [ 'a', 'b', 'c' ];
     
     var tr = trumpet();
-    var divs = tr.selectAll('div');
-    divs.getAttribute('class', function (c) {
-        t.equal(c, classes.shift());
-    });
-    
-    divs.on('read-stream', function (stream) {
-        stream.pipe(concat(function (src) {
+    tr.selectAll('div').on('element', function (div) {
+        var c_ = classes.shift();
+        t.equal(div.attributes.CLASS, c_);
+        
+        div.getAttribute('class', function (c) {
+            t.equal(c, c_);
+        });
+        
+        div.createReadStream().pipe(concat(function (src) {
             t.equal(src.toString(), html.shift());
         }));
     });
