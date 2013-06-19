@@ -103,19 +103,21 @@ Result.prototype._at = function (lex) {
     if (this._writing) {
         if (lex[0] === 'closetag') {
             var level = this._matcher.matchers[0].stack.length;
+            var removed = 0;
             
             for (var i = this._readStreams.length - 1; i >= 0; i--) {
                 var s = this._readStreams[i];
                 if (s._readLevel === level) {
                     s.queue(null);
+                    removed ++;
                     this._readStreams.splice(i, 1);
                     i --;
+                    this.emit('read-close');
                 }
             }
             if (this._readStreams.length === 0) {
                 this._writing = false;
             }
-            this.emit('read-close');
         }
         for (var i = 0; i < this._readStreams.length; i++) {
             this._readStreams[i].queue(lex[1]);
