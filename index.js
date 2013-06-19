@@ -83,6 +83,11 @@ function Result (sel) {
                 rsl[i](stream);
                 self._readStreams.push(stream);
             }
+            for (var i = 0; i < self._readStreams.length; i++) {
+                if (self._readStreams[i]._readLevel === undefined) {
+                    self._readStreams[i]._readLevel = self._readLevel;
+                }
+            }
         }
     });
     
@@ -96,19 +101,24 @@ function Result (sel) {
 
 Result.prototype._at = function (lex) {
     if (this._writing) {
-        if (lex[0] === 'closetag'
-        && this._readLevel === this._readMatcher.stack.length) {
-            this._writing = false;
-            for (var i = 0; i < this._readStreams.length; i++) {
-                this._readStreams[i].queue(null);
+        if (lex[0] === 'closetag') {
+            var level = this._matcher.matchers[0].stack.length;
+            
+            for (var i = this._readStreams.length - 1; i >= 0; i--) {
+                var s = this._readStreams[i];
+                if (s._readLevel === level) {
+                    s.queue(null);
+                    this._readStreams.splice(i, 1);
+                    i --;
+                }
             }
-            this._readStreams.splice(0);
+            if (this._readStreams.length === 0) {
+                this._writing = false;
+            }
             this.emit('read-close');
         }
-        else {
-            for (var i = 0; i < this._readStreams.length; i++) {
-                this._readStreams[i].queue(lex[1]);
-            }
+        for (var i = 0; i < this._readStreams.length; i++) {
+            this._readStreams[i].queue(lex[1]);
         }
     }
     this._matcher.at(lex[0], lex[2]);

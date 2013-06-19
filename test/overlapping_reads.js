@@ -9,7 +9,7 @@ test('stream all divs', function (t) {
     var html = [
         '\n',
         '\n<div class="c">\n</div>\n',
-        '\n<div class="b">\n<div class="c">\n</div>\n</div>\n',
+        '\n<div class="b">\n<div class="c">\n</div>\n</div>\n'
     ];
     
     var tr = trumpet();
