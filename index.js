@@ -9,6 +9,8 @@ var inherits = require('inherits');
 module.exports = function (opts) {
     var selectors = [];
     var tokens = tokenize();
+    var writing = false;
+    
     tokens.pipe(through(write, end));
     
     var tr = through(
@@ -19,7 +21,7 @@ module.exports = function (opts) {
     tr.select = function (sel) {
         var r = new Result(sel);
         r._matcher.once('unmatch', function () {
-            if (!r._reading) {
+            if (!r._reading && !r._writing) {
                 var ix = selectors.indexOf(r);
                 if (ix >= 0) selectors.splice(ix, 1);
             }
@@ -28,6 +30,32 @@ module.exports = function (opts) {
             var ix = selectors.indexOf(r);
             if (ix >= 0) selectors.splice(ix, 1);
         });
+        
+        r.on('_write-begin', function (stream) {
+            tokens.pause();
+            writing = true;
+            stream.pipe(through(write, end));
+            stream.resume();
+            
+            function write (buf) {
+                if (Buffer.isBuffer(buf)) {
+                    tr.queue(buf)
+                }
+                else if (typeof buf === 'string') {
+                    tr.queue(Buffer(buf));
+                }
+                else {
+                    tr.queue(Buffer(String(buf)));
+                }
+            }
+            function end () {
+                writing = false;
+                tokens.resume();
+            }
+        });
+        
+        r.on('_write-end', function () {});
+        
         selectors.push(r);
         return r;
     };
@@ -58,6 +86,8 @@ module.exports = function (opts) {
         });
         
         r.createReadStream = undefined;
+        r.createWriteStream = undefined;
+        
         selectors.push(r);
         return r;
     };
@@ -65,6 +95,8 @@ module.exports = function (opts) {
     return tr;
     
     function write (lex) {
+        if (writing) return;
+        
         var sub;
         selectors.forEach(function (s) {
             s._at(lex);
@@ -90,9 +122,10 @@ function Result (sel) {
     self._setAttr = {};
     self._getAttr = {};
     self._readStreams = [];
-    self._writeStreams = [];
+    self._writeStream = null;
     
     self._reading = false;
+    self._writing = false;
     self._matcher = matcher(parseSelector(sel));
     
     self._matcher.on('tag-end', function (m) {
@@ -102,10 +135,15 @@ function Result (sel) {
             self._readLevel = m.stack.length;
             
             for (var i = 0; i < self._readStreams.length; i++) {
-                if (self._readStreams[i]._readLevel === undefined) {
-                    self._readStreams[i]._readLevel = self._readLevel;
+                if (self._readStreams[i]._level === undefined) {
+                    self._readStreams[i]._level = self._readLevel;
                 }
             }
+        }
+        if (self._writeStream) {
+            self._writing = true;
+            self._writeLevel = m.stack.length;
+            self.emit('_write-begin', self._writeStream);
         }
     });
     
@@ -125,7 +163,7 @@ Result.prototype._at = function (lex) {
             
             for (var i = this._readStreams.length - 1; i >= 0; i--) {
                 var s = this._readStreams[i];
-                if (s._readLevel === level) {
+                if (s._level === level) {
                     s.queue(null);
                     removed ++;
                     this._readStreams.splice(i, 1);
@@ -139,7 +177,16 @@ Result.prototype._at = function (lex) {
         }
         for (var i = 0; i < this._readStreams.length; i++) {
             var s = this._readStreams[i];
-            if (s._readLevel !== undefined) s.queue(lex[1]);
+            if (s._level !== undefined) s.queue(lex[1]);
+        }
+    }
+    if (this._writing) {
+        if (lex[0] === 'closetag') {
+            var level = this._matcher.matchers[0].stack.length;
+            if (level === this._writeLevel) {
+                this._writing = false;
+                this.emit('_write-end');
+            }
         }
     }
     this._matcher.at(lex[0], lex[2]);
@@ -157,8 +204,8 @@ Result.prototype.getAttribute = function (key, cb) {
 
 Result.prototype.createWriteStream = function () {
     // doesn't work with selectAll()
-    var stream = through();
-    this._writeStreams.push(stream);
+    var stream = through().pause();
+    this._writeStream = stream;
     return stream;
 };
 

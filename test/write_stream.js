@@ -5,7 +5,7 @@ var test = require('tape');
 var concat = require('concat-stream');
 
 test('write stream', function (t) {
-    t.plan(3);
+    t.plan(1);
     
     var tr = trumpet();
     var ws = tr.select('div').createWriteStream();
