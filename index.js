@@ -112,12 +112,12 @@ Result.prototype._at = function (lex) {
                     removed ++;
                     this._readStreams.splice(i, 1);
                     i --;
-                    this.emit('read-close');
                 }
             }
             if (this._readStreams.length === 0) {
                 this._writing = false;
             }
+            if (removed > 0) this.emit('read-close');
         }
         for (var i = 0; i < this._readStreams.length; i++) {
             this._readStreams[i].queue(lex[1]);
