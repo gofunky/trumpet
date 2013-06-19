@@ -9,7 +9,7 @@ test('read stream', function (t) {
     var tr = trumpet();
     
     tr.select('.a').createReadStream().pipe(concat(function (body) {
-        t.equal(body, 'AAA');
+        t.equal(body.toString(), 'AAA');
     }));
     
     fs.createReadStream(__dirname + '/read_stream.html').pipe(tr);
