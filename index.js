@@ -71,9 +71,11 @@ function Result (sel) {
     self._matcher = matcher(parseSelector(sel));
     
     self._matcher.on('tag-end', function (m) {
-        self._writing = true;
-        self._readMatcher = m;
-        self._readLevel = m.stack.length;
+        if (self._readStreams.length) {
+            self._writing = true;
+            self._readMatcher = m;
+            self._readLevel = m.stack.length;
+        }
     });
     
     self._matcher.on('attribute', function (node) {
