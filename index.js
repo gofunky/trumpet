@@ -51,6 +51,7 @@ module.exports = function (opts) {
                     }
                 });
             };
+            
             node.createReadStream = Result.prototype.createReadStream.bind(r);
             
             r.emit('element', node);
@@ -95,17 +96,11 @@ function Result (sel) {
     self._matcher = matcher(parseSelector(sel));
     
     self._matcher.on('tag-end', function (m) {
-        var rsl = self.listeners('read-stream');
-        if (self._readStreams.length || rsl.length) {
+        if (self._readStreams.length) {
             self._reading = true;
             self._readMatcher = m;
             self._readLevel = m.stack.length;
             
-            for (var i = 0; i < rsl.length; i++) {
-                var stream = through();
-                rsl[i](stream);
-                self._readStreams.push(stream);
-            }
             for (var i = 0; i < self._readStreams.length; i++) {
                 if (self._readStreams[i]._readLevel === undefined) {
                     self._readStreams[i]._readLevel = self._readLevel;
@@ -143,7 +138,8 @@ Result.prototype._at = function (lex) {
             if (removed > 0) this.emit('read-close');
         }
         for (var i = 0; i < this._readStreams.length; i++) {
-            this._readStreams[i].queue(lex[1]);
+            var s = this._readStreams[i];
+            if (s._readLevel !== undefined) s.queue(lex[1]);
         }
     }
     this._matcher.at(lex[0], lex[2]);

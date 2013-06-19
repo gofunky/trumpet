@@ -13,13 +13,10 @@ test('stream all divs', function (t) {
     ];
     
     var tr = trumpet();
-    var divs = tr.selectAll('div');
-    
-    divs.on('read-stream', function (stream) {
-        stream.pipe(concat(function (src) {
+    tr.selectAll('div', function (div) {
+        div.createReadStream().pipe(concat(function (src) {
             t.equal(src.toString(), html.shift());
         }));
     });
-    
     fs.createReadStream(__dirname + '/overlapping_reads.html').pipe(tr);
 });
