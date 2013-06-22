@@ -6,8 +6,6 @@ var concat = require('concat-stream');
 
 test('through stream thrice', function (t) {
     t.plan(1);
-    t.ok('disabled');
-    return;
     
     var tr = trumpet();
     tr.selectAll('div', function (div) {
