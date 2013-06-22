@@ -44,9 +44,10 @@ test('get all class names', function (t) {
     
     var tr = trumpet();
     
-    var elem = tr.selectAll('div');
-    elem.getAttribute('class', function (value) {
-        t.equal(value, names.shift());
+    tr.selectAll('div', function (elem) {
+        elem.getAttribute('class', function (value) {
+            t.equal(value, names.shift());
+        });
     });
     fs.createReadStream(__dirname + '/rebase.html').pipe(tr);
 });
@@ -59,9 +60,10 @@ test('all class name pairs', function (t) {
         t.deepEqual(names, [ 'b', 'a', 'b', 'c', 'd' ]);
     }));
     
-    var elem = tr.selectAll('div > div');
-    elem.getAttribute('class', function (value) {
-        names.push(value);
+    tr.selectAll('div > div', function (elem) {
+        elem.getAttribute('class', function (value) {
+            names.push(value);
+        });
     });
     fs.createReadStream(__dirname + '/rebase.html').pipe(tr);
 });
