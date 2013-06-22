@@ -114,6 +114,8 @@ called `name` with `cb(value)`.
 When the selector for `elem` matches, replace the case-insensitive attribute
 called `name` with `value`.
 
+If the attribute doesn't exist, it will be created in the output stream.
+
 ## elem.createReadStream()
 
 Create a new readable stream with the inner html content under `elem`.
