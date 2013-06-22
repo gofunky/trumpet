@@ -63,6 +63,8 @@ module.exports = function (opts) {
             skipping = false;
         });
         
+        r.on('queue', function (buf) { tr.queue(buf) });
+        
         selectors.push(r);
         return r;
     };
@@ -70,6 +72,7 @@ module.exports = function (opts) {
     tr.selectAll = function (sel, cb) {
         var r = new Result(sel);
         if (cb) r.on('element', cb);
+        r.on('queue', function (buf) { tr.queue(buf) });
         
         r._matcher.on('open', function (node) {
             node.getAttribute = function (name, cb) {
@@ -139,7 +142,17 @@ function Result (sel) {
     self._writing = false;
     self._matcher = matcher(parseSelector(sel));
     
+    var remainingSets = [];
+    self._matcher.on('open', function () {
+        remainingSets = Object.keys(self._setAttr);
+    });
+    
     self._matcher.on('tag-end', function (m) {
+        for (var i = 0; i < remainingSets.length; i++) {
+            var key = remainingSets[i];
+            self.emit('queue', Buffer(' ' + self._setAttr[key]));
+        }
+        
         if (self._readStreams.length) {
             self._reading = true;
             self._readMatcher = m;
@@ -162,7 +175,11 @@ function Result (sel) {
         var f = self._getAttr[node.name];
         if (f) f(node.value);
         var v = self._setAttr[node.name];
-        if (v !== undefined) self._substitute = v;
+        if (v !== undefined) {
+            self._substitute = v;
+            var ix = remainingSets.indexOf(node.name);
+            if (ix >= 0) remainingSets.splice(ix, 1);
+        }
     });
 }
 

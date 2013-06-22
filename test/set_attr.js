@@ -21,8 +21,6 @@ test('set attribute', function (t) {
 
 test('create attribute', function (t) {
     t.plan(1);
-    t.ok(true, 'skip');
-    return;
     
     var tr = trumpet();
     var elem = tr.select('input[type=text]');
