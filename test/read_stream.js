@@ -52,7 +52,7 @@ test('stream all divs', function (t) {
     var classes = [ 'a', 'b', 'c' ];
     
     var tr = trumpet();
-    tr.selectAll('div').on('element', function (div) {
+    tr.selectAll('div', function (div) {
         var c_ = classes.shift();
         t.equal(div.attributes.CLASS, c_);
         
