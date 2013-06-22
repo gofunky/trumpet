@@ -21,17 +21,43 @@ module.exports = function (opts) {
     );
     
     tr.select = function (sel) {
+        var r = createResult(sel, { all: false });
+        return r;
+    };
+    
+    tr.selectAll = function (sel, cb) {
+        var r = createResult(sel, { all: true });
+        
+        r._matcher.on('open', function (node) {
+            r.name = node.name;
+            r.attributes = node.attributes;
+            r.isSelfClosing = node.isSelfClosing;
+            cb(r);
+        });
+        
+        r._matcher.on('tag-end', function (node) {
+            r._getAttr = {};
+            r._setAttr = {};
+        });
+    };
+    
+    return tr;
+    
+    function createResult (sel, opts) {
         var r = new Result(sel);
-        r._matcher.once('unmatch', function () {
-            if (!r._reading && !r._writing) {
+        
+        if (opts.all === false) {
+            r._matcher.once('unmatch', function () {
+                if (!r._reading && !r._writing) {
+                    var ix = selectors.indexOf(r);
+                    if (ix >= 0) selectors.splice(ix, 1);
+                }
+            });
+            r.once('read-close', function () {
                 var ix = selectors.indexOf(r);
                 if (ix >= 0) selectors.splice(ix, 1);
-            }
-        });
-        r.once('read-close', function () {
-            var ix = selectors.indexOf(r);
-            if (ix >= 0) selectors.splice(ix, 1);
-        });
+            });
+        }
         
         r.on('_write-begin', function (stream) {
             if (stream._skipping !== false) {
@@ -67,46 +93,7 @@ module.exports = function (opts) {
         
         selectors.push(r);
         return r;
-    };
-    
-    tr.selectAll = function (sel, cb) {
-        var r = new Result(sel);
-        if (cb) r.on('element', cb);
-        r.on('queue', function (buf) { tr.queue(buf) });
-        
-        r._matcher.on('open', function (node) {
-            node.getAttribute = function (name, cb) {
-                r.getAttribute(name, function (value) {
-                    delete r._getAttr[name.toUpperCase()];
-                    cb.call(this, value);
-                });
-            };
-            node.setAttribute = function (name, value) {
-                r.setAttribute(name, value);
-                r._matcher.on('attribute', function (node) {
-                    if (node.name === name.toUpperCase()) {
-                        delete r._setAttr[name.toUpperCase()];
-                    }
-                });
-            };
-            
-            node.createStream = RP.createStream.bind(r);
-            node.createReadStream = RP.createReadStream.bind(r);
-            node.createWriteStream = RP.createWriteStream.bind(r);
-            
-            r.emit('element', node);
-        });
-        
-        var RP = Result.prototype;
-        r.createStream = undefined;
-        r.createReadStream = undefined;
-        r.createWriteStream = undefined;
-        
-        selectors.push(r);
-        return r;
-    };
-    
-    return tr;
+    }
     
     function write (lex) {
         var sub;

@@ -29,9 +29,10 @@ test('get all divs', function (t) {
     var names = [ 'a', 'b' ];
     
     var tr = trumpet();
-    var elem = tr.selectAll('div');
-    elem.getAttribute('class', function (value) {
-        t.equal(value, names.shift());
+    tr.selectAll('div', function (elem) {
+        elem.getAttribute('class', function (value) {
+            t.equal(value, names.shift());
+        });
     });
     fs.createReadStream(__dirname + '/get_attr.html').pipe(tr);
 });
