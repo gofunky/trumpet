@@ -12,6 +12,7 @@ module.exports = function (opts) {
     var tokens = tokenize();
     var tokenBuffer = null;
     var skipping = false;
+    var lastToken = null;
     
     tokens.pipe(through(write, end));
     
@@ -60,6 +61,13 @@ module.exports = function (opts) {
         }
         
         r.on('_write-begin', function (stream) {
+            if (lastToken[0] === 'tag-end'
+            && lastToken[1].length > 0
+            && '>' === String.fromCharCode(lastToken[1][lastToken[1].length-1])
+            ) {
+                tr.queue(lastToken[1]);
+            }
+            
             if (stream._skipping !== false) {
                 tokens.pause();
             }
@@ -96,6 +104,8 @@ module.exports = function (opts) {
     }
     
     function write (lex) {
+        lastToken = lex;
+        
         var sub;
         selectors.forEach(function (s) {
             s._at(lex);
@@ -106,7 +116,6 @@ module.exports = function (opts) {
         });
         
         if (skipping) return;
-        
         if (sub !== undefined) tr.queue(sub)
         else tr.queue(lex[1])
     }
