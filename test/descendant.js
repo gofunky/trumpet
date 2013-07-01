@@ -20,7 +20,7 @@ test('descendant no-match selector', function (t) {
     t.plan(1);
     
     var tr = trumpet();
-    var elem = tr.select('.a .d');
+    var elem = tr.select('.b .d');
     elem.getAttribute('class', function (value) {
         t.fail('should not have matched');
     });
