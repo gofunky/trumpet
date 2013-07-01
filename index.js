@@ -136,7 +136,7 @@ function Result (sel) {
     
     self._reading = false;
     self._writing = false;
-    self._matcher = matcher(parseSelector(sel), self);
+    self._matcher = matcher(parseSelector(sel));
     
     var remainingSets = [];
     self._matcher.on('open', function () {
