@@ -150,7 +150,7 @@ function Result (sel) {
         }
         
         if (self._readStreams.length) {
-            self._reading = true;
+            self._reading = m._reading = true;
             self._readMatcher = m;
             self._readLevel = m.stack.length;
             
@@ -161,7 +161,7 @@ function Result (sel) {
             }
         }
         if (self._writeStream) {
-            self._writing = true;
+            self._writing = m._writing = true;
             self._writeLevel = m.stack.length;
             self.emit('_write-begin', self._writeStream);
         }
@@ -195,6 +195,7 @@ Result.prototype._at = function (lex) {
             }
             if (this._readStreams.length === 0) {
                 this._reading = false;
+                this._matcher._reading = false;
             }
             if (removed > 0) this.emit('read-close');
         }
@@ -207,7 +208,7 @@ Result.prototype._at = function (lex) {
         if (lex[0] === 'closetag') {
             var level = this._matcher.matchers[0].stack.length;
             if (level === this._writeLevel) {
-                this._writing = false;
+                this._writing = this._matcher._writing = false;
                 this.emit('_write-end');
             }
         }
