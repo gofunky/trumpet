@@ -31,7 +31,7 @@ test('em is first, select h1', function (t) {
     var tr = trumpet();
     var elem = tr.select('.b h1');
     elem.getAttribute('value', function (value) {
-        t.equal(value, 'ah1');
+        t.equal(value, 'bh1');
     });
     fs.createReadStream(__dirname + '/misc_tags.html').pipe(tr);
 });
@@ -42,7 +42,7 @@ test('em is first, select em', function (t) {
     var tr = trumpet();
     var elem = tr.select('.b em');
     elem.getAttribute('value', function (value) {
-        t.equal(value, 'aem');
+        t.equal(value, 'bem');
     });
     fs.createReadStream(__dirname + '/misc_tags.html').pipe(tr);
 });
