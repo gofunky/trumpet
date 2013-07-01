@@ -3,7 +3,6 @@ var fs = require('fs');
 var test = require('tape');
 var through = require('through');
 
-/*
 test('descendant selector', function (t) {
     t.plan(1);
     
@@ -14,7 +13,6 @@ test('descendant selector', function (t) {
     });
     fs.createReadStream(__dirname + '/descendant.html').pipe(tr);
 });
-*/
 
 test('descendant no-match selector', function (t) {
     t.plan(1);
