@@ -46,3 +46,14 @@ test('em is first, select em', function (t) {
     });
     fs.createReadStream(__dirname + '/misc_tags.html').pipe(tr);
 });
+
+test('deeply nested', function (t) {
+    t.plan(1);
+    
+    var tr = trumpet();
+    var elem = tr.select('.c h1');
+    elem.getAttribute('value', function (value) {
+        t.equal(value, 'ch1');
+    });
+    fs.createReadStream(__dirname + '/misc_tags.html').pipe(tr);
+});
