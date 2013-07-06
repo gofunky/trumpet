@@ -116,6 +116,11 @@ called `name` with `value`.
 
 If the attribute doesn't exist, it will be created in the output stream.
 
+## elem.removeAttribute(name)
+
+When the selector for `elem` matches, remove the attribute called `name` if it
+exists.
+
 ## elem.createReadStream()
 
 Create a new readable stream with the inner html content under `elem`.
