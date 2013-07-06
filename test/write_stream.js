@@ -29,7 +29,6 @@ test('outer write stream', function (t) {
     fs.createReadStream(__dirname + '/write_stream.html').pipe(tr);
 });
 
-return;
 test('write stream', function (t) {
     t.plan(1);
     

@@ -30,10 +30,10 @@ module.exports = function (opts) {
     tr.selectAll = function (sel, cb) {
         var r = createResult(sel, { all: true });
         
-        r._matcher.on('open', function (node) {
-            r.name = node.name;
-            r.attributes = node.attributes;
-            r.isSelfClosing = node.isSelfClosing;
+        r._matcher.on('open', function (m) {
+            r.name = m.current.name;
+            r.attributes = m.current.attributes;
+            r.isSelfClosing = m.current.isSelfClosing;
             cb(r);
         });
         
@@ -152,8 +152,14 @@ function Result (sel) {
     self._matcher = matcher(parseSelector(sel));
     
     var remainingSets = [];
-    self._matcher.on('open', function () {
+    self._matcher.on('open', function (m) {
         remainingSets = Object.keys(self._setAttr);
+        
+        if (self._writeStream && self._writeStream.outer) {
+            self._writing = true;
+            self._writeLevel = m.stack.length;
+            self.emit('_write-begin', self._writeStream);
+        }
     });
     
     self._matcher.on('tag-end', function (m) {
@@ -173,7 +179,7 @@ function Result (sel) {
                 }
             }
         }
-        if (self._writeStream) {
+        if (self._writeStream && !self._writeStream.outer) {
             self._writing = true;
             self._writeLevel = m.stack.length;
             self.emit('_write-begin', self._writeStream);
@@ -220,10 +226,18 @@ Result.prototype._at = function (lex) {
             if (s._level !== undefined) s.queue(lex[1]);
         }
     }
-    if (this._writing) {
-        if (lex[0] === 'closetag') {
-            var level = this._matcher.matchers[0].stack.length;
-            if (level === this._writeLevel) {
+    
+    if (this._writing === 'next') {
+        this._writing = false;
+        this.emit('_write-end');
+    }
+    else if (this._writing && lex[0] === 'closetag') {
+        var level = this._matcher.matchers[0].stack.length;
+        if (level === this._writeLevel) {
+            if (this._writeStream.outer) {
+                this._writing = 'next';
+            }
+            else {
                 this._writing = false;
                 this.emit('_write-end');
             }
@@ -254,8 +268,10 @@ Result.prototype.getAttribute = function (key, cb) {
     this._getAttr[key.toUpperCase()] = cb;
 };
 
-Result.prototype.createWriteStream = function () {
+Result.prototype.createWriteStream = function (opts) {
+    if (!opts) opts = {};
     var stream = through().pause();
+    if (opts.outer) stream.outer = true;
     this._writeStream = stream;
     return stream;
 };
@@ -268,9 +284,9 @@ Result.prototype.createReadStream = function (opts) {
     return stream;
 };
 
-Result.prototype.createStream = function () {
-    var ws = Result.prototype.createWriteStream.call(this);
+Result.prototype.createStream = function (opts) {
+    var ws = Result.prototype.createWriteStream.call(this, opts);
     ws._skipping = false;
-    var rs = Result.prototype.createReadStream.call(this);
+    var rs = Result.prototype.createReadStream.call(this, opts);
     return duplexer(ws, rs);
 };
