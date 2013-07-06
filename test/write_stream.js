@@ -4,6 +4,32 @@ var through = require('through');
 var test = require('tape');
 var concat = require('concat-stream');
 
+test('outer write stream', function (t) {
+    t.plan(1);
+    
+    var tr = trumpet();
+    var ws = tr.select('div').createWriteStream({ outer: true });
+    var s = through();
+    s.pipe(ws);
+    
+    s.write('<B>beep');
+    
+    setTimeout(function () {
+        s.write(' boop.</B>');
+        s.end();
+    }, 500);
+    
+    tr.pipe(concat(function (body) {
+        t.equal(
+            body.toString(),
+            '<html>\n<body>\n<B>beep boop.</B>\n</body>\n</html>\n'
+        );
+    }));
+    
+    fs.createReadStream(__dirname + '/write_stream.html').pipe(tr);
+});
+
+return;
 test('write stream', function (t) {
     t.plan(1);
     
@@ -22,7 +48,7 @@ test('write stream', function (t) {
     tr.pipe(concat(function (body) {
         t.equal(
             body.toString(),
-            '<html>\n<body>\n<div>beep boop.</div>\n</body>\n</html>\n'
+            '<html>\n<body>\n<div class="x">beep boop.</div>\n</body>\n</html>\n'
         );
     }));
     
