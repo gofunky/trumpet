@@ -4,6 +4,27 @@ var test = require('tape');
 var concat = require('concat-stream');
 var html = fs.readFileSync(__dirname + '/read_stream.html');
 
+test('outer stream', function (t) {
+    t.plan(3);
+    
+    var tr = trumpet();
+    
+    tr.select('.a').createReadStream({ outer: true })
+        .pipe(concat(function (body) {
+            t.equal(body.toString(), 'AAA');
+        }))
+    ;
+    
+    var b = tr.select('.b');
+    b.getAttribute('class', function (v) { t.equal(v, 'b') });
+    b.createReadStream().pipe(concat(function (body) {
+        t.equal(body.toString(), '<div class="b">X<b>Y</b>Z</div>');
+    }));
+    
+    fs.createReadStream(__dirname + '/read_stream.html').pipe(tr);
+});
+
+return;
 test('read stream', function (t) {
     t.plan(3);
     
