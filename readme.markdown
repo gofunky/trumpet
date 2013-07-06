@@ -121,18 +121,24 @@ If the attribute doesn't exist, it will be created in the output stream.
 When the selector for `elem` matches, remove the attribute called `name` if it
 exists.
 
-## elem.createReadStream()
+## elem.createReadStream(opts)
 
 Create a new readable stream with the inner html content under `elem`.
 
-## elem.createWriteStream()
+To use the outer html content instead of the inner, set `opts.outer` to `true`.
+
+## elem.createWriteStream(opts)
 
 Create a new write stream to replace the inner html content under `elem`.
 
-## elem.createStream()
+To use the outer html content instead of the inner, set `opts.outer` to `true`.
+
+## elem.createStream(opts)
 
 Create a new readable writable stream that outputs the content under `elem` and
 replaces the content with the data written to it.
+
+To use the outer html content instead of the inner, set `opts.outer` to `true`.
 
 # selector syntax
 
