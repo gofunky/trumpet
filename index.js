@@ -107,6 +107,7 @@ module.exports = function (opts) {
     
     function write (lex) {
         lastToken = lex;
+        var writeSkip = false;
         
         var sub;
         selectors.forEach(function (s) {
@@ -115,13 +116,18 @@ module.exports = function (opts) {
                 sub = s._substitute;
                 s._substitute = undefined;
             }
+            if (s._writing === 'next') {
+                s._writing = false;
+                s.emit('_write-end');
+                writeSkip = true;
+            }
         });
         
         if (skipSpace) {
             skipSpace = false;
             if (lex[0] === 'tag-space') return;
         }
-        if (skipping) return;
+        if (skipping || writeSkip) return;
         
         if (sub === undefined) {
             tr.queue(lex[1]);
