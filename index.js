@@ -12,6 +12,7 @@ module.exports = function (opts) {
     var tokens = tokenize();
     var tokenBuffer = null;
     var skipping = false;
+    var skipSpace = false;
     var lastToken = null;
     
     tokens.pipe(through(write, end));
@@ -39,6 +40,7 @@ module.exports = function (opts) {
         r._matcher.on('tag-end', function (node) {
             r._getAttr = {};
             r._setAttr = {};
+            r._rmAttr = {};
         });
     };
     
@@ -115,9 +117,19 @@ module.exports = function (opts) {
             }
         });
         
+        if (skipSpace) {
+            skipSpace = false;
+            if (lex[0] === 'tag-space') return;
+        }
         if (skipping) return;
-        if (sub !== undefined) tr.queue(sub)
-        else tr.queue(lex[1])
+        
+        if (sub === undefined) {
+            tr.queue(lex[1]);
+        }
+        else if (sub === null) {
+            skipSpace = true;
+        }
+        else tr.queue(sub);
     }
     
     function end () {
@@ -130,6 +142,7 @@ inherits(Result, EventEmitter);
 function Result (sel) {
     var self = this;
     self._setAttr = {};
+    self._rmAttr = {};
     self._getAttr = {};
     self._readStreams = [];
     self._writeStream = null;
@@ -176,6 +189,9 @@ function Result (sel) {
             var ix = remainingSets.indexOf(node.name);
             if (ix >= 0) remainingSets.splice(ix, 1);
         }
+        if (self._rmAttr[node.name]) {
+            self._substitute = null;
+        }
     });
 }
 
@@ -218,6 +234,11 @@ Result.prototype._at = function (lex) {
 Result.prototype.setAttribute = function (key, value) {
     var sub = Buffer(ent.encode(key) + '="' + ent.encode(value) + '"');
     this._setAttr[key.toUpperCase()] = sub;
+    return this;
+};
+
+Result.prototype.removeAttribute = function (key) {
+    this._rmAttr[key.toUpperCase()] = true;
     return this;
 };
 
