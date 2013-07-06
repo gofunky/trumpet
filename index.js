@@ -204,6 +204,7 @@ Result.prototype._at = function (lex) {
             for (var i = this._readStreams.length - 1; i >= 0; i--) {
                 var s = this._readStreams[i];
                 if (s._level === level) {
+                    if (s.outer) s.queue(lex[1]);
                     s.queue(null);
                     removed ++;
                     this._readStreams.splice(i, 1);
@@ -228,7 +229,14 @@ Result.prototype._at = function (lex) {
             }
         }
     }
-    this._matcher.at(lex[0], lex[2]);
+    
+    var matching = this._matcher.at(lex[0], lex[2]);
+    if (matching) {
+        for (var i = 0; i < this._readStreams.length; i++) {
+            var rs = this._readStreams[i];
+            if (rs.outer) rs.queue(lex[1]);
+        }
+    }
 };
 
 Result.prototype.setAttribute = function (key, value) {
@@ -247,15 +255,15 @@ Result.prototype.getAttribute = function (key, cb) {
 };
 
 Result.prototype.createWriteStream = function () {
-    // doesn't work with selectAll()
     var stream = through().pause();
     this._writeStream = stream;
     return stream;
 };
 
-Result.prototype.createReadStream = function () {
-    // doesn't work with selectAll()
+Result.prototype.createReadStream = function (opts) {
+    if (!opts) opts = {};
     var stream = through();
+    if (opts.outer) stream.outer = true;
     this._readStreams.push(stream);
     return stream;
 };

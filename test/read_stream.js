@@ -11,20 +11,19 @@ test('outer stream', function (t) {
     
     tr.select('.a').createReadStream({ outer: true })
         .pipe(concat(function (body) {
-            t.equal(body.toString(), 'AAA');
+            t.equal(body.toString(), '<div class="a">AAA</div>');
         }))
     ;
     
     var b = tr.select('.b');
     b.getAttribute('class', function (v) { t.equal(v, 'b') });
-    b.createReadStream().pipe(concat(function (body) {
+    b.createReadStream({ outer: true }).pipe(concat(function (body) {
         t.equal(body.toString(), '<div class="b">X<b>Y</b>Z</div>');
     }));
     
     fs.createReadStream(__dirname + '/read_stream.html').pipe(tr);
 });
 
-return;
 test('read stream', function (t) {
     t.plan(3);
     
