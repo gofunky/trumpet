@@ -44,6 +44,18 @@ module.exports = function (opts) {
         });
     };
     
+    tr.createReadStream = function (sel, opts) {
+        return tr.select(sel).createReadStream(opts);
+    };
+    
+    tr.createWriteStream = function (sel, opts) {
+        return tr.select(sel).createWriteStream(opts);
+    };
+    
+    tr.createStream = function (sel, opts) {
+        return tr.select(sel).createStream(opts);
+    };
+    
     return tr;
     
     function createResult (sel, opts) {
