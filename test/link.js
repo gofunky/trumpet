@@ -25,7 +25,7 @@ test('write stream', function (t) {
     tr.pipe(concat(function (body) {
         t.equal(
             body.toString(),
-            '<html><body><a href="/beep">boop</a></body></html>'
+            '<html><body><a href="/beep">beep boop.</a></body></html>'
         );
     }));
     tr.end('<html><body><a></a></body></html>');
