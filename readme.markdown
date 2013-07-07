@@ -140,6 +140,18 @@ replaces the content with the data written to it.
 
 To use the outer html content instead of the inner, set `opts.outer` to `true`.
 
+## tr.createStream(sel, opts)
+
+Short-hand for `tr.select(sel).createStream(opts)`.
+
+## tr.createReadStream(sel, opts)
+
+Short-hand for `tr.select(sel).createReadStream(opts)`.
+
+## tr.createWriteStream(sel, opts)
+
+Short-hand for `tr.select(sel).createWriteStream(opts)`.
+
 # selector syntax
 
 Presently these [css selectors](http://www.w3.org/TR/CSS2/selector.html) work:
