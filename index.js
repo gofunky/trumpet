@@ -79,7 +79,7 @@ module.exports = function (opts) {
             && lastToken[1].length > 0
             && '>' === String.fromCharCode(lastToken[1][lastToken[1].length-1])
             ) {
-                tr.queue(lastToken[1]);
+                if (lastToken[1].length) tr.queue(lastToken[1]);
             }
             
             if (stream._skipping !== false) {
@@ -91,13 +91,14 @@ module.exports = function (opts) {
             
             function write (buf) {
                 if (Buffer.isBuffer(buf)) {
-                    tr.queue(buf)
+                    if (buf.length) tr.queue(buf)
                 }
                 else if (typeof buf === 'string') {
-                    tr.queue(Buffer(buf));
+                    if (buf.length) tr.queue(Buffer(buf));
                 }
                 else {
-                    tr.queue(Buffer(String(buf)));
+                    buf = String(buf);
+                    if (buf.length) tr.queue(Buffer(buf));
                 }
             }
             function end () {
@@ -142,12 +143,12 @@ module.exports = function (opts) {
         if (skipping || writeSkip) return;
         
         if (sub === undefined) {
-            tr.queue(lex[1]);
+            if (lex[1].length) tr.queue(lex[1]);
         }
         else if (sub === null) {
             skipSpace = true;
         }
-        else tr.queue(sub);
+        else if (sub.length) tr.queue(sub);
     }
     
     function end () {
@@ -228,7 +229,7 @@ Result.prototype._at = function (lex) {
             for (var i = this._readStreams.length - 1; i >= 0; i--) {
                 var s = this._readStreams[i];
                 if (s._level === level) {
-                    if (s.outer) s.queue(lex[1]);
+                    if (s.outer && lex[1].length) s.queue(lex[1]);
                     s.queue(null);
                     removed ++;
                     this._readStreams.splice(i, 1);
@@ -241,7 +242,7 @@ Result.prototype._at = function (lex) {
         }
         for (var i = 0; i < this._readStreams.length; i++) {
             var s = this._readStreams[i];
-            if (s._level !== undefined) s.queue(lex[1]);
+            if (s._level !== undefined && lex[1].length) s.queue(lex[1]);
         }
     }
     
@@ -266,7 +267,7 @@ Result.prototype._at = function (lex) {
     if (matching) {
         for (var i = 0; i < this._readStreams.length; i++) {
             var rs = this._readStreams[i];
-            if (rs.outer) rs.queue(lex[1]);
+            if (rs.outer && lex[1].length) rs.queue(lex[1]);
         }
     }
 };
