@@ -47,7 +47,9 @@ test('write stream', function (t) {
     tr.pipe(concat(function (body) {
         t.equal(
             body.toString(),
-            '<html>\n<body>\n<div class="x">beep boop.</div>\n</body>\n</html>\n'
+            '<!doctype html>'
+            + '<html>\n<body>\n<div class="x">beep boop.</div>\n'
+            + '</body>\n</html>\n'
         );
     }));
     
