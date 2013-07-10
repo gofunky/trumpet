@@ -22,7 +22,8 @@ test('outer write stream', function (t) {
     tr.pipe(concat(function (body) {
         t.equal(
             body.toString(),
-            '<html>\n<body>\n<B>beep boop.</B>\n</body>\n</html>\n'
+            '<!doctype html>\n'
+            + '<html>\n<body>\n<B>beep boop.</B>\n</body>\n</html>\n'
         );
     }));
     
@@ -47,7 +48,7 @@ test('write stream', function (t) {
     tr.pipe(concat(function (body) {
         t.equal(
             body.toString(),
-            '<!doctype html>'
+            '<!doctype html>\n'
             + '<html>\n<body>\n<div class="x">beep boop.</div>\n'
             + '</body>\n</html>\n'
         );
