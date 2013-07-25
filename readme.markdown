@@ -164,6 +164,8 @@ Presently these [css selectors](http://www.w3.org/TR/CSS2/selector.html) work:
 * E.class
 * E#id
 * E[attr=value]
+* E[attr~=search]
+* E[attr|=prefix]
 
 # install
 
