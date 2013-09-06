@@ -30,7 +30,7 @@ module.exports = function (opts) {
     tr.selectAll = function (sel, cb) {
         var r = createResult(sel, { all: true });
         
-        r._matcher.on('open', function (m) {
+        r._matcher.on('pre-open', function (m) {
             r.name = m.current.name;
             r.attributes = m.current.attributes;
             r.isSelfClosing = m.current.isSelfClosing;
