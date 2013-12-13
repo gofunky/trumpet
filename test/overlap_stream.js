@@ -14,13 +14,12 @@ test('overlap prepend stream', function (t) {
         a.pipe(through()).pipe(a);
     });
     
-    tr.selectAll('body', function (elem) {
-        var b = elem.createStream();
-        b.pipe(through(null, function () {
-            this.queue('!!!!!\n');
-            this.queue(null);
-        })).pipe(b);
-    });
+    var elem = tr.select('body');
+    var b = elem.createStream();
+    b.pipe(through(null, function () {
+        this.queue('!!!!!\n');
+        this.queue(null);
+    })).pipe(b);
     
     tr.pipe(concat(function (body) {
         t.equal(
@@ -31,6 +30,7 @@ test('overlap prepend stream', function (t) {
             + '<script src="/a.js"></script>\n'
             + '</head>\n'
             + '<body>\n'
+            + '%%%%%\n'
             + '<script src="/b.js"></script>\n'
             + '!!!!!\n'
             + '</body>\n'
