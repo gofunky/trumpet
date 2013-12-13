@@ -10,7 +10,7 @@ test('overlap prepend stream', function (t) {
     
     tr.selectAll('script', function (elem) {
         var a = elem.createStream({ outer: true })
-        a.write('%%%%%\n');
+        a.write('-----\n');
         a.pipe(through()).pipe(a);
     });
     
@@ -26,11 +26,11 @@ test('overlap prepend stream', function (t) {
             body.toString(),
             '<html>\n'
             + '<head>\n'
-            + '%%%%%\n'
+            + '-----\n'
             + '<script src="/a.js"></script>\n'
             + '</head>\n'
             + '<body>\n'
-            + '%%%%%\n'
+            + '-----\n'
             + '<script src="/b.js"></script>\n'
             + '!!!!!\n'
             + '</body>\n'
