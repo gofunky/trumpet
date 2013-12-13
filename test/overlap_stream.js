@@ -8,15 +8,22 @@ test('overlap prepend stream', function (t) {
     t.plan(1);
     
     var tr = trumpet();
-    var s = tr.select('script').createStream({ outer: true });
-    s.write('!!!!!\n');
-    s.pipe(through()).pipe(s);
+    var a = tr.select('script').createStream({ outer: true })
+    a.write('%%%%%\n');
+    a.pipe(through()).pipe(a);
+    
+    var b = tr.select('body').createStream();
+    b.pipe(through(null, function () {
+        this.queue('!!!!!\n');
+        this.queue(null);
+    })).pipe(b);
     
     tr.pipe(concat(function (body) {
         t.equal(
             body.toString(),
-            '<html>\n<body>\n!!!!!\n'
-            + '<script src="/a.js"></script>\n</body>\n</html>\n'
+            '<html>\n<head>\n%%%%%\n'
+            + '<script src="/a.js"></script>\n</head>\n<body>\n'
+            + '<script src="/b.js"></script>\n!!!!!\n</body>\n</html>\n'
         );
     }));
     fs.createReadStream(__dirname + '/overlap_stream.html').pipe(tr);
