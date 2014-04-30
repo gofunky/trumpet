@@ -18,13 +18,11 @@ Trumpet.prototype._transform = function (buf, enc, next) {
     var self = this;
     this._tokenize.write(buf);
     
-    (function read () {
-        var token;
-        while ((token = self._tokenize.read()) !== null) {
-            self._applyToken(token);
-        }
-        next();
-    })();
+    var token;
+    while ((token = self._tokenize.read()) !== null) {
+        self._applyToken(token);
+    }
+    next();
 };
 
 Trumpet.prototype._flush = function (next) {
