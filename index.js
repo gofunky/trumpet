@@ -44,9 +44,12 @@ Trumpet.prototype.select = function (str) {
     return sel;
 };
 
-Trumpet.prototype.selectAll = function (str) {
+Trumpet.prototype.selectAll = function (str, cb) {
     var self = this;
     var sel = new Selector(str);
+    sel.on('match', function (tag) {
+        cb(tag);
+    });
     this._selectors.push(sel);
     return sel;
 };
