@@ -43,3 +43,7 @@ Trumpet.prototype._applyToken = function (token) {
     }
     this.push(token[1]);
 };
+
+Trumpet.prototype.createReadStream = function (sel, opts) {
+    return this.select(sel).createReadStream(opts);
+};
