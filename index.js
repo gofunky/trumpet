@@ -32,6 +32,18 @@ Trumpet.prototype._flush = function (next) {
 };
 
 Trumpet.prototype.select = function (str) {
+    var self = this;
+    var sel = new Selector(str);
+    sel.once('match', function () {
+        var ix = self._selectors.indexOf(sel);
+        if (ix >= 0) self._selectors.splice(ix, 1);
+    });
+    this._selectors.push(sel);
+    return sel;
+};
+
+Trumpet.prototype.selectAll = function (str) {
+    var self = this;
     var sel = new Selector(str);
     this._selectors.push(sel);
     return sel;
