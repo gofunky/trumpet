@@ -34,12 +34,12 @@ Trumpet.prototype._flush = function (next) {
 Trumpet.prototype.select = function (str) {
     var self = this;
     var sel = new Selector(str);
-    /*
-    sel.once('match', function () {
-        var ix = self._selectors.indexOf(sel);
-        if (ix >= 0) self._selectors.splice(ix, 1);
+    sel.once('match', function (tag) {
+        tag.once('close', function () {
+            var ix = self._selectors.indexOf(tag);
+            if (ix >= 0) self._selectors.splice(ix, 1);
+        });
     });
-    */
     this._selectors.push(sel);
     return sel;
 };
@@ -56,11 +56,16 @@ Trumpet.prototype.selectAll = function (str, cb) {
 
 Trumpet.prototype._applyToken = function (token) {
     for (var i = 0; i < this._selectors.length; i++) {
-        this._selectors[i]._push(token);
+        var sel = this._selectors[i];
+        sel._push(token);
     }
     this.push(token[1]);
 };
 
 Trumpet.prototype.createReadStream = function (sel, opts) {
+    return this.select(sel).createReadStream(opts);
+};
+
+Trumpet.prototype.createWriteStream = function (sel, opts) {
     return this.select(sel).createReadStream(opts);
 };
