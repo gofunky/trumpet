@@ -8,7 +8,7 @@ test('set attributes', function (t) {
     
     var tr = trumpet();
     tr.selectAll('input[type=text]', function (elem) {
-        elem.setAttribute('value', elem.attributes.VALUE.toUpperCase());
+        elem.setAttribute('value', elem.attributes.value.toUpperCase());
     });
     
     tr.pipe(concat(function (src) {

@@ -46,7 +46,7 @@ Trumpet.prototype._flush = function (next) {
     this._advance(next);
 };
 
-Trumpet.prototype.select = function (str) {
+Trumpet.prototype.selectAll = function (str) {
     var self = this;
     var sel = new Selector(str);
     sel.once('match', function (tag) {
@@ -96,13 +96,15 @@ Trumpet.prototype.select = function (str) {
     return sel;
 };
 
-Trumpet.prototype.selectAll = function (str, cb) {
+Trumpet.prototype.select = function (str, cb) {
     var self = this;
-    var sel = new Selector(str);
-    sel.on('match', function (tag) {
-        cb(tag);
+    var sel = self.selectAll(str, cb);
+    sel.once('match', function (tag) {
+        tag.once('close', function () {
+            var ix = self._selectors.indexOf(sel);
+            if (ix >= 0) self._selectors.splice(ix, 1);
+        });
     });
-    this._selectors.push(sel);
     return sel;
 };
 
