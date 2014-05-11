@@ -46,18 +46,26 @@ Trumpet.prototype._flush = function (next) {
     this._advance(next);
 };
 
-Trumpet.prototype.selectAll = function (str) {
+Trumpet.prototype.selectAll = function (str, cb) {
     var self = this;
     var sel = new Selector(str);
-    sel.once('match', function (tag) {
-        tag.once('close', function () {
-            var ix = self._selectors.indexOf(sel);
-            if (ix >= 0) self._selectors.splice(ix, 1);
-        });
-        self._tag = tag;
+    sel.on('match', onmatch);
+    sel.on('writable', onwritable);
+    sel._cleanup = function () {
+        sel.removeListener('match', onmatch);
+        sel.removeListener('writable', onwritable);
+        
+        var ix = self._selectors.indexOf(sel);
+        if (ix >= 0) self._selectors.splice(ix, 1);
+    };
+    
+    function onmatch (tag) {
+        if (cb) cb(tag);
         if (setAttr) self._setAttr = setAttr;
-    });
-    sel.once('writable', function (w) {
+        setAttr = null;
+    }
+    
+    function onwritable (w) {
         var finished = false;
         w.once('finish', function () { finished = true });
         
@@ -85,7 +93,8 @@ Trumpet.prototype.selectAll = function (str) {
                 else self._skip = false;
             });
         });
-    });
+    }
+    
     var setAttr;
     sel.on('_setAttr', function (name, value) {
         if (!setAttr) setAttr = {};
@@ -101,8 +110,7 @@ Trumpet.prototype.select = function (str, cb) {
     var sel = self.selectAll(str, cb);
     sel.once('match', function (tag) {
         tag.once('close', function () {
-            var ix = self._selectors.indexOf(sel);
-            if (ix >= 0) self._selectors.splice(ix, 1);
+            sel._cleanup();
         });
     });
     return sel;
