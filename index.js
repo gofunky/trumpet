@@ -3,6 +3,7 @@ var inherits = require('inherits');
 
 var tokenize = require('html-tokenize');
 var Selector = require('./lib/selector.js');
+var applyAttr = require('./lib/apply_attr.js');
 
 module.exports = Trumpet;
 inherits(Trumpet, Transform);
@@ -14,6 +15,7 @@ function Trumpet () {
     this._selectors = [];
     this._after = [];
     this._writer = null;
+    this._setAttr = null;
     
     this.once('finish', function () {
         this.push(null);
@@ -59,6 +61,8 @@ Trumpet.prototype.select = function (str) {
         
         sel.once('match', function (tag) {
             self._writer = w;
+            self._tag = tag;
+            if (setAttr) self._setAttr = setAttr;
             if (w._options.outer) {
                 self._skip = true;
                 w._copy(self);
@@ -82,6 +86,12 @@ Trumpet.prototype.select = function (str) {
             });
         });
     });
+    var setAttr;
+    sel.on('_setAttr', function (name, value) {
+        if (!setAttr) setAttr = {};
+        setAttr[name] = value;
+    });
+    
     this._selectors.push(sel);
     return sel;
 };
@@ -101,7 +111,12 @@ Trumpet.prototype._applyToken = function (token) {
         var sel = this._selectors[i];
         sel._push(token);
     }
-    if (!this._skip) this.push(token[1]);
+    if (!this._skip && this._setAttr) {
+        var buf = applyAttr(this._setAttr, this._tag, token[1]);
+        this._setAttr = null;
+        this.push(buf);
+    }
+    else if (!this._skip) this.push(token[1]);
     while (this._after.length) this._after.shift()();
 };
 
