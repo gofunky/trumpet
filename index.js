@@ -55,11 +55,17 @@ Trumpet.prototype.select = function (str) {
     });
     sel.once('writable', function (w) {
         var finished = false;
-        w.once('finish', function () { finished = true })
+        w.once('finish', function () { finished = true });
         
         sel.once('match', function (tag) {
             self._writer = w;
-            self._tag = tag;
+            if (w._options.outer) {
+                self._skip = true;
+                w._copy(self);
+            }
+            else {
+                self._after.push(function () { w._copy(self) });
+            }
             if (finished) self._after.push(onfinish)
             else w.once('finish', onfinish)
             
@@ -69,10 +75,10 @@ Trumpet.prototype.select = function (str) {
                 if (self._next) self._advance(self._next);
             }
             tag.once('close', function () {
-                self._skip = false;
-            });
-            self._after.push(function () {
-                w._copy(self);
+                if (w._options.outer) {
+                    self._after.push(function () { self._skip = false });
+                }
+                else self._skip = false;
             });
         });
     });
@@ -104,5 +110,5 @@ Trumpet.prototype.createReadStream = function (sel, opts) {
 };
 
 Trumpet.prototype.createWriteStream = function (sel, opts) {
-    return this.select(sel).createReadStream(opts);
+    return this.select(sel).createWriteStream(opts);
 };
