@@ -54,6 +54,8 @@ Trumpet.prototype.select = function (str) {
             var ix = self._selectors.indexOf(sel);
             if (ix >= 0) self._selectors.splice(ix, 1);
         });
+        self._tag = tag;
+        if (setAttr) self._setAttr = setAttr;
     });
     sel.once('writable', function (w) {
         var finished = false;
@@ -61,8 +63,6 @@ Trumpet.prototype.select = function (str) {
         
         sel.once('match', function (tag) {
             self._writer = w;
-            self._tag = tag;
-            if (setAttr) self._setAttr = setAttr;
             if (w._options.outer) {
                 self._skip = true;
                 w._copy(self);
