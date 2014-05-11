@@ -12,7 +12,7 @@ function Trumpet () {
     Transform.call(this);
     this._tokenize = tokenize();
     this._selectors = [];
-    this._next = [];
+    this._after = [];
     this._writer = null;
     
     this.once('finish', function () {
@@ -32,11 +32,7 @@ Trumpet.prototype._advance = function (next) {
     while ((token = this._tokenize.read()) !== null) {
         this._applyToken(token);
         if (this._writer) {
-            this._writer.on('finish', function () {
-                self._writer = null;
-                self._skip = true;
-                self._advance(next);
-            });
+            this._next = next;
             return;
         }
     }
@@ -58,13 +54,24 @@ Trumpet.prototype.select = function (str) {
         });
     });
     sel.once('writable', function (w) {
+        var finished = false;
+        w.once('finish', function () { finished = true })
+        
         sel.once('match', function (tag) {
             self._writer = w;
             self._tag = tag;
+            if (finished) self._after.push(onfinish)
+            else w.once('finish', onfinish)
+            
+            function onfinish () {
+                self._writer = null;
+                self._skip = true;
+                if (self._next) self._advance(self._next);
+            }
             tag.once('close', function () {
                 self._skip = false;
             });
-            self._next.push(function () {
+            self._after.push(function () {
                 w._copy(self);
             });
         });
@@ -89,7 +96,7 @@ Trumpet.prototype._applyToken = function (token) {
         sel._push(token);
     }
     if (!this._skip) this.push(token[1]);
-    while (this._next.length) this._next.shift()();
+    while (this._after.length) this._after.shift()();
 };
 
 Trumpet.prototype.createReadStream = function (sel, opts) {
