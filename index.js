@@ -79,7 +79,7 @@ Trumpet.prototype.selectAll = function (str, cb) {
         if (self._tag) fromTag(self._tag)
         else sel.once('match', fromTag)
         
-        function fromTag (tag) {
+        function fromTag (tag, already) {
             self._writer = w;
             if (w._options.outer) {
                 self._skip = true;
@@ -119,16 +119,10 @@ Trumpet.prototype.selectAll = function (str, cb) {
             }
             
             if (finished) self._after.push(onfinish);
-            else {
-                d.on('finish', onfinish);
-                tag.once('close', function () {
-                    self._duplexerClosed = true;
-                });
-            }
+            else d.on('finish', onfinish);
             
             function onfinish () {
                 self._duplexer = null;
-                self._duplexerClosed = false;
                 self._skip = false;
             }
         }
