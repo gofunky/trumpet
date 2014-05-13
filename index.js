@@ -67,13 +67,19 @@ Trumpet.prototype.selectAll = function (str, cb) {
         if (cb) cb(tag);
         if (setAttr) self._setAttr = setAttr;
         setAttr = null;
+        tag.once('close', function () {
+            self._tag = null;
+        });
     }
     
     function onwritable (w) {
         var finished = false;
         w.once('finish', function () { finished = true });
         
-        sel.once('match', function (tag) {
+        if (self._tag) fromTag(self._tag)
+        else sel.once('match', fromTag)
+        
+        function fromTag (tag) {
             self._writer = w;
             if (w._options.outer) {
                 self._skip = true;
@@ -96,27 +102,36 @@ Trumpet.prototype.selectAll = function (str, cb) {
                 }
                 else self._skip = false;
             });
-        });
+        }
     }
     
     function onduplex (d) {
         var finished = false;
         d.once('finish', function () { finished = true });
         
-        sel.once('match', function (tag) {
+        if (self._tag) fromTag(self._tag)
+        else sel.once('match', fromTag)
+        
+        function fromTag (tag) {
             self._duplexer = d;
             if (!d._options.outer) {
                 self._after.push(function () { self._skip = true });
             }
             
-            if (finished) self_after.push(onfinish);
-            else d.on('finish', onfinish);
+            if (finished) self._after.push(onfinish);
+            else {
+                d.on('finish', onfinish);
+                tag.once('close', function () {
+                    self._duplexerClosed = true;
+                });
+            }
             
             function onfinish () {
                 self._duplexer = null;
+                self._duplexerClosed = false;
                 self._skip = false;
             }
-        });
+        }
         onwritable(d._writer);
     }
     

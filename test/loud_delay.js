@@ -5,7 +5,7 @@ var concat = require('concat-stream');
 var fs = require('fs');
 var expected = fs.readFileSync(__dirname + '/loud_expected.html', 'utf8');
 
-test('loud', function (t) {
+test('loud delay', function (t) {
     t.plan(1);
     var tr = trumpet();
 
