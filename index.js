@@ -94,7 +94,6 @@ Trumpet.prototype.selectAll = function (str, cb) {
             function onfinish () {
                 self._writer = null;
                 self._skip = true;
-                if (self._next) self._advance(self._next);
             }
             tag.once('close', function () {
                 if (w._options.outer) {
@@ -111,9 +110,14 @@ Trumpet.prototype.selectAll = function (str, cb) {
         
         if (self._tag) fromTag(self._tag)
         else sel.once('match', fromTag)
+        onwritable(d._writer);
         
         function fromTag (tag) {
             self._duplexer = d;
+            tag.once('close', function () {
+                self._duplexer = null;
+            });
+            
             if (!d._options.outer) {
                 self._after.push(function () { self._skip = true });
             }
@@ -124,9 +128,9 @@ Trumpet.prototype.selectAll = function (str, cb) {
             function onfinish () {
                 self._duplexer = null;
                 self._skip = false;
+                if (self._next) self._advance(self._next);
             }
         }
-        onwritable(d._writer);
     }
     
     var setAttr;
