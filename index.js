@@ -100,11 +100,23 @@ Trumpet.prototype.selectAll = function (str, cb) {
     }
     
     function onduplex (d) {
-        onwritable(d.writer);
+        var finished = false;
+        d.once('finish', function () { finished = true });
+        
         sel.once('match', function (tag) {
             self._duplexer = d;
-            self._after.push(function () { self._skip = true });
+            if (!d._options.outer) {
+                self._after.push(function () { self._skip = true });
+            }
+            
+            if (finished) self_after.push(onfinish);
+            else d.on('finish', onfinish);
+            
+            function onfinish () {
+                self._duplexer = null;
+            }
         });
+        onwritable(d._writer);
     }
     
     var setAttr;
