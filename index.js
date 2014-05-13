@@ -114,6 +114,7 @@ Trumpet.prototype.selectAll = function (str, cb) {
             
             function onfinish () {
                 self._duplexer = null;
+                self._skip = false;
             }
         });
         onwritable(d._writer);
