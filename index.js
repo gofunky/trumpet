@@ -33,7 +33,7 @@ Trumpet.prototype._advance = function (next) {
     var token;
     while ((token = this._tokenize.read()) !== null) {
         this._applyToken(token);
-        if (this._writer) {
+        if (this._writer && !this._duplexer) {
             this._next = next;
             return;
         }
@@ -100,7 +100,11 @@ Trumpet.prototype.selectAll = function (str, cb) {
     }
     
     function onduplex (d) {
-        console.log('DUPLEX');
+        onwritable(d.writer);
+        sel.once('match', function (tag) {
+            self._duplexer = d;
+            self._after.push(function () { self._skip = true });
+        });
     }
     
     var setAttr;

@@ -5,12 +5,9 @@ tr.pipe(process.stdout);
 
 tr.selectAll('.x span', function (span) {
     var stream = span.createStream();
-    stream.end('PLACEHOLDER');
-    /*
     stream.pipe(through(function (buf) {
         this.queue(buf.toString().toUpperCase());
     })).pipe(stream);
-    */
 });
 
 var fs = require('fs');
