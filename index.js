@@ -51,15 +51,19 @@ Trumpet.prototype.selectAll = function (str, cb) {
     var sel = new Selector(str);
     sel.on('match', onmatch);
     sel.on('writable', onwritable);
+    sel.on('duplex', onduplex);
+    
     sel._cleanup = function () {
         sel.removeListener('match', onmatch);
         sel.removeListener('writable', onwritable);
+        sel.removeListener('duplex', onduplex);
         
         var ix = self._selectors.indexOf(sel);
         if (ix >= 0) self._selectors.splice(ix, 1);
     };
     
     function onmatch (tag) {
+        self._tag = tag;
         if (cb) cb(tag);
         if (setAttr) self._setAttr = setAttr;
         setAttr = null;
@@ -93,6 +97,10 @@ Trumpet.prototype.selectAll = function (str, cb) {
                 else self._skip = false;
             });
         });
+    }
+    
+    function onduplex (d) {
+        console.log('DUPLEX');
     }
     
     var setAttr;
