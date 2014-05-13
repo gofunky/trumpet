@@ -12,9 +12,9 @@
         "inherits": "~2.0.0"
     },
     "devDependencies" : {
-        "tap" : "~0.4.0",
-        "tape" : "~1.0.4",
-        "concat-stream" : "~1.0.0"
+        "tap" : "~0.4.9",
+        "tape" : "~2.12.3",
+        "concat-stream" : "~1.4.5"
     },
     "scripts" : {
         "test" : "tap test/*.js"
