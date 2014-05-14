@@ -38,6 +38,7 @@ Trumpet.prototype._advance = function (next) {
             return;
         }
     }
+    this._next = null;
     next();
 };
 
@@ -79,7 +80,7 @@ Trumpet.prototype.selectAll = function (str, cb) {
         if (self._tag) fromTag(self._tag)
         else sel.once('match', fromTag)
         
-        function fromTag (tag, already) {
+        function fromTag (tag) {
             self._writer = w;
             if (w._options.outer) {
                 self._skip = true;
@@ -94,12 +95,19 @@ Trumpet.prototype.selectAll = function (str, cb) {
             function onfinish () {
                 self._writer = null;
                 self._skip = true;
+                var t = self._token;
+                if (t) {
+                    self._token = null;
+                    self.push(t[1]);
+                }
             }
             tag.once('close', function () {
                 if (w._options.outer) {
                     self._after.push(function () { self._skip = false });
                 }
-                else self._skip = false;
+                else if (finished) {
+                    self._skip = false;
+                }
             });
         }
     }
@@ -155,6 +163,7 @@ Trumpet.prototype.select = function (str, cb) {
 };
 
 Trumpet.prototype._applyToken = function (token) {
+    this._token = token;
     for (var i = 0; i < this._selectors.length; i++) {
         var sel = this._selectors[i];
         sel._push(token);
