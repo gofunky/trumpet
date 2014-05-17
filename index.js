@@ -7,9 +7,6 @@ var tokenize = require('html-tokenize');
 var select = require('html-select');
 var parseTag = require('html-select/lib/parse_tag.js');
 
-var nextTick = typeof setImmediate !== 'undefined'
-    ? setImmediate : process.nextTick
-;
 module.exports = Trumpet;
 inherits(Trumpet, Duplex);
 
@@ -21,7 +18,13 @@ function Trumpet () {
     this._select = select();
     this._tokenize.pipe(this._select);
     this._writing = false;
+    this._piping = false;
 }
+
+Trumpet.prototype.pipe = function () {
+    this._piping = true;
+    return Duplex.prototype.pipe.apply(this, arguments);
+};
 
 Trumpet.prototype._read = function (n) {
     var self = this;
@@ -35,6 +38,10 @@ Trumpet.prototype._read = function (n) {
 };
 
 Trumpet.prototype._write = function (buf, enc, next) {
+    if (!this._writing && !this._piping) {
+        this._piping = true;
+        this.resume();
+    }
     return this._tokenize._write(buf, enc, next);
 };
 
@@ -65,6 +72,7 @@ Trumpet.prototype._augment = function (elem, cb) {
 };
 
 Trumpet.prototype._augmentTag = function (stream, p) {
+    var self = this;
     return {
         createReadStream: function (opts) {
             var r = new Readable;
@@ -80,6 +88,7 @@ Trumpet.prototype._augmentTag = function (stream, p) {
             return r;
         },
         createWriteStream: function (opts) {
+            self._writing = true;
             var w = new Writable;
             w._write = function (buf, enc, next) {
                 stream.write([ 'buffer', buf ]);

@@ -7,4 +7,3 @@ tr.select('.msg', function (e) {
 
 var fs = require('fs');
 fs.createReadStream(__dirname + '/html/read.html').pipe(tr);
-tr.resume();
