@@ -45,23 +45,34 @@ Trumpet.prototype._write = function (buf, enc, next) {
     return this._tokenize._write(buf, enc, next);
 };
 
-Trumpet.prototype.selectAll = function (str, cb) {
+Trumpet.prototype.select = function (str, cb) {
     var self = this;
-    self._select.select(str, function (elem) {
-        self._augment(elem, cb);
+    var first = true;
+    
+    var res = self.selectAll(str, function (elem) {
+        if (!first) return;
+        first = false;
+        res.createReadStream = function () {};
+        res.createWriteStream = function () {};
+        res.createStream = function () {};
+        if (cb) cb(elem);
     });
+    return res;
 };
 
-Trumpet.prototype.select = function (str, cb) {
+Trumpet.prototype.selectAll = function (str, cb) {
     var self = this;
     self._select.select(str, function (elem) {
         self._augment(elem, function (tag) {
             if (cb) cb(tag);
+            queue.splice(0).forEach(function (q) {
+                tag[q[0]].apply(tag, q.slice(1));
+            });
             
             var rs, ws, ds;
             
             if (readers.length) rs = tag.createReadStream();
-            readers.forEach(function (r) {
+            readers.splice(0).forEach(function (r) {
                 r._read = function () {
                     var buf, reads = 0;
                     while ((buf = rs.read()) !== null) {
@@ -76,7 +87,14 @@ Trumpet.prototype.select = function (str, cb) {
     });
     
     var readers = [];
+    var queue = [];
     return {
+        getAttribute: function (key, cb) {
+            queue.push([ 'getAttribute', key, cb ]);
+        },
+        getName: function (cb) {
+            queue.push([ 'getName', cb ]);
+        },
         createReadStream: function (opts) {
             var r = new Readable;
             r._read = function () { r._pending = true };
@@ -127,7 +145,9 @@ Trumpet.prototype._augmentTag = function (stream, p) {
         },
         createStream: function (opts) { return stream },
         name: p.name,
-        attributes: p.getAttributes()
+        attributes: p.getAttributes(),
+        getAttribute: function (key, cb) { cb(p.getAttributes()[key]) },
+        getName: function (cb) { cb(p.name) }
     };
 };
 
