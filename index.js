@@ -1,180 +1,98 @@
-var Transform = require('readable-stream').Transform;
+var Readable = require('readable-stream').Readable;
+var Writable = require('readable-stream').Writable;
+var Duplex = require('readable-stream').Duplex;
 var inherits = require('inherits');
 
 var tokenize = require('html-tokenize');
-var Selector = require('./lib/selector.js');
-var applyAttr = require('./lib/apply_attr.js');
+var select = require('html-select');
+var parseTag = require('html-select/lib/parse_tag.js');
 
+var nextTick = typeof setImmediate !== 'undefined'
+    ? setImmediate : process.nextTick
+;
 module.exports = Trumpet;
-inherits(Trumpet, Transform);
+inherits(Trumpet, Duplex);
 
 function Trumpet () {
+    var self = this;
     if (!(this instanceof Trumpet)) return new Trumpet;
-    Transform.call(this);
+    Duplex.call(this);
     this._tokenize = tokenize();
-    this._selectors = [];
-    this._after = [];
-    this._writer = null;
-    this._setAttr = null;
-    
-    this.once('finish', function () {
-        this.push(null);
-    });
+    this._select = select();
+    this._tokenize.pipe(this._select);
+    this._writing = false;
 }
 
-Trumpet.prototype._transform = function (buf, enc, next) {
+Trumpet.prototype._read = function (n) {
     var self = this;
-    this._tokenize.write(buf);
-    this._advance(next);
-};
-
-Trumpet.prototype._advance = function (next) {
-    var self = this;
-    var token;
-    while ((token = this._tokenize.read()) !== null) {
-        this._applyToken(token);
-        if (this._writer && !this._duplexer) {
-            this._next = next;
-            return;
-        }
+    var s = this._select;
+    var buf, read = 0;
+    while ((row = s.read()) !== null) {
+        this.push(row[1]);
+        read ++;
     }
-    this._next = null;
-    next();
+    if (read === 0) s.once('readable', function () { self._read(n) });;
 };
 
-Trumpet.prototype._flush = function (next) {
-    this._tokenize.end();
-    this._advance(next);
+Trumpet.prototype._write = function (buf, enc, next) {
+    return this._tokenize._write(buf, enc, next);
 };
 
 Trumpet.prototype.selectAll = function (str, cb) {
     var self = this;
-    var sel = new Selector(str);
-    sel.on('match', onmatch);
-    sel.on('writable', onwritable);
-    sel.on('duplex', onduplex);
-    
-    sel._cleanup = function () {
-        sel.removeListener('match', onmatch);
-        sel.removeListener('writable', onwritable);
-        sel.removeListener('duplex', onduplex);
-        
-        var ix = self._selectors.indexOf(sel);
-        if (ix >= 0) self._selectors.splice(ix, 1);
-    };
-    
-    function onmatch (tag) {
-        self._tag = tag;
-        if (cb) cb(tag);
-        if (setAttr) self._setAttr = setAttr;
-        setAttr = null;
-        tag.once('close', function () {
-            self._tag = null;
-        });
-    }
-    
-    function onwritable (w) {
-        var finished = false;
-        w.once('finish', function () { finished = true });
-        
-        if (self._tag) fromTag(self._tag)
-        else sel.once('match', fromTag)
-        
-        function fromTag (tag) {
-            self._writer = w;
-            if (w._options.outer) {
-                self._skip = true;
-                w._copy(self);
-            }
-            else {
-                self._after.push(function () { w._copy(self) });
-            }
-            if (finished) self._after.push(onfinish)
-            else w.once('finish', onfinish)
-            
-            function onfinish () {
-                self._writer = null;
-                self._skip = true;
-                var t = self._token;
-                if (t) {
-                    self._token = null;
-                    self.push(t[1]);
-                }
-            }
-            tag.once('close', function () {
-                if (w._options.outer) {
-                    self._after.push(function () { self._skip = false });
-                }
-                else if (finished) {
-                    self._skip = false;
-                }
-            });
-        }
-    }
-    
-    function onduplex (d) {
-        var finished = false;
-        d.once('finish', function () { finished = true });
-        
-        if (self._tag) fromTag(self._tag)
-        else sel.once('match', fromTag)
-        onwritable(d._writer);
-        
-        function fromTag (tag) {
-            self._duplexer = d;
-            tag.once('close', function () {
-                self._duplexer = null;
-            });
-            
-            if (!d._options.outer) {
-                self._after.push(function () { self._skip = true });
-            }
-            
-            if (finished) self._after.push(onfinish);
-            else d.on('finish', onfinish);
-            
-            function onfinish () {
-                self._duplexer = null;
-                self._skip = false;
-                if (self._next) self._advance(self._next);
-            }
-        }
-    }
-    
-    var setAttr;
-    sel.on('_setAttr', function (name, value) {
-        if (!setAttr) setAttr = {};
-        setAttr[name] = value;
+    self._select.select(str, function (elem) {
+        self._augment(elem, cb);
     });
-    
-    this._selectors.push(sel);
-    return sel;
 };
 
 Trumpet.prototype.select = function (str, cb) {
     var self = this;
-    var sel = self.selectAll(str, cb);
-    sel.once('match', function (tag) {
-        tag.once('close', function () {
-            sel._cleanup();
-        });
+    self._select.select(str, function (elem) {
+        self._augment(elem, cb);
     });
-    return sel;
 };
 
-Trumpet.prototype._applyToken = function (token) {
-    this._token = token;
-    for (var i = 0; i < this._selectors.length; i++) {
-        var sel = this._selectors[i];
-        sel._push(token);
-    }
-    if (!this._skip && this._setAttr) {
-        var buf = applyAttr(this._setAttr, this._tag, token[1]);
-        this._setAttr = null;
-        this.push(buf);
-    }
-    else if (!this._skip) this.push(token[1]);
-    while (this._after.length) this._after.shift()();
+Trumpet.prototype._augment = function (elem, cb) {
+    var self = this;
+    var stream = elem.createStream();
+    (function read () {
+        var row = stream.read();
+        if (row === null) return stream.once('readable', read);
+        stream.unshift(row);
+        var p = parseTag(row[1]);
+        cb(self._augmentTag(stream, p));
+    })();
+};
+
+Trumpet.prototype._augmentTag = function (stream, p) {
+    return {
+        createReadStream: function (opts) {
+            var r = new Readable;
+            r._read = function () {
+                var buf, reads = 0;
+                while ((buf = stream.read()) !== null) {
+                    r.push(buf[1]);
+                    stream.write(buf);
+                    reads ++;
+                }
+                if (reads === 0) stream.on('readable', r._read);
+            };
+            return r;
+        },
+        createWriteStream: function (opts) {
+            var w = new Writable;
+            w._write = function (buf, enc, next) {
+                stream.write([ 'buffer', buf ]);
+                next();
+            };
+            w.once('finish', function () { stream.end() });
+            stream.resume();
+            return w;
+        },
+        createStream: function (opts) { return stream },
+        name: p.name,
+        attributes: p.getAttributes()
+    };
 };
 
 Trumpet.prototype.createReadStream = function (sel, opts) {
