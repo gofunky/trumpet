@@ -55,8 +55,35 @@ Trumpet.prototype.selectAll = function (str, cb) {
 Trumpet.prototype.select = function (str, cb) {
     var self = this;
     self._select.select(str, function (elem) {
-        self._augment(elem, cb);
+        self._augment(elem, function (tag) {
+            if (cb) cb(tag);
+            
+            var rs, ws, ds;
+            
+            if (readers.length) rs = tag.createReadStream();
+            readers.forEach(function (r) {
+                r._read = function () {
+                    var buf, reads = 0;
+                    while ((buf = rs.read()) !== null) {
+                        r.push(buf);
+                        reads ++;
+                    }
+                    if (reads === 0) rs.once('readable', r._read);
+                };
+                if (r._pending) r._read();
+            });
+        });
     });
+    
+    var readers = [];
+    return {
+        createReadStream: function (opts) {
+            var r = new Readable;
+            r._read = function () { r._pending = true };
+            readers.push(r);
+            return r;
+        },
+    };
 };
 
 Trumpet.prototype._augment = function (elem, cb) {
