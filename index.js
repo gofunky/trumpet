@@ -85,6 +85,7 @@ Trumpet.prototype._selectAll = function (str, cb) {
                     }
                     if (reads === 0) rs.once('readable', r._read);
                 };
+                rs.once('end', function () { r.push(null) });
                 if (r._pending) r._read();
             });
             
@@ -98,6 +99,7 @@ Trumpet.prototype._selectAll = function (str, cb) {
                     }
                     if (reads === 0) ds.once('readable', d._read);
                 };
+                ds.once('end', function () { d.push(null) });
                 d.once('finish', function () { ds.end() });
                 if (d._pending) d._read();
                 if (d._buffer) {
@@ -164,6 +166,7 @@ Trumpet.prototype._augmentTag = function (stream, p) {
                 }
                 if (reads === 0) stream.on('readable', r._read);
             };
+            stream.once('end', function () { r.push(null) });
             return r;
         },
         createWriteStream: function (opts) {
@@ -192,6 +195,7 @@ Trumpet.prototype._augmentTag = function (stream, p) {
                 }
                 if (reads === 0) stream.on('readable', d._read);
             };
+            stream.once('end', function () { d.push(null) });
             return d;
         },
         name: p.name,
