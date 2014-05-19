@@ -49,7 +49,7 @@ Trumpet.prototype.select = function (str, cb) {
     var self = this;
     var first = true;
     
-    var res = self.selectAll(str, function (elem) {
+    var res = self._selectAll(str, function (elem) {
         if (!first) return;
         first = false;
         res.createReadStream = function () {};
@@ -61,6 +61,10 @@ Trumpet.prototype.select = function (str, cb) {
 };
 
 Trumpet.prototype.selectAll = function (str, cb) {
+    this._selectAll(str, cb);
+};
+
+Trumpet.prototype._selectAll = function (str, cb) {
     var self = this;
     self._select.select(str, function (elem) {
         self._augment(elem, function (tag) {
@@ -83,10 +87,30 @@ Trumpet.prototype.selectAll = function (str, cb) {
                 };
                 if (r._pending) r._read();
             });
+            
+            if (duplexers.length) ds = tag.createStream();
+            duplexers.splice(0).forEach(function (d) {
+                d._read = function () {
+                    var buf, reads = 0;
+                    while ((buf = ds.read()) !== null) {
+                        d.push(buf);
+                        reads ++;
+                    }
+                    if (reads === 0) ds.once('readable', d._read);
+                };
+                d.once('finish', function () { ds.end() });
+                if (d._pending) d._read();
+                if (d._buffer) {
+                    ds.write(d._buffer);
+                    d._write = ds._write;
+                    d._next();
+                }
+                else d._write = ds._write;
+            });
         });
     });
     
-    var readers = [];
+    var readers = [], writers = [], duplexers = [];
     var queue = [];
     return {
         getAttribute: function (key, cb) {
@@ -101,6 +125,16 @@ Trumpet.prototype.selectAll = function (str, cb) {
             readers.push(r);
             return r;
         },
+        createStream: function (opts) {
+            var d = new Duplex;
+            d._read = function () { d._pending = true };
+            d._write = function (buf, enc, next) {
+                d._buffer = buf;
+                d._next = next;
+            };
+            duplexers.push(d);
+            return d;
+        }
     };
 };
 
@@ -143,7 +177,23 @@ Trumpet.prototype._augmentTag = function (stream, p) {
             stream.resume();
             return w;
         },
-        createStream: function (opts) { return stream },
+        createStream: function (opts) {
+            var d = new Duplex;
+            d._write = function (buf, enc, next) {
+                stream.write([ 'buffer', buf ]);
+                next();
+            };
+            d.once('finish', function () { stream.end() });
+            d._read = function () {
+                var buf, reads = 0;
+                while ((buf = stream.read()) !== null) {
+                    d.push(buf[1]);
+                    reads ++;
+                }
+                if (reads === 0) stream.on('readable', d._read);
+            };
+            return d;
+        },
         name: p.name,
         attributes: p.getAttributes(),
         getAttribute: function (key, cb) { cb(p.getAttributes()[key]) },
