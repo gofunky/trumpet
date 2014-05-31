@@ -71,7 +71,7 @@ Trumpet.prototype.selectAll = function (str, cb) {
 Trumpet.prototype._selectAll = function (str, cb) {
     var self = this;
     var readers = [], writers = [], duplex = [];
-    var gets = [];
+    var gets = [], sets = [];
     
     var element, welem;
     this._select.select(str, function (elem) {
@@ -101,12 +101,20 @@ Trumpet.prototype._selectAll = function (str, cb) {
         gets.splice(0).forEach(function (g) {
             welem.getAttribute(g[0], g[1]);
         });
+        
+        sets.splice(0).forEach(function (g) {
+            welem.setAttribute(g[0], g[1]);
+        });
     });
     
     return {
         getAttribute: function (key, cb) {
             if (welem) return welem.getAttribute(key, cb);
             gets.push([ key, cb ]);
+        },
+        setAttribute: function (key, value) {
+            if (welem) return welem.setAttribute(key, value);
+            sets.push([ key, value ]);
         },
         createReadStream: function (opts) {
             if (welem) return welem.createReadStream(opts);
@@ -134,14 +142,20 @@ Trumpet.prototype._selectAll = function (str, cb) {
 
 function wrapElem (elem) {
     var tag = parseTag(elem._first[1]);
+    var attrs = tag.getAttributes();
+    var setter = false;
     
     return {
         name: tag.name,
         getName: function (cb) { cb(tag.name) },
         getAttribute: function (key, cb) {
-            var value = tag.getAttributes()[key];
+            var value = attrs[key];
             if (cb) cb(value);
             return value;
+        },
+        setAttribute: function (key, value) {
+            attrs[key] = value;
+            if (!setter) createSetter();
         },
         createReadStream: function (opts) {
             if (!opts) opts = {};
@@ -175,8 +189,34 @@ function wrapElem (elem) {
             var s = elem.createStream({ inner: !opts.outer });
             return combine(w, s, r);
         }
-    }
+    };
     
+    function createSetter () {
+        var s = elem.createStream();
+        setter = true;
+        var first = true;
+        s.pipe(through.obj(function (row, enc, next) {
+            if (first) {
+                var keys = Object.keys(attrs);
+                var parts = keys.map(function (key) {
+                    if (attrs[key] === true) return key;
+                    return key + '="' + esc(attrs[key]) + '"';
+                }).join(' ');
+                
+                var buf = Buffer(row[1].toString('utf8')
+                    .slice(0, tag.name.length + 1)
+                    + (parts.length ? ' ' : '') + parts
+                    + '>'
+                );
+                this.push([ row[0], buf ]);
+            }
+            else {
+                this.push(row);
+            }
+            first = false;
+            next();
+        })).pipe(s);
+    }
 }
     
 Trumpet.prototype.createReadStream = function (sel, opts) {
@@ -186,3 +226,11 @@ Trumpet.prototype.createReadStream = function (sel, opts) {
 Trumpet.prototype.createWriteStream = function (sel, opts) {
     return this.select(sel).createWriteStream(opts);
 };
+
+function esc (s) {
+    return s.replace(/&/, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</, '&lt;')
+        .replace(/>/, '&gt;')
+    ;
+}
