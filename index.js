@@ -66,7 +66,8 @@ Trumpet.prototype.selectAll = function (str, cb) {
 
 Trumpet.prototype._selectAll = function (str, cb) {
     var self = this;
-    var readers = [], gets = [];
+    var readers = [], writers = [];
+    var gets = [];
     
     var element, welem;
     this._select.select(str, function (elem) {
@@ -80,17 +81,11 @@ Trumpet.prototype._selectAll = function (str, cb) {
         });
         
         readers.splice(0).forEach(function (r) {
-            var re = welem.createReadStream(r._options);
-            re.pipe(through.obj(write, end));
-            
-            function write (row, enc, next) {
-                r.push(row[1]);
-                next();
-            }
-            function end (next) {
-                r.push(null);
-                next();
-            }
+            welem.createReadStream(r._options).pipe(r);
+        });
+        
+        writers.splice(0).forEach(function (w) {
+            w.pipe(welem.createWriteStream(w._options));
         });
         
         gets.splice(0).forEach(function (g) {
@@ -105,12 +100,17 @@ Trumpet.prototype._selectAll = function (str, cb) {
         },
         createReadStream: function (opts) {
             if (welem) return welem.createReadStream(opts);
-            
-            var r = new Readable;
-            r._read = function () {};
+            var r = through();
             r._options = opts;
             readers.push(r);
             return r;
+        },
+        createWriteStream: function (opts) {
+            if (welem) return welem.createWriteStream(opts);
+            var w = through();
+            w._options = opts;
+            writers.push(w);
+            return w;
         }
     };
 };
@@ -132,7 +132,23 @@ function wrapElem (elem) {
         },
         createReadStream: function (opts) {
             if (!opts) opts = {};
-            return elem.createReadStream({ inner: !opts.outer });
+            return elem.createReadStream({ inner: !opts.outer })
+                .pipe(through.obj(write, end));
+            ;
+            function write (row, enc, next) { this.push(row[1]); next() }
+            function end (next) { this.push(null); next() }
+        },
+        createWriteStream: function (opts) {
+            if (!opts) opts = {};
+            var we = elem.createWriteStream({ inner: !opts.outer });
+            var ws = new Writable;
+            ws._write = function (buf, enc, next) { we.write(buf); next() };
+            ws.once('finish', function () { we.end() });
+            return ws;
+        },
+        createStream: function (opts) {
+            if (!opts) opts = {};
+            return elem.createStream({ inner: !opts.outer });
         }
     }
     
