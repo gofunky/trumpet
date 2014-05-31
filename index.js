@@ -4,6 +4,7 @@ var Duplex = require('readable-stream').Duplex;
 var inherits = require('inherits');
 var through = require('through2');
 var duplexer = require('duplexer2');
+var combine = require('stream-combiner');
 
 var tokenize = require('html-tokenize');
 var select = require('html-select');
@@ -20,6 +21,8 @@ function Trumpet () {
     this._writing = false;
     this._piping = false;
     this._select = this._tokenize.pipe(select());
+    this._select.once('end', function () { self.push(null) });
+    this.once('finish', function () { self._tokenize.end() });
 }
 
 Trumpet.prototype.pipe = function () {
@@ -90,7 +93,9 @@ Trumpet.prototype._selectAll = function (str, cb) {
         });
         
         duplex.splice(0).forEach(function (d) {
-            d.pipe(welem.createStream(d._options));
+            d.input.pipe(welem.createStream(d.options))
+                .pipe(d.output)
+            ;
         });
         
         gets.splice(0).forEach(function (g) {
@@ -119,26 +124,22 @@ Trumpet.prototype._selectAll = function (str, cb) {
         },
         createStream: function (opts) {
             if (welem) return welem.createStream(opts);
-            var d = through();
-            d._options = opts;
+            var d = { input: through(), output: through() };
+            d.options = opts;
             duplex.push(d);
-            return d;
+            return duplexer(d.input, d.output);
         }
     };
 };
 
 function wrapElem (elem) {
-    var tag;
-    var first = elem._first;
-    function getTag () {
-        if (tag) return tag;
-        tag = parseTag(first[1]);
-        return tag;
-    }
+    var tag = parseTag(elem._first[1]);
     
     return {
+        name: tag.name,
+        getName: function (cb) { cb(tag.name) },
         getAttribute: function (key, cb) {
-            var value = getTag().getAttributes()[key];
+            var value = tag.getAttributes()[key];
             if (cb) cb(value);
             return value;
         },
@@ -172,8 +173,7 @@ function wrapElem (elem) {
                 next();
             });
             var s = elem.createStream({ inner: !opts.outer });
-            w.pipe(s).pipe(r);
-            return duplexer(w, r);
+            return combine(w, s, r);
         }
     }
     
