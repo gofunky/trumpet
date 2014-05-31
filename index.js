@@ -142,7 +142,10 @@ function wrapElem (elem) {
             if (!opts) opts = {};
             var we = elem.createWriteStream({ inner: !opts.outer });
             var ws = new Writable;
-            ws._write = function (buf, enc, next) { we.write(buf); next() };
+            ws._write = function (row, enc, next) {
+                we.write(row[1]);
+                next()
+            };
             ws.once('finish', function () { we.end() });
             return ws;
         },
