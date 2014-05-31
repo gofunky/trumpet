@@ -28,15 +28,16 @@ Trumpet.prototype.pipe = function () {
 
 Trumpet.prototype._read = function (n) {
     var self = this;
-    var buf, read = 0;
+    var buf;
     for (var i = 0; i < this._selectors.length; i++) {
         var s = this._selectors[i];
+        var read = 0;
         while ((row = s.read()) !== null) {
             this.push(row[1]);
             read ++;
         }
+        if (read === 0) s.once('readable', function () { self._read(n) });
     }
-    if (read === 0) s.once('readable', function () { self._read(n) });;
 };
 
 Trumpet.prototype._write = function (buf, enc, next) {
@@ -68,17 +69,25 @@ Trumpet.prototype.selectAll = function (str, cb) {
 
 Trumpet.prototype._selectAll = function (str, cb) {
     var self = this;
-    var readers = [];
+    var readers = [], gets = [];
     
     var s = select();
     this._selectors.push(s);
     this._tokenize.pipe(s);
     
-    var element;
+    var element, welem;
     s.select(str, function (elem) {
         element = elem;
+        welem = wrapElem(elem);
+        if (cb) cb(welem);
+        
+        elem.once('close', function () {
+            element = null;
+            welem = null;
+        });
+        
         readers.splice(0).forEach(function (r) {
-            var re = elem.createReadStream(r._options);
+            var re = welem.createReadStream(r._options);
             re.pipe(through.obj(write, end));
             
             function write (row, enc, next) {
@@ -90,41 +99,52 @@ Trumpet.prototype._selectAll = function (str, cb) {
                 next();
             }
         });
+        
+        gets.splice(0).forEach(function (g) {
+            welem.getAttribute(g[0], g[1]);
+        });
     });
     
     return {
+        getAttribute: function (key, cb) {
+            if (welem) return welem.getAttribute(key, cb);
+            gets.push([ key, cb ]);
+        },
         createReadStream: function (opts) {
+            if (welem) return welem.createReadStream(opts);
+            
             var r = new Readable;
             r._read = function () {};
-            r._options = opts || {};
-            r._options.inner = !r._options.outer;
+            r._options = opts;
             readers.push(r);
             return r;
         }
     };
 };
 
-Trumpet.prototype._augment = function (elem, cb) {
-    return cb({
+function wrapElem (elem) {
+    var tag;
+    var first = elem._first;
+    function getTag () {
+        if (tag) return tag;
+        tag = parseTag(first[1]);
+        return tag;
+    }
+    
+    return {
+        getAttribute: function (key, cb) {
+            var value = getTag().getAttributes()[key];
+            if (cb) cb(value);
+            return value;
+        },
         createReadStream: function (opts) {
-            var re = elem.createReadStream(opts);
-            var rs = new Readable;
-            rs._read = function () {};
-            re.pipe(through.obj(write, end));
-            return rs;
-            
-            function write (row, enc, next) {
-                rs.push(row[1]);
-                next();
-            }
-            function end (next) {
-                rs.push(null);
-                next();
-            }
+            if (!opts) opts = {};
+            return elem.createReadStream({ inner: !opts.outer });
         }
-    });
-};
-
+    }
+    
+}
+    
 Trumpet.prototype.createReadStream = function (sel, opts) {
     return this.select(sel).createReadStream(opts);
 };
