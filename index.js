@@ -2,6 +2,7 @@ var Readable = require('readable-stream').Readable;
 var Writable = require('readable-stream').Writable;
 var Duplex = require('readable-stream').Duplex;
 var inherits = require('inherits');
+var through = require('through2');
 
 var tokenize = require('html-tokenize');
 var select = require('html-select');
@@ -15,10 +16,9 @@ function Trumpet () {
     if (!(this instanceof Trumpet)) return new Trumpet;
     Duplex.call(this);
     this._tokenize = tokenize();
-    this._select = select();
-    this._tokenize.pipe(this._select);
     this._writing = false;
     this._piping = false;
+    this._selectors = [];
 }
 
 Trumpet.prototype.pipe = function () {
@@ -28,11 +28,13 @@ Trumpet.prototype.pipe = function () {
 
 Trumpet.prototype._read = function (n) {
     var self = this;
-    var s = this._select;
     var buf, read = 0;
-    while ((row = s.read()) !== null) {
-        this.push(row[1]);
-        read ++;
+    for (var i = 0; i < this._selectors.length; i++) {
+        var s = this._selectors[i];
+        while ((row = s.read()) !== null) {
+            this.push(row[1]);
+            read ++;
+        }
     }
     if (read === 0) s.once('readable', function () { self._read(n) });;
 };
@@ -61,148 +63,66 @@ Trumpet.prototype.select = function (str, cb) {
 };
 
 Trumpet.prototype.selectAll = function (str, cb) {
-    this._selectAll(str, cb);
+    return this._selectAll(str, cb);
 };
 
 Trumpet.prototype._selectAll = function (str, cb) {
     var self = this;
-    self._select.select(str, function (elem) {
-        self._augment(elem, function (tag) {
-            if (cb) cb(tag);
-            queue.splice(0).forEach(function (q) {
-                tag[q[0]].apply(tag, q.slice(1));
-            });
+    var readers = [];
+    
+    var s = select();
+    this._selectors.push(s);
+    this._tokenize.pipe(s);
+    
+    var element;
+    s.select(str, function (elem) {
+        element = elem;
+        readers.splice(0).forEach(function (r) {
+            var re = elem.createReadStream(r._options);
+            re.pipe(through.obj(write, end));
             
-            var rs, ws, ds;
-            
-            if (readers.length) rs = tag.createReadStream();
-            readers.splice(0).forEach(function (r) {
-                r._read = function () {
-                    var buf, reads = 0;
-                    while ((buf = rs.read()) !== null) {
-                        r.push(buf);
-                        reads ++;
-                    }
-                    if (reads === 0) rs.once('readable', r._read);
-                };
-                rs.once('end', function () { r.push(null) });
-                if (r._pending) r._read();
-            });
-            
-            if (duplexers.length) ds = tag.createStream();
-            duplexers.splice(0).forEach(function (d) {
-                d._read = function () {
-                    var buf, reads = 0;
-                    while ((buf = ds.read()) !== null) {
-                        d.push(buf);
-                        reads ++;
-                    }
-                    if (reads === 0) ds.once('readable', d._read);
-                };
-                ds.once('end', function () { d.push(null) });
-                d.once('finish', function () { ds.end() });
-                if (d._pending) d._read();
-                if (d._buffer) {
-                    ds.write(d._buffer);
-                    d._write = ds._write;
-                    d._next();
-                }
-                else d._write = ds._write;
-            });
+            function write (row, enc, next) {
+                r.push(row[1]);
+                next();
+            }
+            function end (next) {
+                r.push(null);
+                next();
+            }
         });
     });
     
-    var readers = [], writers = [], duplexers = [];
-    var queue = [];
     return {
-        getAttribute: function (key, cb) {
-            queue.push([ 'getAttribute', key, cb ]);
-        },
-        getName: function (cb) {
-            queue.push([ 'getName', cb ]);
-        },
         createReadStream: function (opts) {
             var r = new Readable;
-            r._read = function () { r._pending = true };
+            r._read = function () {};
+            r._options = opts || {};
+            r._options.inner = !r._options.outer;
             readers.push(r);
             return r;
-        },
-        createStream: function (opts) {
-            var d = new Duplex;
-            d._read = function () { d._pending = true };
-            d._write = function (buf, enc, next) {
-                d._buffer = buf;
-                d._next = next;
-            };
-            duplexers.push(d);
-            return d;
         }
     };
 };
 
 Trumpet.prototype._augment = function (elem, cb) {
-    var self = this;
-    var stream = elem.createStream();
-    (function read () {
-        var row = stream.read();
-        if (row === null) return stream.once('readable', read);
-        stream.unshift(row);
-        var p = parseTag(row[1]);
-        cb(self._augmentTag(stream, p));
-    })();
-};
-
-Trumpet.prototype._augmentTag = function (stream, p) {
-    var self = this;
-    return {
+    return cb({
         createReadStream: function (opts) {
-            var r = new Readable;
-            r._read = function () {
-                var buf, reads = 0;
-                while ((buf = stream.read()) !== null) {
-                    r.push(buf[1]);
-                    stream.write(buf);
-                    reads ++;
-                }
-                if (reads === 0) stream.on('readable', r._read);
-            };
-            stream.once('end', function () { r.push(null) });
-            return r;
-        },
-        createWriteStream: function (opts) {
-            self._writing = true;
-            var w = new Writable;
-            w._write = function (buf, enc, next) {
-                stream.write([ 'buffer', buf ]);
+            var re = elem.createReadStream(opts);
+            var rs = new Readable;
+            rs._read = function () {};
+            re.pipe(through.obj(write, end));
+            return rs;
+            
+            function write (row, enc, next) {
+                rs.push(row[1]);
                 next();
-            };
-            w.once('finish', function () { stream.end() });
-            stream.resume();
-            return w;
-        },
-        createStream: function (opts) {
-            var d = new Duplex;
-            d._write = function (buf, enc, next) {
-                stream.write([ 'buffer', buf ]);
+            }
+            function end (next) {
+                rs.push(null);
                 next();
-            };
-            d.once('finish', function () { stream.end() });
-            d._read = function () {
-                var buf, reads = 0;
-                while ((buf = stream.read()) !== null) {
-                    d.push(buf[1]);
-                    reads ++;
-                }
-                if (reads === 0) stream.on('readable', d._read);
-            };
-            stream.once('end', function () { d.push(null) });
-            return d;
-        },
-        name: p.name,
-        attributes: p.getAttributes(),
-        getAttribute: function (key, cb) { cb(p.getAttributes()[key]) },
-        getName: function (cb) { cb(p.name) }
-    };
+            }
+        }
+    });
 };
 
 Trumpet.prototype.createReadStream = function (sel, opts) {
