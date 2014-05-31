@@ -3,6 +3,7 @@ var Writable = require('readable-stream').Writable;
 var Duplex = require('readable-stream').Duplex;
 var inherits = require('inherits');
 var through = require('through2');
+var duplexer = require('duplexer2');
 
 var tokenize = require('html-tokenize');
 var select = require('html-select');
@@ -66,7 +67,7 @@ Trumpet.prototype.selectAll = function (str, cb) {
 
 Trumpet.prototype._selectAll = function (str, cb) {
     var self = this;
-    var readers = [], writers = [];
+    var readers = [], writers = [], duplex = [];
     var gets = [];
     
     var element, welem;
@@ -86,6 +87,10 @@ Trumpet.prototype._selectAll = function (str, cb) {
         
         writers.splice(0).forEach(function (w) {
             w.pipe(welem.createWriteStream(w._options));
+        });
+        
+        duplex.splice(0).forEach(function (d) {
+            d.pipe(welem.createStream(d._options));
         });
         
         gets.splice(0).forEach(function (g) {
@@ -111,6 +116,13 @@ Trumpet.prototype._selectAll = function (str, cb) {
             w._options = opts;
             writers.push(w);
             return w;
+        },
+        createStream: function (opts) {
+            if (welem) return welem.createStream(opts);
+            var d = through();
+            d._options = opts;
+            duplex.push(d);
+            return d;
         }
     };
 };
@@ -151,7 +163,17 @@ function wrapElem (elem) {
         },
         createStream: function (opts) {
             if (!opts) opts = {};
-            return elem.createStream({ inner: !opts.outer });
+            var w = through.obj(function (buf, enc, next) {
+                this.push([ 'data', buf ]);
+                next();
+            });
+            var r = through.obj(function (row, enc, next) {
+                this.push(row[1]);
+                next();
+            });
+            var s = elem.createStream({ inner: !opts.outer });
+            w.pipe(s).pipe(r);
+            return duplexer(w, r);
         }
     }
     
