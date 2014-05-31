@@ -28,16 +28,15 @@ Trumpet.prototype.pipe = function () {
 
 Trumpet.prototype._read = function (n) {
     var self = this;
-    var buf;
+    var buf, read = 0;
     for (var i = 0; i < this._selectors.length; i++) {
         var s = this._selectors[i];
-        var read = 0;
         while ((row = s.read()) !== null) {
             this.push(row[1]);
             read ++;
         }
-        if (read === 0) s.once('readable', function () { self._read(n) });
     }
+    if (read === 0) s.once('readable', function () { self._read(n) });
 };
 
 Trumpet.prototype._write = function (buf, enc, next) {
