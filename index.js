@@ -18,7 +18,7 @@ function Trumpet () {
     this._tokenize = tokenize();
     this._writing = false;
     this._piping = false;
-    this._selectors = [];
+    this._select = this._tokenize.pipe(select());
 }
 
 Trumpet.prototype.pipe = function () {
@@ -29,12 +29,10 @@ Trumpet.prototype.pipe = function () {
 Trumpet.prototype._read = function (n) {
     var self = this;
     var buf, read = 0;
-    for (var i = 0; i < this._selectors.length; i++) {
-        var s = this._selectors[i];
-        while ((row = s.read()) !== null) {
-            this.push(row[1]);
-            read ++;
-        }
+    var s = this._select;
+    while ((row = s.read()) !== null) {
+        this.push(row[1]);
+        read ++;
     }
     if (read === 0) s.once('readable', function () { self._read(n) });
 };
@@ -70,12 +68,8 @@ Trumpet.prototype._selectAll = function (str, cb) {
     var self = this;
     var readers = [], gets = [];
     
-    var s = select();
-    this._selectors.push(s);
-    this._tokenize.pipe(s);
-    
     var element, welem;
-    s.select(str, function (elem) {
+    this._select.select(str, function (elem) {
         element = elem;
         welem = wrapElem(elem);
         if (cb) cb(welem);
