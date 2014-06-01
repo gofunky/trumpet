@@ -144,6 +144,13 @@ function wrapElem (elem) {
     var tag = parseTag(elem._first[1]);
     var attrs = tag.getAttributes();
     
+    var getAttribute = elem.getAttribute;
+    elem.getAttribute = function (key, cb) {
+        var value = getAttribute.call(elem, key);
+        if (cb) cb(value);
+        return value;
+    };
+    
     var createReadStream = elem.createReadStream;
     elem.createReadStream = function (opts) {
         if (!opts) opts = {};
