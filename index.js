@@ -143,80 +143,46 @@ Trumpet.prototype._selectAll = function (str, cb) {
 function wrapElem (elem) {
     var tag = parseTag(elem._first[1]);
     var attrs = tag.getAttributes();
-    var setter = false;
     
-    return {
-        name: tag.name,
-        getName: function (cb) { cb(tag.name) },
-        getAttribute: function (key, cb) {
-            var value = attrs[key];
-            if (cb) cb(value);
-            return value;
-        },
-        setAttribute: function (key, value) {
-            attrs[key] = value;
-            if (!setter) createSetter();
-        },
-        createReadStream: function (opts) {
-            if (!opts) opts = {};
-            return elem.createReadStream({ inner: !opts.outer })
-                .pipe(through.obj(write, end));
-            ;
-            function write (row, enc, next) { this.push(row[1]); next() }
-            function end (next) { this.push(null); next() }
-        },
-        createWriteStream: function (opts) {
-            if (!opts) opts = {};
-            var we = elem.createWriteStream({ inner: !opts.outer });
-            var ws = new Writable;
-            ws._write = function (row, enc, next) {
-                we.write(row[1]);
-                next()
-            };
-            ws.once('finish', function () { we.end() });
-            return ws;
-        },
-        createStream: function (opts) {
-            if (!opts) opts = {};
-            var w = through.obj(function (buf, enc, next) {
-                this.push([ 'data', buf ]);
-                next();
-            });
-            var r = through.obj(function (row, enc, next) {
-                this.push(row[1]);
-                next();
-            });
-            var s = elem.createStream({ inner: !opts.outer });
-            return combine(w, s, r);
-        }
+    var createReadStream = elem.createReadStream;
+    elem.createReadStream = function (opts) {
+        if (!opts) opts = {};
+        return createReadStream.call(elem, { inner: !opts.outer })
+            .pipe(through.obj(write, end));
+        ;
+        function write (row, enc, next) { this.push(row[1]); next() }
+        function end (next) { this.push(null); next() }
     };
     
-    function createSetter () {
-        var s = elem.createStream();
-        setter = true;
-        var first = true;
-        s.pipe(through.obj(function (row, enc, next) {
-            if (first) {
-                var keys = Object.keys(attrs);
-                var parts = keys.map(function (key) {
-                    if (attrs[key] === true) return key;
-                    return key + '="' + esc(attrs[key]) + '"';
-                }).join(' ');
-                
-                var buf = Buffer(row[1].toString('utf8')
-                    .slice(0, tag.name.length + 1)
-                    + (parts.length ? ' ' : '') + parts
-                    + '>'
-                );
-                this.push([ row[0], buf ]);
-            }
-            else {
-                this.push(row);
-            }
-            first = false;
+    var createWriteStream = elem.createWriteStream;
+    elem.createWriteStream = function (opts) {
+        if (!opts) opts = {};
+        var we = createWriteStream.call(elem, { inner: !opts.outer });
+        var ws = new Writable;
+        ws._write = function (row, enc, next) {
+            we.write(row[1]);
+            next()
+        };
+        ws.once('finish', function () { we.end() });
+        return ws;
+    };
+    
+    var createStream = elem.createStream;
+    elem.createStream = function (opts) {
+        if (!opts) opts = {};
+        var w = through.obj(function (buf, enc, next) {
+            this.push([ 'data', buf ]);
             next();
-        })).pipe(s);
-    }
+        });
+        var r = through.obj(function (row, enc, next) {
+            this.push(row[1]);
+            next();
+        });
+        var s = createStream.call(elem, { inner: !opts.outer });
+        return combine(w, s, r);
+    };
+    
+    return elem;
 }
     
 Trumpet.prototype.createReadStream = function (sel, opts) {
@@ -226,11 +192,3 @@ Trumpet.prototype.createReadStream = function (sel, opts) {
 Trumpet.prototype.createWriteStream = function (sel, opts) {
     return this.select(sel).createWriteStream(opts);
 };
-
-function esc (s) {
-    return s.replace(/&/, '&amp;')
-        .replace(/"/g, '&quot;')
-        .replace(/</, '&lt;')
-        .replace(/>/, '&gt;')
-    ;
-}
