@@ -1,14 +1,12 @@
-var Readable = require('readable-stream').Readable;
-var Writable = require('readable-stream').Writable;
 var Duplex = require('readable-stream').Duplex;
 var inherits = require('inherits');
 var through = require('through2');
 var duplexer = require('duplexer2');
-var combine = require('stream-combiner');
 
 var tokenize = require('html-tokenize');
 var select = require('html-select');
-var parseTag = require('html-select/lib/parse_tag.js');
+
+var wrapElem = require('./lib/wrap.js');
 
 module.exports = Trumpet;
 inherits(Trumpet, Duplex);
@@ -148,84 +146,6 @@ Trumpet.prototype._selectAll = function (str, cb) {
     };
 };
 
-function wrapElem (elem) {
-    var welem = {};
-    
-    welem.getAttribute = function (key, cb) {
-        var value = elem.getAttribute(key);
-        if (cb) cb(value);
-        return value;
-    };
-    
-    welem.setAttribute = function (key, value) {
-        elem.setAttribute(key, value);
-    };
-    
-    welem.removeAttribute = function (key) {
-        elem.removeAttribute(key);
-    };
-    
-    welem.createReadStream = function (opts) {
-        if (!opts) opts = {};
-        
-        var rs = elem.createReadStream({ inner: !opts.outer });
-        var r = new Readable;
-        r._read = function read () {
-            var row, reads = 0;
-            while ((row = rs.read()) !== null) {
-                r.push(row[1]);
-                reads ++;
-            }
-            if (reads === 0) rs.once('readable', read);
-        };
-        rs.on('end', function () { r.push(null) });
-        
-        return r;
-    };
-    
-    welem.createWriteStream = function (opts) {
-        if (!opts) opts = {};
-        
-        var ws = elem.createWriteStream({ inner: !opts.outer });
-        var w = new Writable;
-        w._write = function (buf, enc, next) {
-            ws.write([ 'data', buf ]);
-            next();
-        };
-        w.on('finish', function () { ws.end() });
-        
-        return w;
-    };
-    
-    welem.createStream = function (opts) {
-        if (!opts) opts = {};
-        
-        var d = new Duplex;
-        var s = elem.createStream({ inner: !opts.outer });
-        
-        d._write = function (buf, enc, next) {
-            s.write([ 'data', buf ]);
-            next();
-        };
-        
-        d._read = function read () {
-            var row, reads = 0;
-            while ((row = s.read()) !== null) {
-                d.push(row[1]);
-                reads ++;
-            }
-            if (reads === 0) s.once('readable', read);
-        };
-        
-        d.on('finish', function () { s.end() });
-        s.on('end', function () { d.push(null) });
-        
-        return d;
-    };
-    
-    return welem;
-}
-    
 Trumpet.prototype.createReadStream = function (sel, opts) {
     return this.select(sel).createReadStream(opts);
 };
