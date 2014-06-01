@@ -149,29 +149,55 @@ Trumpet.prototype._selectAll = function (str, cb) {
 };
 
 function wrapElem (elem) {
-    if (elem._wrapped) return elem;
+    var welem = {};
     
-    var getAttribute = elem.getAttribute;
-    elem.getAttribute = function (key, cb) {
-        var value = getAttribute.call(elem, key);
+    welem.getAttribute = function (key, cb) {
+        var value = elem.getAttribute(key);
         if (cb) cb(value);
         return value;
     };
     
-    var createReadStream = elem.createReadStream;
-    elem.createReadStream = function (opts) {
-        if (!opts) opts = {};
-        return createReadStream.call(elem, { inner: !opts.outer });
+    welem.setAttribute = function (key, value) {
+        elem.setAttribute(key, value);
     };
     
-    var createWriteStream = elem.createWriteStream;
-    elem.createWriteStream = function (opts) {
-        if (!opts) opts = {};
-        return createWriteStream.call(elem, { inner: !opts.outer });
+    welem.removeAttribute = function (key) {
+        elem.removeAttribute(key);
     };
     
-    var createStream = elem.createStream;
-    elem.createStream = function (opts) {
+    welem.createReadStream = function (opts) {
+        if (!opts) opts = {};
+        
+        var rs = elem.createReadStream({ inner: !opts.outer });
+        var r = new Readable;
+        r._read = function read () {
+            var row, reads = 0;
+            while ((row = rs.read()) !== null) {
+                r.push(row[1]);
+                reads ++;
+            }
+            if (reads === 0) rs.once('readable', read);
+        };
+        rs.on('end', function () { r.push(null) });
+        
+        return r;
+    };
+    
+    welem.createWriteStream = function (opts) {
+        if (!opts) opts = {};
+        
+        var ws = elem.createWriteStream({ inner: !opts.outer });
+        var w = new Writable;
+        w._write = function (buf, enc, next) {
+            ws.write([ 'data', buf ]);
+            next();
+        };
+        w.on('finish', function () { ws.end() });
+        
+        return w;
+    };
+    
+    welem.createStream = function (opts) {
         if (!opts) opts = {};
         var w = through.obj(function (buf, enc, next) {
             this.push([ 'data', buf ]);
@@ -181,12 +207,11 @@ function wrapElem (elem) {
             this.push(row[1]);
             next();
         });
-        var s = createStream.call(elem, { inner: !opts.outer });
+        var s = elem.createStream({ inner: !opts.outer });
         return combine(w, s, r);
     };
     
-    elem._wrapped = true;
-    return elem;
+    return welem;
 }
     
 Trumpet.prototype.createReadStream = function (sel, opts) {
