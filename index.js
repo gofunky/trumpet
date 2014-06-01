@@ -141,8 +141,7 @@ Trumpet.prototype._selectAll = function (str, cb) {
 };
 
 function wrapElem (elem) {
-    var tag = parseTag(elem._first[1]);
-    var attrs = tag.getAttributes();
+    if (elem._wrapped) return elem;
     
     var getAttribute = elem.getAttribute;
     elem.getAttribute = function (key, cb) {
@@ -154,24 +153,13 @@ function wrapElem (elem) {
     var createReadStream = elem.createReadStream;
     elem.createReadStream = function (opts) {
         if (!opts) opts = {};
-        return createReadStream.call(elem, { inner: !opts.outer })
-            .pipe(through.obj(write, end));
-        ;
-        function write (row, enc, next) { this.push(row[1]); next() }
-        function end (next) { this.push(null); next() }
+        return createReadStream.call(elem, { inner: !opts.outer });
     };
     
     var createWriteStream = elem.createWriteStream;
     elem.createWriteStream = function (opts) {
         if (!opts) opts = {};
-        var we = createWriteStream.call(elem, { inner: !opts.outer });
-        var ws = new Writable;
-        ws._write = function (row, enc, next) {
-            we.write(row[1]);
-            next()
-        };
-        ws.once('finish', function () { we.end() });
-        return ws;
+        return createWriteStream.call(elem, { inner: !opts.outer });
     };
     
     var createStream = elem.createStream;
@@ -189,6 +177,7 @@ function wrapElem (elem) {
         return combine(w, s, r);
     };
     
+    elem._wrapped = true;
     return elem;
 }
     
