@@ -196,3 +196,7 @@ Trumpet.prototype.createReadStream = function (sel, opts) {
 Trumpet.prototype.createWriteStream = function (sel, opts) {
     return this.select(sel).createWriteStream(opts);
 };
+
+Trumpet.prototype.createStream = function (sel, opts) {
+    return this.select(sel).createStream(opts);
+};
