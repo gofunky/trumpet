@@ -71,7 +71,7 @@ Trumpet.prototype.selectAll = function (str, cb) {
 Trumpet.prototype._selectAll = function (str, cb) {
     var self = this;
     var readers = [], writers = [], duplex = [];
-    var gets = [], sets = [];
+    var gets = [], sets = [], removes = [];
     
     var element, welem;
     this._select.select(str, function (elem) {
@@ -105,6 +105,10 @@ Trumpet.prototype._selectAll = function (str, cb) {
         sets.splice(0).forEach(function (g) {
             welem.setAttribute(g[0], g[1]);
         });
+        
+        removes.splice(0).forEach(function (key) {
+            welem.removeAttribute(key);
+        });
     });
     
     return {
@@ -115,6 +119,10 @@ Trumpet.prototype._selectAll = function (str, cb) {
         setAttribute: function (key, value) {
             if (welem) return welem.setAttribute(key, value);
             sets.push([ key, value ]);
+        },
+        removeAttribute: function (key) {
+            if (welem) return welem.removeAttribute(key);
+            removes.push(key);
         },
         createReadStream: function (opts) {
             if (welem) return welem.createReadStream(opts);
