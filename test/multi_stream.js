@@ -20,7 +20,7 @@ test('multiple read streams', function (t) {
         'burritos'
     ];
     tr.selectAll('.b span', function (span) {
-        t.equal(span.name, 'SPAN');
+        t.equal(span.name, 'span');
         var rs = span.createReadStream();
         rs.pipe(output, { end: false });
         rs.pipe(concat(function (src) {
