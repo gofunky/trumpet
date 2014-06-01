@@ -199,16 +199,28 @@ function wrapElem (elem) {
     
     welem.createStream = function (opts) {
         if (!opts) opts = {};
-        var w = through.obj(function (buf, enc, next) {
-            this.push([ 'data', buf ]);
-            next();
-        });
-        var r = through.obj(function (row, enc, next) {
-            this.push(row[1]);
-            next();
-        });
+        
+        var d = new Duplex;
         var s = elem.createStream({ inner: !opts.outer });
-        return combine(w, s, r);
+        
+        d._write = function (buf, enc, next) {
+            s.write([ 'data', buf ]);
+            next();
+        };
+        
+        d._read = function read () {
+            var row, reads = 0;
+            while ((row = s.read()) !== null) {
+                d.push(row[1]);
+                reads ++;
+            }
+            if (reads === 0) s.once('readable', read);
+        };
+        
+        d.on('finish', function () { s.end() });
+        s.on('end', function () { d.push(null) });
+        
+        return d;
     };
     
     return welem;
