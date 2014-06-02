@@ -19,7 +19,10 @@ function Trumpet () {
     this._writing = false;
     this._piping = false;
     this._select = this._tokenize.pipe(select());
-    this._select.once('end', function () { self.push(null) });
+    this._select.once('end', function () {
+        self.emit('_end');
+        self.push(null)
+    });
     this.once('finish', function () { self._tokenize.end() });
 }
 
@@ -69,7 +72,19 @@ Trumpet.prototype.selectAll = function (str, cb) {
 Trumpet.prototype._selectAll = function (str, cb) {
     var self = this;
     var readers = [], writers = [], duplex = [];
-    var gets = [], sets = [], removes = [];
+    var gets = [], getss = [], sets = [], removes = [];
+    
+    this.once('_end', function () {
+        readers.splice(0).forEach(function (r) {
+            r.end();
+            r.resume();
+        });
+        
+        duplex.splice(0).forEach(function (d) {
+            d.end();
+            d.resume();
+        });
+    });
     
     var element, welem;
     this._select.select(str, function (elem) {
@@ -100,6 +115,10 @@ Trumpet.prototype._selectAll = function (str, cb) {
             welem.getAttribute(g[0], g[1]);
         });
         
+        getss.splice(0).forEach(function (cb) {
+            welem.getAttributes(cb);
+        });
+        
         sets.splice(0).forEach(function (g) {
             welem.setAttribute(g[0], g[1]);
         });
@@ -113,6 +132,9 @@ Trumpet.prototype._selectAll = function (str, cb) {
         getAttribute: function (key, cb) {
             if (welem) return welem.getAttribute(key, cb);
             gets.push([ key, cb ]);
+        },
+        getAttributes: function (cb) {
+            getss.push(cb);
         },
         setAttribute: function (key, value) {
             if (welem) return welem.setAttribute(key, value);
