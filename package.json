@@ -1,41 +1,42 @@
 {
-    "name" : "trumpet",
-    "version" : "1.6.3",
-    "description" : "parse and transform streaming html using css selectors",
-    "main" : "index.js",
-    "dependencies" : {
-        "sax" : "~0.5.4",
-        "ent" : "~0.0.5",
-        "through": "~2.3.4",
-        "duplexer": "~0.1.1",
-        "buffers": "~0.1.1",
-        "inherits": "~2.0.0"
-    },
-    "devDependencies" : {
-        "tap" : "~0.4.9",
-        "tape" : "~2.12.3",
-        "concat-stream" : "~1.4.5"
-    },
-    "scripts" : {
-        "test" : "tap test/*.js"
-    },
-    "repository" : {
-        "type" : "git",
-        "url" : "http://github.com/substack/node-trumpet.git"
-    },
-    "keywords" : [
-        "html",
-        "streaming",
-        "parser",
-        "transform",
-        "selectors",
-        "css"
-    ],
-    "author" : {
-        "name" : "James Halliday",
-        "email" : "mail@substack.net",
-        "url" : "http://substack.net"
-    },
-    "license" : "MIT",
-    "engine" : { "node" : ">=0.4" }
+  "name": "trumpet",
+  "version": "1.6.3",
+  "description": "parse and transform streaming html using css selectors",
+  "main": "index.js",
+  "dependencies": {
+    "html-select": "^2.3.5",
+    "html-tokenize": "^1.1.1",
+    "through2": "^1.0.0",
+    "duplexer2": "~0.0.2",
+    "inherits": "^2.0.0"
+  },
+  "devDependencies": {
+    "tape": "~2.12.3",
+    "concat-stream": "~1.4.5",
+    "through": "~2.3.4"
+  },
+  "scripts": {
+    "test": "tape test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/substack/node-trumpet.git"
+  },
+  "keywords": [
+    "html",
+    "streaming",
+    "parser",
+    "transform",
+    "selectors",
+    "css"
+  ],
+  "author": {
+    "name": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net"
+  },
+  "license": "MIT",
+  "engine": {
+    "node": ">=0.4"
+  }
 }
