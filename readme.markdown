@@ -152,6 +152,12 @@ Short-hand for `tr.select(sel).createReadStream(opts)`.
 
 Short-hand for `tr.select(sel).createWriteStream(opts)`.
 
+# attributes
+
+## elem.name
+
+The element name as a lower-case string. For example: `'div'`.
+
 # selector syntax
 
 Presently these [css selectors](http://www.w3.org/TR/CSS2/selector.html) work:
