@@ -8,7 +8,7 @@ test('first', function (t) {
     var expected = [ 'AAA', 'DDD' ];
     
     var tr = trumpet();
-    tr.selectAll('.row *:first', function (elem) {
+    tr.selectAll('.row *:first-child', function (elem) {
         var ex = expected.shift();
         elem.createReadStream().pipe(concat(function (body) {
             t.equal(body.toString('utf8'), ex);
