@@ -36,7 +36,7 @@ Trumpet.prototype._read = function (n) {
     var buf, read = 0;
     var s = this._select;
     while ((row = s.read()) !== null) {
-        if (row[1].length) {
+        if (row[1] && row[1].length) {
             this.push(row[1]);
             read ++;
         }
