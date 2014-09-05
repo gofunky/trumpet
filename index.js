@@ -32,6 +32,7 @@ Trumpet.prototype.pipe = function () {
 };
 
 Trumpet.prototype._read = function (n) {
+    var row;
     var self = this;
     var buf, read = 0;
     var s = this._select;
