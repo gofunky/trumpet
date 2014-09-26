@@ -109,6 +109,15 @@ Get a result object `elem` for every element matching `selector`.
 When the selector for `elem` matches, query the case-insensitive attribute
 called `name` with `cb(value)`.
 
+Returns `elem`.
+
+## elem.getAttribute(name, cb)
+
+Get all the elements in `cb(attributes)` as an object `attributes` with
+lower-case keys.
+
+Returns `elem`.
+
 ## elem.setAttribute(name, value)
 
 When the selector for `elem` matches, replace the case-insensitive attribute
@@ -116,10 +125,14 @@ called `name` with `value`.
 
 If the attribute doesn't exist, it will be created in the output stream.
 
+Returns `elem`.
+
 ## elem.removeAttribute(name)
 
 When the selector for `elem` matches, remove the attribute called `name` if it
 exists.
+
+Returns `elem`.
 
 ## elem.createReadStream(opts)
 
