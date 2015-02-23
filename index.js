@@ -84,8 +84,8 @@ Trumpet.prototype._selectAll = function (str, cb) {
         });
         
         duplex.splice(0).forEach(function (d) {
-            d.end();
-            d.resume();
+            d.input.end();
+            d.input.resume();
         });
     });
     
