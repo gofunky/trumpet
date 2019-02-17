@@ -7,7 +7,7 @@
     "html-select2": "^1.0.1",
     "html-tokenize": "^2.0.0",
     "through2": "^3.0.0",
-    "duplexer2": "~0.0.2",
+    "duplexer2": "~0.1.4",
     "inherits": "^2.0.0",
     "readable-stream": "^3.1.1"
   },
