@@ -3,13 +3,21 @@
 [![NPM version](https://img.shields.io/npm/v/node-trumpet2.svg?style=flat-square)](https://www.npmjs.com/package/node-trumpet2)
 [![Build](https://travis-ci.com/gofunky/node-trumpet2.svg?branch=master)](https://travis-ci.com/gofunky/node-trumpet2)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0d035d70ee994372a31e0aedbc5f409a)](https://www.codacy.com/app/gofunky/node-trumpet2?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=gofunky/node-trumpet2&amp;utm_campaign=Badge_Grade)
+[![CodeFactor](https://www.codefactor.io/repository/github/gofunky/node-trumpet2/badge)](https://www.codefactor.io/repository/github/gofunky/node-trumpet2)
 
 the maintained version of [trumpet](https://github.com/substack/node-trumpet)
 
-# examples
+## Install
 
-## replace inner
+With [npm](http://npmjs.org) do:
+
+```
+npm install node-trumpet2
+```
+
+## Examples
+
+### Replace inner
 
 input html:
 
@@ -47,7 +55,7 @@ output:
 </table>
 ```
 
-## read all
+### Read all
 
 Input html:
 
@@ -88,7 +96,7 @@ output:
 tacos y burritos
 ```
 
-## read modify write
+### Read, modify, and write
 
 input html:
 
@@ -146,42 +154,42 @@ output:
 </html>
 ```
 
-# methods
+## Methods
 
 ``` js
 var trumpet = require('trumpet')
 ```
 
-## var tr = trumpet(opts)
+### var tr = trumpet(opts)
 
 Create a new trumpet stream. This stream is readable and writable.
 Pipe an html stream into `tr` and get back a transformed html stream.
 
 Parse errors are emitted by `tr` in an `'error'` event.
 
-## var elem = tr.select(selector)
+### var elem = tr.select(selector)
 
 Return a result object `elem` for the first element matching `selector`.
 
-## tr.selectAll(selector, function (elem) {})
+### tr.selectAll(selector, function (elem) {})
 
 Get a result object `elem` for every element matching `selector`.
 
-## elem.getAttribute(name, cb)
+### elem.getAttribute(name, cb)
 
 When the selector for `elem` matches, query the case-insensitive attribute
 called `name` with `cb(value)`.
 
 Returns `elem`.
 
-## elem.getAttributes(name, cb)
+### elem.getAttributes(name, cb)
 
 Get all the elements in `cb(attributes)` as an object `attributes` with
 lower-case keys.
 
 Returns `elem`.
 
-## elem.setAttribute(name, value)
+### elem.setAttribute(name, value)
 
 When the selector for `elem` matches, replace the case-insensitive attribute
 called `name` with `value`.
@@ -190,53 +198,53 @@ If the attribute doesn't exist, it will be created in the output stream.
 
 Returns `elem`.
 
-## elem.removeAttribute(name)
+### elem.removeAttribute(name)
 
 When the selector for `elem` matches, remove the attribute called `name` if it
 exists.
 
 Returns `elem`.
 
-## elem.createReadStream(opts)
+### elem.createReadStream(opts)
 
 Create a new readable stream with the inner html content under `elem`.
 
 To use the outer html content instead of the inner, set `opts.outer` to `true`.
 
-## elem.createWriteStream(opts)
+### elem.createWriteStream(opts)
 
 Create a new write stream to replace the inner html content under `elem`.
 
 To use the outer html content instead of the inner, set `opts.outer` to `true`.
 
-## elem.createStream(opts)
+### elem.createStream(opts)
 
 Create a new readable writable stream that outputs the content under `elem` and
 replaces the content with the data written to it.
 
 To use the outer html content instead of the inner, set `opts.outer` to `true`.
 
-## tr.createStream(sel, opts)
+### tr.createStream(sel, opts)
 
 Short-hand for `tr.select(sel).createStream(opts)`.
 
-## tr.createReadStream(sel, opts)
+### tr.createReadStream(sel, opts)
 
 Short-hand for `tr.select(sel).createReadStream(opts)`.
 
-## tr.createWriteStream(sel, opts)
+### tr.createWriteStream(sel, opts)
 
 Short-hand for `tr.select(sel).createWriteStream(opts)`.
 
-# attributes
+## Attributes
 
-## elem.name
+### elem.name
 
 The element name as a lower-case string. For example: `'div'`.
 
-# selector syntax
+## Selector syntax
 
-Presently these [css selectors](http://www.w3.org/TR/CSS2/selector.html) work:
+Currently, these [css selectors](http://www.w3.org/TR/CSS2/selector.html) work:
 
 * *
 * E
@@ -251,15 +259,3 @@ Presently these [css selectors](http://www.w3.org/TR/CSS2/selector.html) work:
 * E[attr^=prefix]
 * E[attr$=suffix]
 * E[attr*=search]
-
-# install
-
-With [npm](http://npmjs.org) do:
-
-```
-npm install trumpet
-```
-
-# license
-
-MIT
