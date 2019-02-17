@@ -1,11 +1,11 @@
-var trumpet = require('../');
-var through = require('through2');
-var fs = require('fs');
-var tr = trumpet();
+const trumpet = require('../');
+const through = require('through2');
+const fs = require('fs');
+const tr = trumpet();
 
-var loud = tr.select('.loud').createStream();
+const loud = tr.select('.loud').createStream();
 loud.pipe(through(function (buf, enc, next) {
-    var self = this;
+    const self = this;
     setTimeout(function () {
         self.push(buf.toString().toUpperCase());
         next();

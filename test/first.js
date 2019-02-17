@@ -1,17 +1,17 @@
-var trumpet = require('../');
-var fs = require('fs');
-var test = require('tape');
-var concat = require('concat-stream');
+const trumpet = require('../');
+const fs = require('fs');
+const test = require('tape');
+const concat = require('concat-stream');
 
 test('first', function (t) {
     t.plan(2);
-    var expected = [ 'AAA', 'DDD' ];
-    
-    var tr = trumpet();
+    const expected = ['AAA', 'DDD'];
+
+    const tr = trumpet();
     tr.selectAll('.row *:first-child', function (elem) {
-        var ex = expected.shift();
+        const ex = expected.shift();
         elem.createReadStream().pipe(concat(function (body) {
-            t.equal(body.toString('utf8'), ex);
+            t.equal(String(body), ex);
         }));
     });
     fs.createReadStream(__dirname + '/first.html').pipe(tr);

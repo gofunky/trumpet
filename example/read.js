@@ -1,7 +1,7 @@
-var trumpet = require('../');
-var tr = trumpet();
+const trumpet = require('../');
+const tr = trumpet();
 
 tr.select('.msg').createReadStream().pipe(process.stdout);
 
-var fs = require('fs');
+const fs = require('fs');
 fs.createReadStream(__dirname + '/html/read.html').pipe(tr);

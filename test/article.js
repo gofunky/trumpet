@@ -1,12 +1,12 @@
-var trumpet = require('../');
-var test = require('tape');
-var concat = require('concat-stream');
-var fs = require('fs');
+const trumpet = require('../');
+const test = require('tape');
+const concat = require('concat-stream');
+const fs = require('fs');
 
 test(function (t) {
     t.plan(2);
-    
-    var tr = trumpet();
+
+    const tr = trumpet();
     tr.createReadStream('article username').pipe(concat(function (body) {
         t.equal(body.toString(), '<a href="/user/echojs">echojs</a>');
     }));

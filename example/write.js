@@ -1,9 +1,9 @@
-var trumpet = require('../');
-var tr = trumpet();
+const trumpet = require('../');
+const tr = trumpet();
 tr.pipe(process.stdout);
 
-var ws = tr.select('title').createWriteStream();
+const ws = tr.select('title').createWriteStream();
 ws.end('beep boop.');
 
-var fs = require('fs');
+const fs = require('fs');
 fs.createReadStream(__dirname + '/html/write.html').pipe(tr);

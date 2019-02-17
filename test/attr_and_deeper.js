@@ -1,18 +1,14 @@
-var select = require('../');
-var fs = require('fs');
-var test = require('tape');
-var concat = require('concat-stream');
+const select = require('../');
+const fs = require('fs');
+const test = require('tape');
+const concat = require('concat-stream');
+const htmlclean = require('htmlclean');
 
-var expected = [
-    '<div class="row cool">',
-    '  <div key="msg">wow</div>',
-    '</div>',
-    ''
-].join('\n');;
+const expected = '<div class="row cool"><div key="msg">wow</div></div>';
 
 test('attr and deeper', function (t) {
     t.plan(1);
-    var sel = select();
+    const sel = select();
     sel.select('.row', function (elem) {
         elem.setAttribute('class', 'row cool');
     });
@@ -22,7 +18,7 @@ test('attr and deeper', function (t) {
     fs.createReadStream(__dirname + '/attr_and_deeper.html')
         .pipe(sel)
         .pipe(concat(function (body) {
-            t.equal(body.toString('utf8'), expected);
+            t.equal(htmlclean(body.toString()), expected);
         }))
     ;
 });

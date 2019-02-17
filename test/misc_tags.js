@@ -1,13 +1,13 @@
-var trumpet = require('../');
-var fs = require('fs');
-var test = require('tape');
-var through = require('through');
+const trumpet = require('../');
+const fs = require('fs');
+const test = require('tape');
+const through = require('through');
 
 test('h1 is first, select h1', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
-    var elem = tr.select('.a h1');
+
+    const tr = trumpet();
+    const elem = tr.select('.a h1');
     elem.getAttribute('value', function (value) {
         t.equal(value, 'ah1');
     });
@@ -16,9 +16,9 @@ test('h1 is first, select h1', function (t) {
 
 test('h1 is first, select em', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
-    var elem = tr.select('.a em');
+
+    const tr = trumpet();
+    const elem = tr.select('.a em');
     elem.getAttribute('value', function (value) {
         t.equal(value, 'aem');
     });
@@ -27,9 +27,9 @@ test('h1 is first, select em', function (t) {
 
 test('em is first, select h1', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
-    var elem = tr.select('.b h1');
+
+    const tr = trumpet();
+    const elem = tr.select('.b h1');
     elem.getAttribute('value', function (value) {
         t.equal(value, 'bh1');
     });
@@ -38,9 +38,9 @@ test('em is first, select h1', function (t) {
 
 test('em is first, select em', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
-    var elem = tr.select('.b em');
+
+    const tr = trumpet();
+    const elem = tr.select('.b em');
     elem.getAttribute('value', function (value) {
         t.equal(value, 'bem');
     });
@@ -49,9 +49,9 @@ test('em is first, select em', function (t) {
 
 test('deeply nested', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
-    var elem = tr.select('.c h1');
+
+    const tr = trumpet();
+    const elem = tr.select('.c h1');
     elem.getAttribute('value', function (value) {
         t.equal(value, 'ch1');
     });

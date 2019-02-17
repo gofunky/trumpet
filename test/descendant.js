@@ -1,13 +1,13 @@
-var trumpet = require('../');
-var fs = require('fs');
-var test = require('tape');
-var through = require('through');
+const trumpet = require('../');
+const fs = require('fs');
+const test = require('tape');
+const through = require('through');
 
 test('descendant selector', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
-    var elem = tr.select('.a input[type=text]');
+
+    const tr = trumpet();
+    const elem = tr.select('.a input[type=text]');
     elem.getAttribute('value', function (value) {
         t.equal(value, 'abc');
     });
@@ -16,9 +16,9 @@ test('descendant selector', function (t) {
 
 test('descendant no-match selector', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
-    var elem = tr.select('.b .d');
+
+    const tr = trumpet();
+    const elem = tr.select('.b .d');
     elem.getAttribute('class', function (value) {
         t.fail('should not have matched');
     });

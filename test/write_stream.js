@@ -1,15 +1,16 @@
-var trumpet = require('../');
-var fs = require('fs');
-var through = require('through');
-var test = require('tape');
-var concat = require('concat-stream');
+const trumpet = require('../');
+const fs = require('fs');
+const through = require('through');
+const test = require('tape');
+const concat = require('concat-stream');
+const htmlclean = require('htmlclean');
 
 test('outer write stream', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
-    var ws = tr.select('div').createWriteStream({ outer: true });
-    var s = through();
+
+    const tr = trumpet();
+    const ws = tr.select('div').createWriteStream({outer: true});
+    const s = through();
     s.pipe(ws);
     
     s.write('<B>beep');
@@ -21,9 +22,9 @@ test('outer write stream', function (t) {
     
     tr.pipe(concat(function (body) {
         t.equal(
-            body.toString(),
-            '<!doctype html>\n'
-            + '<html>\n<body>\n<B>beep boop.</B>\n</body>\n</html>\n'
+            htmlclean(String(body)),
+            '<!doctype html>'
+            + '<html><body> <B>beep boop.</B></body></html>'
         );
     }));
     
@@ -32,10 +33,10 @@ test('outer write stream', function (t) {
 
 test('write stream', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
-    var ws = tr.select('div').createWriteStream();
-    var s = through();
+
+    const tr = trumpet();
+    const ws = tr.select('div').createWriteStream();
+    const s = through();
     s.pipe(ws);
     
     s.write('beep');
@@ -47,10 +48,10 @@ test('write stream', function (t) {
     
     tr.pipe(concat(function (body) {
         t.equal(
-            body.toString(),
-            '<!doctype html>\n'
-            + '<html>\n<body>\n<div class="x">beep boop.</div>\n'
-            + '</body>\n</html>\n'
+            htmlclean(String(body)),
+            '<!doctype html>'
+            + '<html><body><div class="x">beep boop.</div>'
+            + '</body></html>'
         );
     }));
     

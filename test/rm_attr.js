@@ -1,19 +1,20 @@
-var trumpet = require('../');
-var fs = require('fs');
-var test = require('tape');
-var concat = require('concat-stream');
+const trumpet = require('../');
+const fs = require('fs');
+const test = require('tape');
+const concat = require('concat-stream');
+const htmlclean = require('htmlclean');
 
 test('remove attribute', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
-    var elem = tr.select('input[type=text]');
+
+    const tr = trumpet();
+    const elem = tr.select('input[type=text]');
     elem.removeAttribute('zzz');
     
     tr.pipe(concat(function (src) {
         t.equal(
-            String(src),
-            '<div class="a"><input type="text" value="xyz"></div>\n'
+            htmlclean(String(src)),
+            '<div class="a"><input type="text" value="xyz"></div>'
         );
     }));
     fs.createReadStream(__dirname + '/rm_attr.html').pipe(tr);

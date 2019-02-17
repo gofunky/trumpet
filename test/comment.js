@@ -1,20 +1,20 @@
-var trumpet = require('../');
-var through = require('through');
-var test = require('tape');
-var concat = require('concat-stream');
+const trumpet = require('../');
+const through = require('through');
+const test = require('tape');
+const concat = require('concat-stream');
 
 test('comment write stream', function (t) {
     t.plan(1);
 
-    var tr = trumpet();
-    var html = tr.select('html');
-    var ws = html.createWriteStream();
+    const tr = trumpet();
+    const html = tr.select('html');
+    const ws = html.createWriteStream();
 
-    var s = through();
+    const s = through();
     s.pipe(ws);
     s.end();
 
-    var res = '<!-- test --><html></html>';
+    const res = '<!-- test --><html></html>';
     tr.pipe(concat(function (body) {
         t.equal(
             body.toString(),
@@ -27,15 +27,15 @@ test('comment write stream', function (t) {
 test('comment write stream variant', function (t) {
     t.plan(1);
 
-    var tr = trumpet();
-    var html = tr.select('html');
-    var ws = html.createWriteStream();
+    const tr = trumpet();
+    const html = tr.select('html');
+    const ws = html.createWriteStream();
 
-    var s = through();
+    const s = through();
     s.pipe(ws);
     s.end();
 
-    var res = '<!--test   --><html></html>';
+    const res = '<!--test   --><html></html>';
     tr.pipe(concat(function (body) {
         t.equal(
             body.toString(),

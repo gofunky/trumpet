@@ -1,18 +1,18 @@
-var Duplex = require('readable-stream').Duplex;
-var inherits = require('inherits');
-var through = require('through2');
-var duplexer = require('duplexer2');
+const Duplex = require('readable-stream').Duplex;
+const inherits = require('inherits');
+const through = require('through2');
+const duplexer = require('duplexer2');
 
-var tokenize = require('html-tokenize');
-var select = require('html-select');
+const tokenize = require('html-tokenize');
+const select = require('html-select2');
 
-var wrapElem = require('./lib/wrap.js');
+const wrapElem = require('./lib/wrap.js');
 
 module.exports = Trumpet;
 inherits(Trumpet, Duplex);
 
 function Trumpet () {
-    var self = this;
+    const self = this;
     if (!(this instanceof Trumpet)) return new Trumpet;
     Duplex.call(this);
     this._tokenize = tokenize();
@@ -32,13 +32,13 @@ Trumpet.prototype.pipe = function () {
 };
 
 Trumpet.prototype._read = function (n) {
-    var row;
-    var self = this;
-    var buf, read = 0;
-    var s = this._select;
+    let row;
+    const self = this;
+    let buf, read = 0;
+    const s = this._select;
     while ((row = s.read()) !== null) {
         if (row[0] === 'END') {
-            this.push(row[1][1])
+            this.push(row[1][1]);
             read ++
         }
         else if (row[1] && row[1].length) {
@@ -58,15 +58,18 @@ Trumpet.prototype._write = function (buf, enc, next) {
 };
 
 Trumpet.prototype.select = function (str, cb) {
-    var self = this;
-    var first = true;
-    
-    var res = self._selectAll(str, function (elem) {
+    const self = this;
+    let first = true;
+
+    const res = self._selectAll(str, function (elem) {
         if (!first) return;
         first = false;
-        res.createReadStream = function () {};
-        res.createWriteStream = function () {};
-        res.createStream = function () {};
+        res.createReadStream = function () {
+        };
+        res.createWriteStream = function () {
+        };
+        res.createStream = function () {
+        };
         if (cb) cb(elem);
     });
     return res;
@@ -77,10 +80,10 @@ Trumpet.prototype.selectAll = function (str, cb) {
 };
 
 Trumpet.prototype._selectAll = function (str, cb) {
-    var self = this;
-    var readers = [], writers = [], duplex = [];
-    var gets = [], getss = [], sets = [], removes = [];
-    
+    const self = this;
+    const readers = [], writers = [], duplex = [];
+    const gets = [], getss = [], sets = [], removes = [];
+
     this.once('_end', function () {
         readers.splice(0).forEach(function (r) {
             r.end();
@@ -92,8 +95,8 @@ Trumpet.prototype._selectAll = function (str, cb) {
             d.input.resume();
         });
     });
-    
-    var element, welem;
+
+    let element, welem;
     this._select.select(str, function (elem) {
         element = elem;
         welem = wrapElem(elem);
@@ -157,21 +160,21 @@ Trumpet.prototype._selectAll = function (str, cb) {
         },
         createReadStream: function (opts) {
             if (welem) return welem.createReadStream(opts);
-            var r = through();
+            const r = through();
             r._options = opts;
             readers.push(r);
             return r;
         },
         createWriteStream: function (opts) {
             if (welem) return welem.createWriteStream(opts);
-            var w = through();
+            const w = through();
             w._options = opts;
             writers.push(w);
             return w;
         },
         createStream: function (opts) {
             if (welem) return welem.createStream(opts);
-            var d = { input: through(), output: through() };
+            const d = {input: through(), output: through()};
             d.options = opts;
             duplex.push(d);
             return duplexer(d.input, d.output);

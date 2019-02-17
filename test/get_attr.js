@@ -1,12 +1,12 @@
-var trumpet = require('../');
-var fs = require('fs');
-var test = require('tape');
+const trumpet = require('../');
+const fs = require('fs');
+const test = require('tape');
 
 test('get attribute', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
-    var elem = tr.select('.b input[type=text]');
+
+    const tr = trumpet();
+    const elem = tr.select('.b input[type=text]');
     elem.getAttribute('value', function (value) {
         t.equal(value, '¡¡¡');
     });
@@ -15,9 +15,9 @@ test('get attribute', function (t) {
 
 test('get 1 div', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
-    var elem = tr.select('div');
+
+    const tr = trumpet();
+    const elem = tr.select('div');
     elem.getAttribute('class', function (value) {
         t.equal(value, 'a');
     });
@@ -26,9 +26,9 @@ test('get 1 div', function (t) {
 
 test('get all divs', function (t) {
     t.plan(2);
-    var names = [ 'a', 'b' ];
-    
-    var tr = trumpet();
+    const names = ['a', 'b'];
+
+    const tr = trumpet();
     tr.selectAll('div', function (elem) {
         elem.getAttribute('class', function (value) {
             t.equal(value, names.shift());

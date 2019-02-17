@@ -1,24 +1,24 @@
-var trumpet = require('../');
-var fs = require('fs');
-var through = require('through');
-var test = require('tape');
-var concat = require('concat-stream');
+const trumpet = require('../');
+const fs = require('fs');
+const test = require('tape');
+const concat = require('concat-stream');
+const htmlclean = require('htmlclean');
 
 test('write end', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
+
+    const tr = trumpet();
     tr.select('.x b', function (elem) {
-        var ws = elem.createWriteStream();
+        const ws = elem.createWriteStream();
         ws.end('beep boop');
     });
     
     tr.pipe(concat(function (body) {
         t.equal(
-            body.toString(),
-            '<!doctype html>\n'
-            + '<html>\n<body>\n<div class="x"><b>beep boop</b></div>\n'
-            + '</body>\n</html>\n'
+            htmlclean(String(body)),
+            '<!doctype html>'
+            + '<html><body><div class="x"><b>beep boop</b></div>'
+            + '</body></html>'
         );
     }));
     
@@ -27,22 +27,22 @@ test('write end', function (t) {
 
 test('write end string', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
+
+    const tr = trumpet();
     tr.select('.x b', function (elem) {
-        var ws = elem.createWriteStream();
+        const ws = elem.createWriteStream();
         ws.end('beep boop');
     });
     
     tr.pipe(concat(function (body) {
         t.equal(
-            body.toString(),
-            '<!doctype html>\n'
-            + '<html>\n<body>\n<div class="x"><b>beep boop</b></div>\n'
-            + '</body>\n</html>\n'
+            htmlclean(String(body)),
+            '<!doctype html>'
+            + '<html><body><div class="x"><b>beep boop</b></div>'
+            + '</body></html>'
         );
     }));
-    
-    var html = fs.readFileSync(__dirname + '/write_end.html', 'utf8');
+
+    const html = fs.readFileSync(__dirname + '/write_end.html', 'utf8');
     tr.end(html);
 }); 

@@ -1,29 +1,30 @@
-var trumpet = require('../');
-var fs = require('fs');
-var test = require('tape');
-var concat = require('concat-stream');
+const trumpet = require('../');
+const fs = require('fs');
+const test = require('tape');
+const concat = require('concat-stream');
+const htmlclean = require('htmlclean');
 
 test('multi file write stream out of order', function (t) {
     t.plan(1);
 
-    var tr = trumpet();
+    const tr = trumpet();
 
-    var sy = fs.createReadStream(__dirname + '/multi_file_write_stream_y.html');
-    var sx = fs.createReadStream(__dirname + '/multi_file_write_stream_x.html');
+    const sy = fs.createReadStream(__dirname + '/multi_file_write_stream_y.html');
+    const sx = fs.createReadStream(__dirname + '/multi_file_write_stream_x.html');
 
-    var wsx = tr.select('.x').createWriteStream();
-    var wsy = tr.select('.y').createWriteStream();
+    const wsx = tr.select('.x').createWriteStream();
+    const wsy = tr.select('.y').createWriteStream();
 
     sx.pipe(wsx);
     sy.pipe(wsy);
 
     tr.pipe(concat(function (body) {
         t.equal(
-            body.toString(),
-            '<!doctype html>\n'
-            + '<html>\n<body>\n<div class="x">beep boop.\n</div>\n'
-            + '<div class="y">beep beep boop.\n</div>\n'
-            + '</body>\n</html>\n'
+            htmlclean(body.toString()),
+            '<!doctype html>'
+            + '<html><body><div class="x">beep boop.</div>'
+            + '<div class="y">beep beep boop.</div>'
+            + '</body></html>'
         );
     }));
     

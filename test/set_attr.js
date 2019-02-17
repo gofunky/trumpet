@@ -1,19 +1,20 @@
-var trumpet = require('../');
-var fs = require('fs');
-var test = require('tape');
-var concat = require('concat-stream');
+const trumpet = require('../');
+const fs = require('fs');
+const test = require('tape');
+const concat = require('concat-stream');
+const htmlclean = require('htmlclean');
 
 test('set attribute', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
-    var elem = tr.select('input[type=text]');
+
+    const tr = trumpet();
+    const elem = tr.select('input[type=text]');
     elem.setAttribute('value', 'abc');
     
     tr.pipe(concat(function (src) {
         t.equal(
-            String(src),
-            '<div class="a"><input type="text" value="abc"></div>\n'
+            htmlclean(String(src)),
+            '<div class="a"><input type="text" value="abc"></div>'
         );
     }));
     fs.createReadStream(__dirname + '/set_attr.html').pipe(tr);
@@ -21,15 +22,15 @@ test('set attribute', function (t) {
 
 test('create attribute', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
-    var elem = tr.select('input[type=text]');
+
+    const tr = trumpet();
+    const elem = tr.select('input[type=text]');
     elem.setAttribute('beep', 'boop');
     
     tr.pipe(concat(function (src) {
         t.equal(
-            String(src),
-            '<div class="a"><input type="text" value="xyz" beep="boop"></div>\n'
+            htmlclean(String(src)),
+            '<div class="a"><input type="text" value="xyz" beep="boop"></div>'
         );
     }));
     fs.createReadStream(__dirname + '/set_attr.html').pipe(tr);

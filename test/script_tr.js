@@ -1,14 +1,14 @@
-var trumpet = require('../');
-var fs = require('fs');
-var through = require('through');
-var test = require('tape');
-var concat = require('concat-stream');
+const trumpet = require('../');
+const fs = require('fs');
+const through = require('through');
+const test = require('tape');
+const concat = require('concat-stream');
 
 test('uppercase script contents', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
-    var ts = tr.select('script').createStream();
+
+    const tr = trumpet();
+    const ts = tr.select('script').createStream();
     ts.pipe(through(function (buf) {
         this.queue(buf.toString().toUpperCase());
     })).pipe(ts);
@@ -30,9 +30,9 @@ test('uppercase script contents', function (t) {
 
 test('uppercase script outer', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
-    var ts = tr.select('script').createStream({ outer: true });
+
+    const tr = trumpet();
+    const ts = tr.select('script').createStream({outer: true});
     ts.pipe(through(function (buf) {
         this.queue(buf.toString().toUpperCase());
     })).pipe(ts);

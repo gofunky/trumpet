@@ -1,13 +1,13 @@
-var trumpet = require('../');
-var fs = require('fs');
-var test = require('tape');
-var through = require('through');
+const trumpet = require('../');
+const fs = require('fs');
+const test = require('tape');
+const through = require('through');
 
 test('wonky duplicated classes selector', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
-    var elem = tr.select('.c');
+
+    const tr = trumpet();
+    const elem = tr.select('.c');
     elem.getAttribute('class', function (value) {
         t.equal(value, 'c');
     });
@@ -16,9 +16,9 @@ test('wonky duplicated classes selector', function (t) {
 
 test('rebase selector', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
-    var elem = tr.select('.a > .b > * > .d');
+
+    const tr = trumpet();
+    const elem = tr.select('.a > .b > * > .d');
     elem.getAttribute('class', function (value) {
         t.equal(value, 'd');
     });
@@ -27,11 +27,11 @@ test('rebase selector', function (t) {
 
 test('too many ancestors selector', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
+
+    const tr = trumpet();
     tr.pipe(through(null, function () { t.ok(true) }));
-    
-    var elem = tr.select('.a > .b > * > * > .d');
+
+    const elem = tr.select('.a > .b > * > * > .d');
     elem.getAttribute('class', function (value) {
         t.fail('should not have matched');
     });
@@ -40,10 +40,10 @@ test('too many ancestors selector', function (t) {
 
 test('get all class names', function (t) {
     t.plan(6);
-    var names = [ 'a', 'b', 'a', 'b', 'c', 'd' ];
-    
-    var tr = trumpet();
-    
+    const names = ['a', 'b', 'a', 'b', 'c', 'd'];
+
+    const tr = trumpet();
+
     tr.selectAll('div', function (elem) {
         elem.getAttribute('class', function (value) {
             t.equal(value, names.shift());
@@ -54,8 +54,8 @@ test('get all class names', function (t) {
 
 test('all class name pairs', function (t) {
     t.plan(1);
-    var tr = trumpet();
-    var names = [];
+    const tr = trumpet();
+    const names = [];
     tr.pipe(through(null, function () {
         t.deepEqual(names, [ 'b', 'a', 'b', 'c', 'd' ]);
     }));

@@ -1,13 +1,13 @@
-var trumpet = require('../');
-var fs = require('fs');
-var test = require('tape');
-var through = require('through');
+const trumpet = require('../');
+const fs = require('fs');
+const test = require('tape');
+const through = require('through');
 
 test('sibling selector', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
-    var elem = tr.select('.b + .d');
+
+    const tr = trumpet();
+    const elem = tr.select('.b + .d');
     elem.getAttribute('class', function (value) {
         t.equal(value, 'd');
     });
@@ -16,9 +16,9 @@ test('sibling selector', function (t) {
 
 test('sibling no-match selector', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
-    var elem = tr.select('.c + .d');
+
+    const tr = trumpet();
+    const elem = tr.select('.c + .d');
     elem.getAttribute('class', function (value) {
         t.fail('should not have matched');
     });

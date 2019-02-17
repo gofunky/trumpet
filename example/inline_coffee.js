@@ -1,22 +1,22 @@
-var trumpet = require('../');
-var fs = require('fs');
-var through = require('through');
-var duplexer = require('duplexer');
-var concat = require('concat-stream');
-var coffee = require('coffee-script');
+const trumpet = require('../');
+const fs = require('fs');
+const through = require('through');
+const duplexer = require('duplexer2');
+const concat = require('concat-stream');
+const coffee = require('coffee-script');
 
-var coffeeStream = (function () {
-    var input = concat(function (body) {
-        output.queue(coffee.compile(body.toString('utf8')));
+const coffeeStream = (function () {
+    const output = through();
+    const input = concat(function (body) {
+        output.queue(coffee.compile(body.toString()));
         output.queue(null);
     });
-    var output = through();
     return duplexer(input, output);
 })();
 
-var tr = trumpet();
+const tr = trumpet();
 tr.pipe(process.stdout);
 
-var stream = tr.createStream('script[type="coffee-script"]');
+const stream = tr.createStream('script[type="coffee-script"]');
 stream.pipe(coffeeStream).pipe(stream);
 fs.createReadStream(__dirname + '/html/inline_coffee.html').pipe(tr);

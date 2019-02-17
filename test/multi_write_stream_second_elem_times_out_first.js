@@ -1,17 +1,18 @@
-var trumpet = require('../');
-var fs = require('fs');
-var through = require('through');
-var test = require('tape');
-var concat = require('concat-stream');
+const trumpet = require('../');
+const fs = require('fs');
+const through = require('through');
+const test = require('tape');
+const concat = require('concat-stream');
+const htmlclean = require('htmlclean');
 
 test('multi write stream out of order', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
-    var wsx = tr.select('.x').createWriteStream();
-    var wsy = tr.select('.y').createWriteStream();
-    var sx = through();
-    var sy = through();
+
+    const tr = trumpet();
+    const wsx = tr.select('.x').createWriteStream();
+    const wsy = tr.select('.y').createWriteStream();
+    const sx = through();
+    const sy = through();
 
     sx.pipe(wsx);
     sy.pipe(wsy);
@@ -31,11 +32,11 @@ test('multi write stream out of order', function (t) {
 
     tr.pipe(concat(function (body) {
         t.equal(
-            body.toString(),
-            '<!doctype html>\n'
-            + '<html>\n<body>\n<div class="x">beep boop.</div>\n'
-            + '<div class="y">beep beep boop.</div>\n'
-            + '</body>\n</html>\n'
+            htmlclean(body.toString()),
+            '<!doctype html>'
+            + '<html><body><div class="x">beep boop.</div>'
+            + '<div class="y">beep beep boop.</div>'
+            + '</body></html>'
         );
     }));
     

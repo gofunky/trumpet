@@ -1,18 +1,18 @@
-var trumpet = require('../');
-var fs = require('fs');
-var through = require('through');
-var test = require('tape');
-var concat = require('concat-stream');
+const trumpet = require('../');
+const fs = require('fs');
+const through = require('through');
+const test = require('tape');
+const concat = require('concat-stream');
 
 test('write stream', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
-    var link = tr.select('a');
-    var ws = link.createWriteStream();
+
+    const tr = trumpet();
+    const link = tr.select('a');
+    const ws = link.createWriteStream();
     link.setAttribute('href', '/beep');
-    
-    var s = through();
+
+    const s = through();
     s.pipe(ws);
     
     s.write('beep');

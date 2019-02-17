@@ -4,7 +4,7 @@
   "description": "parse and transform streaming html using css selectors",
   "main": "index.js",
   "dependencies": {
-    "html-select": "^2.3.5",
+    "html-select2": "^1.0.1",
     "html-tokenize": "^2.0.0",
     "through2": "^3.0.0",
     "duplexer2": "~0.0.2",
@@ -12,8 +12,10 @@
     "readable-stream": "^3.1.1"
   },
   "devDependencies": {
-    "tape": "~4.10.1",
+    "coffee-script": "^1.12.7",
     "concat-stream": "~2.0.0",
+    "htmlclean": "^3.0.8",
+    "tape": "~4.10.1",
     "through": "~2.3.4"
   },
   "scripts": {

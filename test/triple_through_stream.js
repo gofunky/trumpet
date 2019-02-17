@@ -1,28 +1,29 @@
-var trumpet = require('../');
-var fs = require('fs');
-var through = require('through');
-var test = require('tape');
-var concat = require('concat-stream');
+const trumpet = require('../');
+const fs = require('fs');
+const through = require('through');
+const test = require('tape');
+const concat = require('concat-stream');
+const htmlclean = require('htmlclean');
 
 test('through stream thrice', function (t) {
     t.plan(1);
-    
-    var tr = trumpet();
+
+    const tr = trumpet();
     tr.selectAll('div', function (div) {
-        var ts = div.createStream();
+        const ts = div.createStream();
         ts.pipe(through(function (buf) {
-            this.queue(buf.toString().toUpperCase());
+            this.queue(htmlclean(String(buf)).toUpperCase());
         })).pipe(ts);
     });
     
     tr.pipe(concat(function (body) {
         t.equal(
-            body.toString(),
-            '<html>\n<body>\n'
-            + '<div>ABC</div>\n'
-            + '<div>DEF</div>\n'
-            + '<div>GHI</div>\n'
-            + '</body>\n</html>\n'
+            htmlclean(String(body)),
+            '<html><body>'
+            + '<div>ABC</div>'
+            + '<div>DEF</div>'
+            + '<div>GHI</div>'
+            + '</body></html>'
         );
     }));
     

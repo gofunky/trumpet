@@ -1,8 +1,8 @@
-var trumpet = require('..');
-var test = require('tape');
+const trumpet = require('..');
+const test = require('tape');
 
 test('select and select all', function (t) {
-    var tr = trumpet()
+    const tr = trumpet();
 
     tr.selectAll('*');
     tr.selectAll('*');
