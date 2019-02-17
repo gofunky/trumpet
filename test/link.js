@@ -1,32 +1,31 @@
-const trumpet = require('../');
-const fs = require('fs');
-const through = require('through');
-const test = require('tape');
-const concat = require('concat-stream');
+const trumpet = require('../')
+const through = require('through')
+const test = require('tape')
+const concat = require('concat-stream')
 
 test('write stream', function (t) {
-    t.plan(1);
+  t.plan(1)
 
-    const tr = trumpet();
-    const link = tr.select('a');
-    const ws = link.createWriteStream();
-    link.setAttribute('href', '/beep');
+  const tr = trumpet()
+  const link = tr.select('a')
+  const ws = link.createWriteStream()
+  link.setAttribute('href', '/beep')
 
-    const s = through();
-    s.pipe(ws);
-    
-    s.write('beep');
-    
-    setTimeout(function () {
-        s.write(' boop.');
-        s.end();
-    }, 500);
-    
-    tr.pipe(concat(function (body) {
-        t.equal(
-            body.toString(),
-            '<html><body><a href="/beep">beep boop.</a></body></html>'
-        );
-    }));
-    tr.end('<html><body><a></a></body></html>');
-});
+  const s = through()
+  s.pipe(ws)
+
+  s.write('beep')
+
+  setTimeout(function () {
+    s.write(' boop.')
+    s.end()
+  }, 500)
+
+  tr.pipe(concat(function (body) {
+    t.equal(
+      body.toString(),
+      '<html><body><a href="/beep">beep boop.</a></body></html>'
+    )
+  }))
+  tr.end('<html><body><a></a></body></html>')
+})

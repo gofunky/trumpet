@@ -3,6 +3,7 @@
 [![NPM version](https://img.shields.io/npm/v/node-trumpet2.svg?style=flat-square)](https://www.npmjs.com/package/node-trumpet2)
 [![Build](https://travis-ci.com/gofunky/node-trumpet2.svg?branch=master)](https://travis-ci.com/gofunky/node-trumpet2)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0d035d70ee994372a31e0aedbc5f409a)](https://www.codacy.com/app/gofunky/node-trumpet2?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=gofunky/node-trumpet2&amp;utm_campaign=Badge_Grade)
 
 the maintained version of [trumpet](https://github.com/substack/node-trumpet)
 
