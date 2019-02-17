@@ -33,7 +33,7 @@ input html:
 code:
 
 ```js
-var trumpet = require('trumpet');
+var trumpet = require('node-trumpet2');
 var tr = trumpet();
 tr.pipe(process.stdout);
  
@@ -79,7 +79,7 @@ Input html:
 code:
 
 ```js
-var trumpet = require('trumpet');
+var trumpet = require('node-trumpet2');
 var tr = trumpet();
 
 tr.selectAll('.b span', function (span) {
@@ -115,7 +115,7 @@ input html:
 code:
 
 ```js
-var trumpet = require('trumpet');
+var trumpet = require('node-trumpet2');
 var through = require('through');
 
 var tr = trumpet();
@@ -157,7 +157,7 @@ output:
 ## Methods
 
 ```js
-var trumpet = require('trumpet')
+var trumpet = require('node-trumpet2')
 ```
 
 ### var tr = trumpet(opts)
