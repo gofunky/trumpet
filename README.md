@@ -1,6 +1,6 @@
 # node-trumpet2
 
-[![NPM version](https://img.shields.io/npm/v/node-trumpet2.svg?style=flat-square)](https://www.npmjs.com/package/node-trumpet2)
+[![NPM version](https://img.shields.io/npm/v/node-trumpet2.svg)](https://www.npmjs.com/package/node-trumpet2)
 [![Build](https://travis-ci.com/gofunky/node-trumpet2.svg?branch=master)](https://travis-ci.com/gofunky/node-trumpet2)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 [![CodeFactor](https://www.codefactor.io/repository/github/gofunky/node-trumpet2/badge)](https://www.codefactor.io/repository/github/gofunky/node-trumpet2)
@@ -13,9 +13,7 @@ the maintained version of [trumpet](https://github.com/substack/node-trumpet)
 
 With [npm](http://npmjs.org) do:
 
-```
-npm install node-trumpet2
-```
+    npm install node-trumpet2
 
 ## Examples
 
@@ -23,7 +21,7 @@ npm install node-trumpet2
 
 input html:
 
-``` html
+```html
 <table>
   <tbody>blah blah blah</tbody>
   <tr><td>there</td></tr>
@@ -34,7 +32,7 @@ input html:
 
 code:
 
-``` js
+```js
 var trumpet = require('trumpet');
 var tr = trumpet();
 tr.pipe(process.stdout);
@@ -48,7 +46,7 @@ fs.createReadStream(__dirname + '/html/table.html').pipe(tr);
 
 output:
 
-``` html
+```html
 <table>
   <tbody><tr><td>rawr</td></tr></tbody>
   <tr><td>there</td></tr>
@@ -61,7 +59,7 @@ output:
 
 Input html:
 
-``` html
+```html
 <html>
   <head>
     <title>beep</title>
@@ -80,7 +78,7 @@ Input html:
 
 code:
 
-``` js
+```js
 var trumpet = require('trumpet');
 var tr = trumpet();
 
@@ -94,7 +92,7 @@ fs.createReadStream(__dirname + '/html/read_all.html').pipe(tr);
 
 output:
 
-``` html
+```html
 tacos y burritos
 ```
 
@@ -102,7 +100,7 @@ tacos y burritos
 
 input html:
 
-``` html
+```html
 <html>
   <body>
     <div class="x">
@@ -116,7 +114,7 @@ input html:
 
 code:
 
-``` js
+```js
 var trumpet = require('trumpet');
 var through = require('through');
 
@@ -144,7 +142,7 @@ fs.createReadStream(__dirname + '/html/uppercase.html').pipe(tr).pipe(process.st
 
 output:
 
-``` html
+```html
 <html>
   <body>
     <div class="x">
@@ -158,7 +156,7 @@ output:
 
 ## Methods
 
-``` js
+```js
 var trumpet = require('trumpet')
 ```
 
@@ -248,16 +246,16 @@ The element name as a lower-case string. For example: `'div'`.
 
 Currently, these [css selectors](http://www.w3.org/TR/CSS2/selector.html) work:
 
-* *
-* E
-* E F
-* E > F
-* E + F
-* E.class
-* E#id
-* E[attr=value]
-* E[attr~=search]
-* E[attr|=prefix]
-* E[attr^=prefix]
-* E[attr$=suffix]
-* E[attr*=search]
+-   -
+-   E
+-   E F
+-   E > F
+-   E + F
+-   E.class
+-   E#id
+-   E[attr=value]
+-   E[attr~=search]
+-   E[attr|=prefix]
+-   E[attr^=prefix]
+-   E[attr$=suffix]
+-   E[attr*=search]
