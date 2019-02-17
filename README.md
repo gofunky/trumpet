@@ -4,6 +4,8 @@
 [![Build](https://travis-ci.com/gofunky/node-trumpet2.svg?branch=master)](https://travis-ci.com/gofunky/node-trumpet2)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 [![CodeFactor](https://www.codefactor.io/repository/github/gofunky/node-trumpet2/badge)](https://www.codefactor.io/repository/github/gofunky/node-trumpet2)
+[![GitHub License](https://img.shields.io/github/license/gofunky/node-trumpet2.svg)](https://github.com/gofunky/node-trumpet2/blob/master/LICENSE)
+[![GitHub last commit](https://img.shields.io/github/last-commit/gofunky/node-trumpet2.svg)](https://github.com/gofunky/node-trumpet2/commits/master)
 
 the maintained version of [trumpet](https://github.com/substack/node-trumpet)
 
