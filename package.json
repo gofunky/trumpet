@@ -6,7 +6,7 @@
   "dependencies": {
     "html-select": "^2.3.5",
     "html-tokenize": "^2.0.0",
-    "through2": "^1.0.0",
+    "through2": "^3.0.0",
     "duplexer2": "~0.0.2",
     "inherits": "^2.0.0",
     "readable-stream": "^1.0.27-1"
