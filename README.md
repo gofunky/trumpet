@@ -1,10 +1,10 @@
-# trumpet
+# node-trumpet2
 
-parse and transform streaming html using css selectors
+[![NPM version](https://img.shields.io/npm/v/node-trumpet2.svg?style=flat-square)](https://www.npmjs.com/package/node-trumpet2)
+[![Build](https://travis-ci.com/gofunky/node-trumpet2.svg?branch=master)](https://travis-ci.com/gofunky/node-trumpet2)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 
-[![build status](https://secure.travis-ci.org/substack/node-trumpet.png)](http://travis-ci.org/substack/node-trumpet)
-
-![trumpet](http://substack.net/images/trumpet.png)
+the maintained version of [trumpet](https://github.com/substack/node-trumpet)
 
 # examples
 

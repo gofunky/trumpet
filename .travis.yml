@@ -6,7 +6,10 @@ node_js:
   - '8'
   - '7'
   - '6'
-  - '5'
-  - '4'
-before_install:
-  - npm install -g npm@latest
+
+deploy:
+  provider: npm
+  email: matthias.fax@gmail.com
+  api_key: $NPM_API_KEY
+  on:
+    tags: true

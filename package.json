@@ -1,6 +1,6 @@
 {
-  "name": "trumpet",
-  "version": "1.7.2",
+  "name": "node-trumpet2",
+  "version": "2.0.0",
   "description": "parse and transform streaming html using css selectors",
   "main": "index.js",
   "dependencies": {
@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/substack/node-trumpet.git"
+    "url": "http://github.com/gofunky/node-trumpet2.git"
   },
   "keywords": [
     "html",
@@ -34,12 +34,15 @@
     "css"
   ],
   "author": {
-    "name": "James Halliday",
-    "email": "mail@substack.net",
-    "url": "http://substack.net"
+    "name": "Matthias Fax",
+    "email": "mat@fax.fyi",
+    "url": "https://github.com/gofunky/node-trumpet2"
   },
   "license": "MIT",
   "engine": {
-    "node": ">=0.4"
+    "node": ">=0.6"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
