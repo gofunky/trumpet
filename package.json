@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "tape": "~4.10.1",
-    "concat-stream": "~1.4.5",
+    "concat-stream": "~2.0.0",
     "through": "~2.3.4"
   },
   "scripts": {
