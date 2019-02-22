@@ -7,6 +7,10 @@ node_js:
   - '7'
   - '6'
 
+branches:
+  only:
+  - master
+
 deploy:
   provider: npm
   email: matthias.fax@gmail.com
