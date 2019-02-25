@@ -6,6 +6,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/gofunky/node-trumpet2/badge)](https://www.codefactor.io/repository/github/gofunky/node-trumpet2)
 [![GitHub License](https://img.shields.io/github/license/gofunky/node-trumpet2.svg)](https://github.com/gofunky/node-trumpet2/blob/master/LICENSE)
 [![GitHub last commit](https://img.shields.io/github/last-commit/gofunky/node-trumpet2.svg)](https://github.com/gofunky/node-trumpet2/commits/master)
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=gofunky/node-trumpet2)](https://dependabot.com)
 
 the maintained version of [trumpet](https://github.com/substack/node-trumpet)
 
