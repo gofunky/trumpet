@@ -3,7 +3,7 @@ const fs = require('fs')
 const through = require('through')
 const duplexer = require('duplexer2')
 const concat = require('concat-stream')
-const coffee = require('coffee-script')
+const coffee = require('coffeescript')
 
 const coffeeStream = (function () {
   const output = through()
