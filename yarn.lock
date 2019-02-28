@@ -244,12 +244,12 @@ cross-spawn@^6.0.5:
     shebang-command "^1.2.0"
     which "^1.2.9"
 
-cssauron@1.4.0:
+cssauron-noeval@1.4.0:
   version "1.4.0"
-  resolved "https://registry.yarnpkg.com/cssauron/-/cssauron-1.4.0.tgz#a6602dff7e04a8306dc0db9a551e92e8b5662ad8"
-  integrity sha1-pmAt/34EqDBtwNuaVR6S6LVmKtg=
+  resolved "https://registry.yarnpkg.com/cssauron-noeval/-/cssauron-noeval-1.4.0.tgz#11d5a5fea7d21c516d01a351f60db94002e0549c"
+  integrity sha512-aQ++vZcpZSEMMg77B0lYfUPj5t8r2RWQGj1xie7qaW2eg16+IJZbTlMuA1c4LBJJNgH2788HMDkXGVScpzlhaQ==
   dependencies:
-    through X.X.X
+    through "^2.3.8"
 
 debug-log@^1.0.0:
   version "1.0.1"
@@ -830,11 +830,11 @@ hosted-git-info@^2.1.4:
   integrity sha512-7T/BxH19zbcCTa8XkMlbK5lTo1WtgkFi3GvdWEyNuc4Vex7/9Dqbnpsf4JMydcfj9HCg4zUWFTL3Za6lapg5/w==
 
 html-select2@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/html-select2/-/html-select2-1.0.1.tgz#0c581913d3b1d0982d7d92264d32df4e3c4ef016"
-  integrity sha512-kcJUzag0LFDQqCiP35r8cmQ0XP+IN+fbaHBTGDeWrE1gtZbLXh3jobq+sTGEBh+pxFbmAAKPwiDwu+OzrIlxhw==
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/html-select2/-/html-select2-1.0.2.tgz#0c3fbb99c38da89019e182e0025a6abfedef0a33"
+  integrity sha512-dU4V1wnFccoHDNHZ27gqWBVXCghmW2Xzc7Ts9CDS0wNSQKhlv9nxU61QzgyuVXjcQKeETZ77+vDMLo2DFfFd6Q==
   dependencies:
-    cssauron "1.4.0"
+    cssauron-noeval "1.4.0"
     duplexer2 "0.0.2"
     inherits "2.0.3"
     readable-stream "2.3.6"
@@ -1786,7 +1786,7 @@ through2@~0.4.1:
     readable-stream "~1.0.17"
     xtend "~2.1.1"
 
-through@2, through@X.X.X, through@^2.3.6, through@~2.3.4, through@~2.3.8:
+through@2, through@^2.3.6, through@^2.3.8, through@~2.3.4, through@~2.3.8:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
   integrity sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU=
