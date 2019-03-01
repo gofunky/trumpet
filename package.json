@@ -4,7 +4,7 @@
   "main": "index.js",
   "dependencies": {
     "duplexer2": "~0.1.4",
-    "html-select2": "^1.0.1",
+    "html-select2": "^1.0.2",
     "html-tokenize": "^2.0.0",
     "inherits": "^2.0.0",
     "readable-stream": "^3.1.1",
