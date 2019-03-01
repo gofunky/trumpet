@@ -16,7 +16,7 @@ jobs:
   include:
     - stage: deploy
       node_js: '11'
-      script: ./npm-publish-git-tag
+      script: npm-publish-git-tag
       if: tag IS present
 
 cache:
