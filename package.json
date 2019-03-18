@@ -13,7 +13,7 @@
   "devDependencies": {
     "coffeescript": "^2.3.2",
     "concat-stream": "~2.0.0",
-    "eslint": "^5.15.0",
+    "eslint": "^5.15.3",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-node": "^8.0.1",
