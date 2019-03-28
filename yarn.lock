@@ -1405,10 +1405,10 @@ normalize-package-data@^2.3.2, normalize-package-data@^2.3.4:
     semver "2 || 3 || 4 || 5"
     validate-npm-package-license "^3.0.1"
 
-npm-publish-git-tag@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/npm-publish-git-tag/-/npm-publish-git-tag-3.0.3.tgz#31aafe5acfb88072b5a5c3d8ea6bfd8bd0fd703e"
-  integrity sha512-QTu/aMHAFvgEGQfzbaN5crRS9bUCxVVn3bYgQUAtu9PfwO8zB46Nzx9fip/sGVdAbtcL47BYIttPNbl5olfPzw==
+npm-publish-git-tag@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/npm-publish-git-tag/-/npm-publish-git-tag-3.0.4.tgz#f71ca7ce345fe02c6f8f11c451c2948f349c1ece"
+  integrity sha512-CzkmW/CTYN+1Q4TS2+s7UrZVW7lDP8yp3+PRRPD6yaILTKGuxLX9veRiHBJIOEcQQgNDUf+mVdAjwNr1Trq0bQ==
   dependencies:
     "@hutson/set-npm-auth-token-for-ci" "^2.1.0"
     bluebird "^3.5.0"
