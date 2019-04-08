@@ -11,7 +11,7 @@
     "through2": "^3.0.0"
   },
   "devDependencies": {
-    "coffeescript": "^2.3.2",
+    "coffeescript": "^2.4.1",
     "concat-stream": "~2.0.0",
     "eslint": "^5.15.0",
     "eslint-config-standard": "^12.0.0",
