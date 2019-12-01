@@ -1,7 +1,7 @@
 # node-trumpet2
 
 [![NPM version](https://img.shields.io/npm/v/node-trumpet2.svg)](https://www.npmjs.com/package/node-trumpet2)
-[![Build](https://travis-ci.com/gofunky/node-trumpet2.svg?branch=master)](https://travis-ci.com/gofunky/node-trumpet2)
+[![Actions Status](https://github.com/gofunky/node-trumpet2/workflows/build/badge.svg)](https://github.com/gofunky/node-trumpet2/actions)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 [![CodeFactor](https://www.codefactor.io/repository/github/gofunky/node-trumpet2/badge)](https://www.codefactor.io/repository/github/gofunky/node-trumpet2)
 [![GitHub License](https://img.shields.io/github/license/gofunky/node-trumpet2.svg)](https://github.com/gofunky/node-trumpet2/blob/master/LICENSE)
