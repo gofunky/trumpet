@@ -1,0 +1,34 @@
+name: build
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [8.x, 10.x, 11.x, 12.x]
+    name: node.js ${{ matrix.node-version }}
+    steps:
+      - uses: actions/checkout@v1
+      - name: setup node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: caching node modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/yarn.lock') }}-${{ matrix.node-version }}
+          restore-keys: |
+            ${{ runner.OS }}-build-${{ hashFiles('**/yarn.lock') }}
+            ${{ runner.OS }}-build
+      - name: installing dependencies
+        if: steps.cache-primes.outputs.cache-hit != 'true'
+        run: yarn install
+        env:
+          CI: true
+      - name: running tests
+        run: yarn test
+        env:
+          CI: true

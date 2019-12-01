@@ -1,0 +1,70 @@
+name: publish
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [8.x, 10.x, 11.x, 12.x]
+    name: node.js ${{ matrix.node-version }}
+    steps:
+      - uses: actions/checkout@v1
+      - name: setup node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: installing dependencies
+        run: yarn install
+        env:
+          CI: true
+      - name: running tests
+        run: yarn test
+        env:
+          CI: true
+
+  publish-npm:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+      - name: installing dependencies
+        run: yarn install
+        env:
+          CI: true
+      - name: publish
+        run: $(yarn bin)/npm-deploy-git-tag
+        env:
+          CI: true
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  publish-gpr:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://npm.pkg.github.com
+          scope: '@gofunky'
+      - name: installing dependencies
+        run: yarn install
+        env:
+          CI: true
+      - name: publish
+        # workaround until https://github.com/actions/setup-node/issues/67 is solved
+        run: |
+          $(yarn bin)/json -I -f package.json -e "this.name=\"@gofunky/node-trumpet2\""
+          $(yarn bin)/npm-deploy-git-tag
+        env:
+          CI: true
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
