@@ -880,10 +880,10 @@ git-semver-tags@^2.0.2:
     meow "^4.0.0"
     semver "^6.0.0"
 
-glob@^7.0.0, glob@^7.0.5, glob@^7.1.2, glob@^7.1.3, glob@~7.1.3:
-  version "7.1.3"
-  resolved "https://registry.yarnpkg.com/glob/-/glob-7.1.3.tgz#3960832d3f1574108342dafd3a67b332c0969df1"
-  integrity sha512-vcfuiIxogLV4DlGBHIUOwI0IbrJ8HWPc4MU7HzviGeNho/UJDfi6B5p3sHeWIQ0KGIU0Jpxi5ZHxemQfLkkAwQ==
+glob@^7.0.0, glob@^7.0.5, glob@^7.1.2, glob@^7.1.3, glob@~7.1.4:
+  version "7.1.6"
+  resolved "https://registry.yarnpkg.com/glob/-/glob-7.1.6.tgz#141f33b81a7c2492e125594307480c46679278a6"
+  integrity sha512-LwaxwyZ72Lk7vZINtNNrywX0ZuLyStrdDtabefZKAY5ZGJhVtgdznluResxNmPitE0SAO+O26sWTHeKSI2wMBA==
   dependencies:
     fs.realpath "^1.0.0"
     inflight "^1.0.4"
@@ -1013,7 +1013,7 @@ inflight@^1.0.4:
     once "^1.3.0"
     wrappy "1"
 
-inherits@2, inherits@^2.0.1, inherits@^2.0.3, inherits@^2.0.4, inherits@~2.0.1, inherits@~2.0.3:
+inherits@2, inherits@^2.0.1, inherits@^2.0.3, inherits@^2.0.4, inherits@~2.0.1, inherits@~2.0.3, inherits@~2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
   integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
@@ -1751,17 +1751,10 @@ resolve-from@^4.0.0:
   resolved "https://registry.yarnpkg.com/resolve-from/-/resolve-from-4.0.0.tgz#4abcd852ad32dd7baabfe9b40e00a36db5f392e6"
   integrity sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g==
 
-resolve@^1.1.6, resolve@^1.10.0, resolve@^1.11.0, resolve@^1.5.0, resolve@^1.6.0, resolve@^1.8.1, resolve@^1.9.0:
+resolve@^1.1.6, resolve@^1.10.0, resolve@^1.11.0, resolve@^1.5.0, resolve@^1.6.0, resolve@^1.8.1, resolve@^1.9.0, resolve@~1.11.1:
   version "1.11.1"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.11.1.tgz#ea10d8110376982fef578df8fc30b9ac30a07a3e"
   integrity sha512-vIpgF6wfuJOZI7KKKSP+HmiKggadPQAdsp5HiC1mvqnfp0gF1vdwgBWZIdrVft9pgqoMFQN+R7BSWZiBxx+BBw==
-  dependencies:
-    path-parse "^1.0.6"
-
-resolve@~1.10.0:
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.10.0.tgz#3bdaaeaf45cc07f375656dfd2e54ed0810b101ba"
-  integrity sha512-3sUr9aq5OfSg2S9pNtPA9hL1FVEAjvfOC4leW0SNf/mpnaakz2a9femSd6LqAww2RaFctwyf1lCqnTHuF1rxDg==
   dependencies:
     path-parse "^1.0.6"
 
@@ -2078,21 +2071,21 @@ table@^5.2.3:
     slice-ansi "^2.1.0"
     string-width "^3.0.0"
 
-tape@~4.10.1:
-  version "4.10.1"
-  resolved "https://registry.yarnpkg.com/tape/-/tape-4.10.1.tgz#f73be60888dcb120f08b57f947af65a829506a5f"
-  integrity sha512-G0DywYV1jQeY3axeYnXUOt6ktnxS9OPJh97FGR3nrua8lhWi1zPflLxcAHavZ7Jf3qUfY7cxcVIVFa4mY2IY1w==
+tape@~4.11.0:
+  version "4.11.0"
+  resolved "https://registry.yarnpkg.com/tape/-/tape-4.11.0.tgz#63d41accd95e45a23a874473051c57fdbc58edc1"
+  integrity sha512-yixvDMX7q7JIs/omJSzSZrqulOV51EC9dK8dM0TzImTIkHWfe2/kFyL5v+d9C+SrCMaICk59ujsqFAVidDqDaA==
   dependencies:
     deep-equal "~1.0.1"
     defined "~1.0.0"
     for-each "~0.3.3"
     function-bind "~1.1.1"
-    glob "~7.1.3"
+    glob "~7.1.4"
     has "~1.0.3"
-    inherits "~2.0.3"
+    inherits "~2.0.4"
     minimist "~1.2.0"
     object-inspect "~1.6.0"
-    resolve "~1.10.0"
+    resolve "~1.11.1"
     resumer "~0.0.0"
     string.prototype.trim "~1.1.2"
     through "~2.3.8"
