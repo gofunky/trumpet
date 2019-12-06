@@ -14,8 +14,8 @@ categories:
     labels:
       - 'chore'
       - 'dependencies'
-change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 template: |
   ## What’s Changed
 
   $CHANGES
+change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
