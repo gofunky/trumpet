@@ -1,28 +1,29 @@
 const trumpet = require('../')
 const fs = require('fs')
-const test = require('tape')
-const through = require('through')
+const tryToTape = require('try-to-tape')
+const test = tryToTape(require('tape'))
+const through2 = require('through2')
 
-test('sibling selector', function (t) {
-  t.plan(1)
-
+test('sibling selector', async (t) => {
   const tr = trumpet()
   const elem = tr.select('.b + .d')
-  elem.getAttribute('class', function (value) {
+  elem.getAttribute('class', (value) => {
     t.equal(value, 'd')
+    t.end()
   })
   fs.createReadStream(`${__dirname}/sibling.html`).pipe(tr)
 })
 
-test('sibling no-match selector', function (t) {
-  t.plan(1)
-
+test('sibling no-match selector', async (t) => {
   const tr = trumpet()
   const elem = tr.select('.c + .d')
-  elem.getAttribute('class', function (value) {
+  elem.getAttribute('class', () => {
     t.fail('should not have matched')
   })
   fs.createReadStream(`${__dirname}/sibling.html`).pipe(tr)
 
-  tr.pipe(through(null, function () { t.ok(true) }))
+  tr.pipe(through2.obj(() => {
+    t.ok(true)
+    t.end()
+  }))
 })

@@ -1,17 +1,16 @@
 const trumpet = require('../')
 const fs = require('fs')
-const through = require('through')
-const test = require('tape')
+const through2 = require('through2')
+const tryToTape = require('try-to-tape')
+const test = tryToTape(require('tape'))
 const concat = require('concat-stream')
 const htmlclean = require('htmlclean')
 
-test('outer through stream', function (t) {
-  t.plan(1)
-
+test('outer through stream', async (t) => {
   const tr = trumpet()
   const ts = tr.select('div').createStream({ outer: true })
-  ts.pipe(through(function (buf) {
-    this.queue(buf.toString().toUpperCase())
+  ts.pipe(through2.obj((chunk, _, callback) => {
+    callback(null, String(chunk).toUpperCase())
   })).pipe(ts)
 
   tr.pipe(concat(function (body) {
@@ -19,18 +18,17 @@ test('outer through stream', function (t) {
       htmlclean(String(body)),
       '<html><body><DIV>XYZ</DIV></body></html>'
     )
+    t.end()
   }))
 
   fs.createReadStream(`${__dirname}/through_stream.html`).pipe(tr)
 })
 
-test('through stream', function (t) {
-  t.plan(1)
-
+test('through stream', async (t) => {
   const tr = trumpet()
   const ts = tr.select('div').createStream()
-  ts.pipe(through(function (buf) {
-    this.queue(buf.toString().toUpperCase())
+  ts.pipe(through2.obj((chunk, _, callback) => {
+    callback(null, String(chunk).toUpperCase())
   })).pipe(ts)
 
   tr.pipe(concat(function (body) {
@@ -38,6 +36,7 @@ test('through stream', function (t) {
       htmlclean(String(body)),
       '<html><body><div>XYZ</div></body></html>'
     )
+    t.end()
   }))
 
   fs.createReadStream(`${__dirname}/through_stream.html`).pipe(tr)

@@ -32,3 +32,11 @@ jobs:
         run: yarn test
         env:
           CI: true
+      - name: running coverage
+        run: yarn coverage
+        env:
+          CI: true
+      - name: uploading coverage to codecov
+        run: $(yarn bin)/codecov
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

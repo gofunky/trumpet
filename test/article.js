@@ -3,7 +3,7 @@ const test = require('tape')
 const concat = require('concat-stream')
 const fs = require('fs')
 
-test(function (t) {
+test((t) => {
   t.plan(2)
 
   const tr = trumpet()

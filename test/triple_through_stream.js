@@ -1,18 +1,17 @@
 const trumpet = require('../')
 const fs = require('fs')
-const through = require('through')
-const test = require('tape')
+const through2 = require('through2')
+const tryToTape = require('try-to-tape')
+const test = tryToTape(require('tape'))
 const concat = require('concat-stream')
 const htmlclean = require('htmlclean')
 
-test('through stream thrice', function (t) {
-  t.plan(1)
-
+test('through stream thrice', async (t) => {
   const tr = trumpet()
   tr.selectAll('div', function (div) {
     const ts = div.createStream()
-    ts.pipe(through(function (buf) {
-      this.queue(htmlclean(String(buf)).toUpperCase())
+    ts.pipe(through2.obj((chunk, _, callback) => {
+      callback(null, htmlclean(String(chunk)).toUpperCase())
     })).pipe(ts)
   })
 
@@ -25,6 +24,7 @@ test('through stream thrice', function (t) {
       '<div>GHI</div>' +
       '</body></html>'
     )
+    t.end()
   }))
 
   fs.createReadStream(`${__dirname}/triple_through_stream.html`).pipe(tr)

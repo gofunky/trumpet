@@ -1,6 +1,6 @@
 const trumpet = require('../')
 const fs = require('fs')
-const through = require('through')
+const through = require('through2')
 const duplexer = require('duplexer2')
 const concat = require('concat-stream')
 const coffee = require('coffeescript')

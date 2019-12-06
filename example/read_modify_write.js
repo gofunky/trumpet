@@ -1,5 +1,5 @@
 const trumpet = require('../')
-const through = require('through')
+const through = require('through2')
 
 const tr = trumpet()
 

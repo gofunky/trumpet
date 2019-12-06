@@ -1,16 +1,15 @@
 const trumpet = require('../')
 const fs = require('fs')
-const through = require('through')
-const test = require('tape')
+const through2 = require('through2')
+const tryToTape = require('try-to-tape')
+const test = tryToTape(require('tape'))
 const concat = require('concat-stream')
 const htmlclean = require('htmlclean')
 
-test('outer write stream', function (t) {
-  t.plan(1)
-
+test('outer write stream', async (t) => {
   const tr = trumpet()
   const ws = tr.select('div').createWriteStream({ outer: true })
-  const s = through()
+  const s = through2()
   s.pipe(ws)
 
   s.write('<B>beep')
@@ -26,17 +25,16 @@ test('outer write stream', function (t) {
       '<!doctype html>' +
       '<html><body> <B>beep boop.</B></body></html>'
     )
+    t.end()
   }))
 
   fs.createReadStream(`${__dirname}/write_stream.html`).pipe(tr)
 })
 
-test('write stream', function (t) {
-  t.plan(1)
-
+test('write stream', async (t) => {
   const tr = trumpet()
   const ws = tr.select('div').createWriteStream()
-  const s = through()
+  const s = through2()
   s.pipe(ws)
 
   s.write('beep')
@@ -53,6 +51,7 @@ test('write stream', function (t) {
       '<html><body><div class="x">beep boop.</div>' +
       '</body></html>'
     )
+    t.end()
   }))
 
   fs.createReadStream(`${__dirname}/write_stream.html`).pipe(tr)

@@ -1,7 +1,7 @@
 const trumpet = require('../')
 const fs = require('fs')
 const test = require('tape')
-const through = require('through')
+const through = require('through2')
 
 test('child selector', function (t) {
   t.plan(1)

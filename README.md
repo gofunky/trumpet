@@ -4,6 +4,7 @@
 [![Actions Status](https://github.com/gofunky/node-trumpet2/workflows/build/badge.svg)](https://github.com/gofunky/node-trumpet2/actions)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 [![CodeFactor](https://www.codefactor.io/repository/github/gofunky/node-trumpet2/badge)](https://www.codefactor.io/repository/github/gofunky/node-trumpet2)
+[![codecov](https://codecov.io/gh/gofunky/node-trumpet2/branch/master/graph/badge.svg)](https://codecov.io/gh/gofunky/node-trumpet2)
 [![GitHub License](https://img.shields.io/github/license/gofunky/node-trumpet2.svg)](https://github.com/gofunky/node-trumpet2/blob/master/LICENSE)
 [![GitHub last commit](https://img.shields.io/github/last-commit/gofunky/node-trumpet2.svg)](https://github.com/gofunky/node-trumpet2/commits/master)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=gofunky/node-trumpet2)](https://dependabot.com)
@@ -34,14 +35,14 @@ input html:
 code:
 
 ```js
-var trumpet = require('node-trumpet2');
-var tr = trumpet();
+const trumpet = require('node-trumpet2');
+const tr = trumpet();
 tr.pipe(process.stdout);
  
-var ws = tr.select('tbody').createWriteStream();
+const ws = tr.select('tbody').createWriteStream();
 ws.end('<tr><td>rawr</td></tr>');
 
-var fs = require('fs');
+const fs = require('fs');
 fs.createReadStream(__dirname + '/html/table.html').pipe(tr);
 ```
 
@@ -80,14 +81,14 @@ Input html:
 code:
 
 ```js
-var trumpet = require('node-trumpet2');
-var tr = trumpet();
+const trumpet = require('node-trumpet2');
+const tr = trumpet();
 
 tr.selectAll('.b span', function (span) {
     span.createReadStream().pipe(process.stdout);
 });
 
-var fs = require('fs');
+const fs = require('fs');
 fs.createReadStream(__dirname + '/html/read_all.html').pipe(tr);
 ```
 
@@ -116,20 +117,20 @@ input html:
 code:
 
 ```js
-var trumpet = require('node-trumpet2');
-var through = require('through');
+const trumpet = require('node-trumpet2');
+const through = require('through2');
 
-var tr = trumpet();
+const tr = trumpet();
 
 //select all element and apply transformation function to selections
 tr.selectAll('.x span', function (element) {
     //define function to transform input
-    var upper = through(function (buf) {
+    const upper = through(function (buf) {
         this.queue(buf.toString().toUpperCase());
     });
 
     //create a read/write stream for selected selement
-    var estream = element.createStream();
+    const estream = element.createStream();
 
     //stream the element's inner html to transformation function
     //then stream the transformed output back into the element stream
@@ -137,7 +138,7 @@ tr.selectAll('.x span', function (element) {
 });
 
 //stream in html to trumpet and stream processed output to stdout
-var fs = require('fs');
+const fs = require('fs');
 fs.createReadStream(__dirname + '/html/uppercase.html').pipe(tr).pipe(process.stdout);
 ```
 
@@ -158,17 +159,17 @@ output:
 ## Methods
 
 ```js
-var trumpet = require('node-trumpet2')
+const trumpet = require('node-trumpet2')
 ```
 
-### var tr = trumpet(opts)
+### const tr = trumpet(opts)
 
 Create a new trumpet stream. This stream is readable and writable.
 Pipe an html stream into `tr` and get back a transformed html stream.
 
 Parse errors are emitted by `tr` in an `'error'` event.
 
-### var elem = tr.select(selector)
+### const elem = tr.select(selector)
 
 Return a result object `elem` for the first element matching `selector`.
 
