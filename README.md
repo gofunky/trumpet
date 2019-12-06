@@ -2,12 +2,13 @@
 
 [![NPM version](https://img.shields.io/npm/v/node-trumpet2.svg)](https://www.npmjs.com/package/node-trumpet2)
 [![Actions Status](https://github.com/gofunky/node-trumpet2/workflows/build/badge.svg)](https://github.com/gofunky/node-trumpet2/actions)
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-purple.svg)](https://standardjs.com)
 [![CodeFactor](https://www.codefactor.io/repository/github/gofunky/node-trumpet2/badge)](https://www.codefactor.io/repository/github/gofunky/node-trumpet2)
 [![codecov](https://codecov.io/gh/gofunky/node-trumpet2/branch/master/graph/badge.svg)](https://codecov.io/gh/gofunky/node-trumpet2)
+[![NPM Downloads](https://img.shields.io/npm/dm/node-trumpet2)](https://www.npmjs.com/package/node-trumpet2)
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=gofunky/node-trumpet2)](https://dependabot.com)
 [![GitHub License](https://img.shields.io/github/license/gofunky/node-trumpet2.svg)](https://github.com/gofunky/node-trumpet2/blob/master/LICENSE)
 [![GitHub last commit](https://img.shields.io/github/last-commit/gofunky/node-trumpet2.svg)](https://github.com/gofunky/node-trumpet2/commits/master)
-[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=gofunky/node-trumpet2)](https://dependabot.com)
 
 the maintained version of [trumpet](https://github.com/substack/node-trumpet)
 
