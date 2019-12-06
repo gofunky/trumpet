@@ -1,24 +1,24 @@
 const trumpet = require('../')
-const test = require('tape')
+const tryToTape = require('try-to-tape')
+const test = tryToTape(require('tape'))
 const fs = require('fs')
-const through = require('through')
+const through2 = require('through2')
 const concat = require('concat-stream')
 
-test('multiple read streams', function (t) {
-  const output = through()
+test('multiple read streams', async (t) => {
   t.plan(7)
-  const tr = trumpet()
-  tr.pipe(through(null, function () { output.end() }))
-
-  output.pipe(concat(function (src) {
-    t.equal(src.toString(), 'tacosyburritos')
-  }))
-
   const html = [
     'tacos',
     'y',
     'burritos'
   ]
+  const output = through2()
+  output.pipe(concat(function (src) {
+    t.equal(src.toString(), 'tacosyburritos')
+    t.end()
+  }))
+
+  const tr = trumpet()
   tr.selectAll('.b span', function (span) {
     t.equal(span.name, 'span')
     const rs = span.createReadStream()
@@ -26,6 +26,9 @@ test('multiple read streams', function (t) {
     rs.pipe(concat(function (src) {
       t.equal(String(src), html.shift())
     }))
+  })
+  tr.on('end', () => {
+    output.end()
   })
   fs.createReadStream(`${__dirname}/multi_stream.html`).pipe(tr)
 })

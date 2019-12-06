@@ -1,6 +1,6 @@
 const Duplex = require('readable-stream').Duplex
 const inherits = require('inherits')
-const through = require('through2')
+const through2 = require('through2')
 const duplexer = require('duplexer2')
 
 const tokenize = require('html-tokenize')
@@ -160,21 +160,21 @@ Trumpet.prototype._selectAll = function (str, cb) {
     },
     createReadStream: function (opts) {
       if (welem) return welem.createReadStream(opts)
-      const r = through()
+      const r = through2()
       r._options = opts
       readers.push(r)
       return r
     },
     createWriteStream: function (opts) {
       if (welem) return welem.createWriteStream(opts)
-      const w = through()
+      const w = through2()
       w._options = opts
       writers.push(w)
       return w
     },
     createStream: function (opts) {
       if (welem) return welem.createStream(opts)
-      const d = { input: through(), output: through() }
+      const d = { input: through2(), output: through2() }
       d.options = opts
       duplex.push(d)
       return duplexer(d.input, d.output)

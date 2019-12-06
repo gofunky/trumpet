@@ -1,6 +1,6 @@
 const trumpet = require('../')
 const tr = trumpet()
-const through = require('through')
+const through = require('through2')
 tr.pipe(process.stdout)
 
 tr.selectAll('.x span', function (span) {

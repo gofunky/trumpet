@@ -1,14 +1,17 @@
 const trumpet = require('..')
-const test = require('tape')
+const tryToTape = require('try-to-tape')
+const test = tryToTape(require('tape'))
 
-test('select and select all', function (t) {
+test('select and select all', async (t) => {
   const tr = trumpet()
 
   tr.selectAll('*')
   tr.selectAll('*')
 
-  tr.on('data', function () {})
-  tr.on('end', function () { t.end() })
+  tr.on('data', () => {})
+  tr.on('end', () => {
+    t.end()
+  })
 
   tr.end('<div></div>')
 })
