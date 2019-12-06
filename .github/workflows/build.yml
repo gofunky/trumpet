@@ -39,6 +39,6 @@ jobs:
       - name: running coverage
         run: yarn coverage
       - name: uploading coverage to codecov
-        run: codecov
+        run: $(yarn bin)/codecov
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
