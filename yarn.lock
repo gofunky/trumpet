@@ -133,10 +133,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@hutson/npm-deploy-git-tag@^5.0.2":
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/@hutson/npm-deploy-git-tag/-/npm-deploy-git-tag-5.0.2.tgz#e1283b477cf8fb589a0067def7a5086fafd0736d"
-  integrity sha512-n2iXNMDyvcy28Ro1BY+x4ASHGz2B5PuQlpQ2AtjZpT1uQxK/s45IGqWKXdqYHyCjBzCyCcy68Lr7RPxFtwWNjg==
+"@hutson/npm-deploy-git-tag@^5.0.3":
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/@hutson/npm-deploy-git-tag/-/npm-deploy-git-tag-5.0.3.tgz#50d16c6e718077b8052a169a79d9dd7f56c3646e"
+  integrity sha512-KLMseuhPZc+KF0jEJZvKoKOpQu65/cLCdYPX5oN0ksYLFTiXD/FQPvHvi/KLTXKH3sgsJY4Wc3m0gGGSqraDyw==
   dependencies:
     "@hutson/set-npm-auth-token-for-ci" "^4.0.2"
     commander "^2.9.0"
