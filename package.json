@@ -29,7 +29,7 @@
     "tap-nyc": "^1.0.3",
     "tap-spec": "^5.0.0",
     "tape": "~4.13.0",
-    "try-to-tape": "^1.2.5"
+    "try-to-tape": "^1.2.6"
   },
   "scripts": {
     "test": "tape test/*.js | tap-spec",

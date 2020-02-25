@@ -3186,18 +3186,18 @@ trim@0.0.1:
   resolved "https://registry.yarnpkg.com/trim/-/trim-0.0.1.tgz#5858547f6b290757ee95cccc666fb50084c460dd"
   integrity sha1-WFhUf2spB1fulczMZm+1AITEYN0=
 
-try-to-catch@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/try-to-catch/-/try-to-catch-2.0.0.tgz#ca2b4cf47b6fbc6206dacdb979cb7af9eda71942"
-  integrity sha512-6wFRqNe10ZKytsOFwjXn0ISoD01u8YBQ9s52pJN37dz9x/3fXsqcp4xYbkCeNiwSVjNUU0W3jrPMnyCiyVgMFA==
+try-to-catch@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/try-to-catch/-/try-to-catch-3.0.0.tgz#a1903b44d13d5124c54d14a461d22ec1f52ea14b"
+  integrity sha512-eIm6ZXwR35jVF8By/HdbbkcaCDTBI5PpCPkejRKrYp0jyf/DbCCcRhHD7/O9jtFI3ewsqo9WctFEiJTS6i+CQA==
 
-try-to-tape@^1.2.5:
-  version "1.2.5"
-  resolved "https://registry.yarnpkg.com/try-to-tape/-/try-to-tape-1.2.5.tgz#f38441e3a85ce1afd661d242e16fb554e82cb4cc"
-  integrity sha512-0CV/UIyoYkdUcI3PWJHKeBn37EEO0v1Sdmc9pWK+JJo+55HGW4fWM5FiSLFzO4gZa75g0h926tXx2zE2KB2+kQ==
+try-to-tape@^1.2.6:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/try-to-tape/-/try-to-tape-1.2.6.tgz#4c049fb245fb0b5b17867f48bc19032e97f0d947"
+  integrity sha512-PqBK35us4auE/ekBdYvKIRWvyfvlwMFLYnB7tNDoH+GuidkGRuwLmg+rgA9+mRyddvhz99BoIIiOhfqLS0UVuw==
   dependencies:
     currify "^4.0.0"
-    try-to-catch "^2.0.0"
+    try-to-catch "^3.0.0"
 
 tslib@^1.9.0:
   version "1.9.3"
