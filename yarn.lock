@@ -2717,10 +2717,10 @@ standard-engine@^12.0.0:
     minimist "^1.1.0"
     pkg-conf "^3.1.0"
 
-standard@^14.3.2:
-  version "14.3.2"
-  resolved "https://registry.yarnpkg.com/standard/-/standard-14.3.2.tgz#36a65977119063ecf66029d10d23382754b6b5c3"
-  integrity sha512-jz7s55kp5W9ntsjP4VHrCv/uLUcXN+7I/0sSwpEjhYayfWpI2bWn25C7kPywwwHgKD9yseYn0rdMUicsLij49w==
+standard@^14.3.3:
+  version "14.3.3"
+  resolved "https://registry.yarnpkg.com/standard/-/standard-14.3.3.tgz#2b16559d892cb29e29a854eb6ed15d43e44759c8"
+  integrity sha512-HBEAD5eVXrr2o/KZ3kU8Wwaxw90wzoq4dOQe6vlRnPoQ6stn4LCLRLBBDp0CjH/aOTL9bDZJbRUOZcBaBnNJ0A==
   dependencies:
     eslint "~6.8.0"
     eslint-config-standard "14.1.0"
