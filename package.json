@@ -24,7 +24,7 @@
     "eslint-plugin-standard": "^4.0.1",
     "htmlclean": "^3.0.8",
     "json": "^9.0.6",
-    "nyc": "^15.0.1",
+    "nyc": "^15.1.0",
     "standard": "^14.3.4",
     "tap-nyc": "^1.0.3",
     "tap-spec": "^5.0.0",
