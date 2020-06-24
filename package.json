@@ -8,7 +8,7 @@
     "html-tokenize": "^2.0.1",
     "inherits": "^2.0.4",
     "readable-stream": "^3.4.0",
-    "through2": "^3.0.0"
+    "through2": "^3.0.2"
   },
   "devDependencies": {
     "@hutson/npm-deploy-git-tag": "^5.0.3",
