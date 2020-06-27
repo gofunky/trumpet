@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [8.x, 10.x, 11.x, 12.x]
+        node-version: [10.x, 12.x, 13.x, 14.x]
     name: node.js ${{ matrix.node-version }}
     steps:
       - uses: actions/checkout@v1
@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: installing dependencies
-        run: yarn install
+        run: yarn install --frozen-lockfile
         env:
           CI: true
       - name: running tests
@@ -34,10 +34,10 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 14
           registry-url: https://registry.npmjs.org/
       - name: installing dependencies
-        run: yarn install
+        run: yarn install --frozen-lockfile
         env:
           CI: true
       - name: publish
@@ -53,11 +53,11 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 14
           registry-url: https://npm.pkg.github.com
           scope: '@gofunky'
       - name: installing dependencies
-        run: yarn install
+        run: yarn install --frozen-lockfile
         env:
           CI: true
       - name: publish
