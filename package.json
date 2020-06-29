@@ -28,7 +28,7 @@
     "standard": "^14.3.4",
     "tap-nyc": "^1.0.3",
     "tap-spec": "^5.0.0",
-    "tape": "~4.13.2",
+    "tape": "~4.13.3",
     "try-to-tape": "^1.2.6"
   },
   "scripts": {
