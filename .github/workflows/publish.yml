@@ -60,7 +60,7 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v1.0.0
+      - uses: actions/checkout@v2.3.2
       - name: setup node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1.0.0
         with:
@@ -96,7 +96,7 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v1.0.0
+      - uses: actions/checkout@v2.3.2
       - name: setup node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1.0.0
         with:
