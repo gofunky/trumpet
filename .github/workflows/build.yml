@@ -18,7 +18,7 @@ jobs:
         shell: bash
     name: node.js ${{ matrix.node-version }}
     steps:
-      - uses: actions/checkout@v1.0.0
+      - uses: actions/checkout@v2.3.2
       - name: setup node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2.1.1
         with:
