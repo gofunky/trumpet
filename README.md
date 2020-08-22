@@ -252,7 +252,7 @@ The element name as a lower-case string. For example: `'div'`.
 
 Currently, these [css selectors](http://www.w3.org/TR/CSS2/selector.html) work:
 
--   ``\-`
+-   `*`
 -   `E`
 -   `E F`
 -   `E > F`
