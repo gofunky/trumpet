@@ -1,27 +1,35 @@
 name: build
 
-on: [push]
+on:
+  push:
+    branches: [ master ]
+  pull_request_target:
+    branches: [ master ]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         node-version: [10.x, 12.x, 13.x, 14.x]
+        os: [ubuntu-latest]
+    defaults:
+      run:
+        shell: bash
     name: node.js ${{ matrix.node-version }}
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v1.0.0
       - name: setup node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v1.0.0
         with:
           node-version: ${{ matrix.node-version }}
       - name: caching node modules
-        uses: actions/cache@v1
+        uses: actions/cache@v1.0.0
         with:
           path: node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('**/yarn.lock') }}-${{ matrix.node-version }}
+          key: ${{ runner.OS }}-build-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.OS }}-build-${{ hashFiles('**/yarn.lock') }}
+            ${{ runner.OS }}-build-${{ matrix.node-version }}
             ${{ runner.OS }}-build
       - name: installing dependencies
         if: steps.cache-primes.outputs.cache-hit != 'true'

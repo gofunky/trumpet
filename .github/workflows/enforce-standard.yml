@@ -1,0 +1,42 @@
+name: enforce standard
+
+on:
+  pull_request_target:
+    paths:
+      - '**.js'
+
+jobs:
+  black:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node-version: [14.x]
+        os: [ubuntu-latest]
+    name: check standard style
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v2.3.2
+      - name: setup node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1.0.0
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: caching node modules
+        uses: actions/cache@v1.0.0
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-${{ matrix.node-version }}
+            ${{ runner.OS }}-build
+      - name: installing standard
+        run: npm install standard --global
+      - name: running standard
+        run: standard --fix
+      - name: committing changed files
+        uses: stefanzweifel/git-auto-commit-action@v4.4.1
+        with:
+          commit_message: 'style(format): enforce standard'
+          branch: ${{ github.head_ref }}
+          file_pattern: '*.js'
