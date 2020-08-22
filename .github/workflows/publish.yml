@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: caching node modules
-        uses: actions/cache@v1.0.0
+        uses: actions/cache@v2.1.1
         with:
           path: node_modules
           key: ${{ runner.OS }}-build-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
@@ -67,7 +67,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           registry-url: https://registry.npmjs.org/
       - name: caching node modules
-        uses: actions/cache@v1.0.0
+        uses: actions/cache@v2.1.1
         with:
           path: node_modules
           key: ${{ runner.OS }}-build-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
@@ -104,7 +104,7 @@ jobs:
           registry-url: https://npm.pkg.github.com
           scope: '@gofunky'
       - name: caching node modules
-        uses: actions/cache@v1.0.0
+        uses: actions/cache@v2.1.1
         with:
           path: node_modules
           key: ${{ runner.OS }}-build-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
