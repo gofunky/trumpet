@@ -249,16 +249,16 @@ The element name as a lower-case string. For example: `'div'`.
 
 Currently, these [css selectors](http://www.w3.org/TR/CSS2/selector.html) work:
 
--   \-
--   E
--   E F
--   E > F
--   E + F
--   E.class
--   E#id
--   E[attr=value]
--   E[attr~=search]
--   E[attr|=prefix]
--   E[attr^=prefix]
--   E[attr$=suffix]
--   E[attr*=search]
+-   ``\-`
+-   `E`
+-   `E F`
+-   `E > F`
+-   `E + F`
+-   `E.class`
+-   `E#id`
+-   `E[attr=value]`
+-   `E[attr~=search]`
+-   `E[attr|=prefix]`
+-   `E[attr^=prefix]`
+-   `E[attr$=suffix]`
+-   `E[attr*=search]`
