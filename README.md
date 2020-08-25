@@ -1,17 +1,17 @@
-# node-trumpet2
+# trumpet
 
-[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/gofunky/node-trumpet2/build/master?style=for-the-badge)](https://github.com/gofunky/node-trumpet2/actions)
-[![Codecov](https://img.shields.io/codecov/c/github/gofunky/node-trumpet2?style=for-the-badge)](https://codecov.io/gh/gofunky/node-trumpet2)
-[![Renovate Status](https://img.shields.io/badge/renovate-enabled-green?style=for-the-badge&logo=renovatebot&color=1a1f6c)](https://app.renovatebot.com/dashboard#github/gofunky/node-trumpet2)
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/gofunky/trumpet/build/master?style=for-the-badge)](https://github.com/gofunky/trumpet/actions)
+[![Codecov](https://img.shields.io/codecov/c/github/gofunky/trumpet?style=for-the-badge)](https://codecov.io/gh/gofunky/trumpet)
+[![Renovate Status](https://img.shields.io/badge/renovate-enabled-green?style=for-the-badge&logo=renovatebot&color=1a1f6c)](https://app.renovatebot.com/dashboard#github/gofunky/trumpet)
 [![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/node-trumpet2?style=for-the-badge)](https://libraries.io/npm/node-trumpet2)
-[![Snyk Vulnerabilities for npm package](https://img.shields.io/snyk/vulnerabilities/npm/node-trumpet2?style=for-the-badge)](https://snyk.io/test/github/gofunky/node-trumpet2)
+[![Snyk Vulnerabilities for npm package](https://img.shields.io/snyk/vulnerabilities/npm/node-trumpet2?style=for-the-badge)](https://snyk.io/test/github/gofunky/trumpet)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-purple.svg?style=for-the-badge)](https://standardjs.com)
-[![CodeFactor](https://www.codefactor.io/repository/github/gofunky/node-trumpet2/badge?style=for-the-badge)](https://www.codefactor.io/repository/github/gofunky/node-trumpet2)
+[![CodeFactor](https://www.codefactor.io/repository/github/gofunky/trumpet/badge?style=for-the-badge)](https://www.codefactor.io/repository/github/gofunky/trumpet)
 [![node-current](https://img.shields.io/node/v/node-trumpet2?style=for-the-badge)](https://www.npmjs.com/package/node-trumpet2)
 [![NPM version](https://img.shields.io/npm/v/node-trumpet2?style=for-the-badge)](https://www.npmjs.com/package/node-trumpet2)
 [![NPM Downloads](https://img.shields.io/npm/dm/node-trumpet2?style=for-the-badge&color=ff69b4)](https://www.npmjs.com/package/node-trumpet2)
-[![GitHub License](https://img.shields.io/github/license/gofunky/node-trumpet2.svg?style=for-the-badge)](https://github.com/gofunky/node-trumpet2/blob/master/LICENSE)
-[![GitHub last commit](https://img.shields.io/github/last-commit/gofunky/node-trumpet2.svg?style=for-the-badge&color=9cf)](https://github.com/gofunky/node-trumpet2/commits/master)
+[![GitHub License](https://img.shields.io/github/license/gofunky/trumpet.svg?style=for-the-badge)](https://github.com/gofunky/trumpet/blob/master/LICENSE)
+[![GitHub last commit](https://img.shields.io/github/last-commit/gofunky/trumpet.svg?style=for-the-badge&color=9cf)](https://github.com/gofunky/trumpet/commits/master)
 
 the maintained version of [trumpet](https://github.com/substack/node-trumpet)
 
@@ -19,7 +19,7 @@ the maintained version of [trumpet](https://github.com/substack/node-trumpet)
 
 With [npm](http://npmjs.org) do:
 
-    npm install node-trumpet2
+    npm install @gofunky/trumpet
 
 ## Examples
 

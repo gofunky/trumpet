@@ -1,17 +1,17 @@
 {
-  "name": "node-trumpet2",
+  "name": "@gofunky/trumpet",
   "description": "parse and transform streaming html using css selectors",
   "main": "index.js",
   "dependencies": {
     "duplexer2": "~0.1.4",
     "html-select2": "^1.0.2",
     "html-tokenize": "^2.0.1",
-    "inherits": "^2.0.4",
     "readable-stream": "^3.4.0",
     "through2": "^4.0.2"
   },
   "devDependencies": {
     "@hutson/npm-deploy-git-tag": "6.0.0",
+    "babel-eslint": "^10.1.0",
     "codecov": "3.7.2",
     "coffeescript": "2.5.1",
     "concat-stream": "2.0.0",
@@ -20,7 +20,6 @@
     "eslint-plugin-import": "2.22.0",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "4.2.1",
-    "eslint-plugin-react": "7.20.6",
     "eslint-plugin-standard": "4.0.1",
     "htmlclean": "3.0.8",
     "json": "9.0.6",
@@ -34,30 +33,36 @@
   "scripts": {
     "test": "tape test/*.js | tap-spec",
     "coverage": "nyc --reporter=lcov tape test/*.js | tap-nyc",
-    "report": "nyc report --reporter=html"
+    "report": "nyc report --reporter=html",
+    "lint": "standard",
+    "deploy": "npm-deploy-git-tag"
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/gofunky/node-trumpet2.git"
+    "url": "http://github.com/gofunky/trumpet.git"
   },
   "keywords": [
     "html",
-    "streaming",
+    "stream",
     "parser",
     "transform",
-    "selectors",
-    "css"
+    "selector",
+    "css",
+    "library"
   ],
   "author": {
     "name": "matfax",
     "email": "mat@fax.fyi",
-    "url": "https://github.com/gofunky/node-trumpet2"
+    "url": "https://github.com/gofunky/trumpet"
   },
   "license": "MIT",
   "engine": {
-    "node": ">= 10.13.0 <15"
+    "node": ">= 12.18.3 <15"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "standard": {
+    "parser": "babel-eslint"
   }
 }
