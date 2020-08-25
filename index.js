@@ -134,7 +134,7 @@ Trumpet.prototype._selectAll = function (str, cb) {
     })
 
     removes.splice(0).forEach(function (key) {
-      
+
     })
   })
 
