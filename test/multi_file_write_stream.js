@@ -2,7 +2,7 @@ const trumpet = require('../')
 const fs = require('fs')
 const test = require('tape')
 const concat = require('concat-stream')
-const htmlclean = require('htmlclean')
+const htmlClean = require('htmlclean')
 
 test('multi file write stream in order', (t) => {
   t.plan(1)
@@ -20,7 +20,7 @@ test('multi file write stream in order', (t) => {
 
   tr.pipe(concat((body) => {
     t.equal(
-      htmlclean(String(body)),
+      htmlClean(String(body)),
       '<!doctype html>' +
       '<html><body><div class="x">beep boop.</div>' +
       '<div class="y">beep beep boop.</div>' +

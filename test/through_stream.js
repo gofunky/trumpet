@@ -4,7 +4,7 @@ const through2 = require('through2')
 const tryToTape = require('try-to-tape')
 const test = tryToTape(require('tape'))
 const concat = require('concat-stream')
-const htmlclean = require('htmlclean')
+const htmlClean = require('htmlclean')
 
 test('outer through stream', async (t) => {
   const tr = trumpet()
@@ -15,7 +15,7 @@ test('outer through stream', async (t) => {
 
   tr.pipe(concat((body) => {
     t.equal(
-      htmlclean(String(body)),
+      htmlClean(String(body)),
       '<html><body><DIV>XYZ</DIV></body></html>'
     )
     t.end()
@@ -33,7 +33,7 @@ test('through stream', async (t) => {
 
   tr.pipe(concat((body) => {
     t.equal(
-      htmlclean(String(body)),
+      htmlClean(String(body)),
       '<html><body><div>XYZ</div></body></html>'
     )
     t.end()

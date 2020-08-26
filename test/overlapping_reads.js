@@ -2,7 +2,7 @@ const trumpet = require('../')
 const fs = require('fs')
 const test = require('tape')
 const concat = require('concat-stream')
-const htmlClean = require('htmlClean')
+const htmlClean = require('htmlclean')
 
 test('stream all divs', (t) => {
   t.plan(3)

@@ -4,7 +4,7 @@ const through2 = require('through2')
 const tryToTape = require('try-to-tape')
 const test = tryToTape(require('tape'))
 const concat = require('concat-stream')
-const htmlClean = require('htmlClean')
+const htmlClean = require('htmlclean')
 
 test('through stream thrice', async (t) => {
   const tr = trumpet()

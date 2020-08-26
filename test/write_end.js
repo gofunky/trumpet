@@ -3,7 +3,7 @@ const fs = require('fs')
 const tryToTape = require('try-to-tape')
 const test = tryToTape(require('tape'))
 const concat = require('concat-stream')
-const htmlClean = require('htmlClean')
+const htmlClean = require('htmlclean')
 
 test('write end', async (t) => {
   const tr = trumpet()

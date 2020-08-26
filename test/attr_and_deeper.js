@@ -3,7 +3,7 @@ const fs = require('fs')
 const tryToTape = require('try-to-tape')
 const test = tryToTape(require('tape'))
 const concat = require('concat-stream')
-const htmlClean = require('htmlClean')
+const htmlClean = require('htmlclean')
 
 const expected = '<div class="row cool"><div key="msg">wow</div></div>'
 

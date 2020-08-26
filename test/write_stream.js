@@ -4,7 +4,7 @@ const through2 = require('through2')
 const tryToTape = require('try-to-tape')
 const test = tryToTape(require('tape'))
 const concat = require('concat-stream')
-const htmlclean = require('htmlclean')
+const htmlClean = require('htmlclean')
 
 test('outer write stream', async (t) => {
   const tr = trumpet()
@@ -21,7 +21,7 @@ test('outer write stream', async (t) => {
 
   tr.pipe(concat((body) => {
     t.equal(
-      htmlclean(String(body)),
+      htmlClean(String(body)),
       '<!doctype html>' +
       '<html><body> <B>beep boop.</B></body></html>'
     )
@@ -46,7 +46,7 @@ test('write stream', async (t) => {
 
   tr.pipe(concat((body) => {
     t.equal(
-      htmlclean(String(body)),
+      htmlClean(String(body)),
       '<!doctype html>' +
       '<html><body><div class="x">beep boop.</div>' +
       '</body></html>'

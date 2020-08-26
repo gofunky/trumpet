@@ -3,7 +3,7 @@ const fs = require('fs')
 const through = require('through2')
 const test = require('tape')
 const concat = require('concat-stream')
-const htmlClean = require('htmlClean')
+const htmlClean = require('htmlclean')
 
 test('multi write stream out of order', (t) => {
   t.plan(1)
