@@ -3,7 +3,7 @@
 [![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/gofunky/trumpet/build/master?style=for-the-badge)](https://github.com/gofunky/trumpet/actions)
 [![Codecov](https://img.shields.io/codecov/c/github/gofunky/trumpet?style=for-the-badge)](https://codecov.io/gh/gofunky/trumpet)
 [![Renovate Status](https://img.shields.io/badge/renovate-enabled-green?style=for-the-badge&logo=renovatebot&color=1a1f6c)](https://app.renovatebot.com/dashboard#github/gofunky/trumpet)
-[![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/@gofunky/trumpet?style=for-the-badge)](https://libraries.io/npm/@gofunky/trumpet)
+[![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/@gofunky%2Ftrumpet?style=for-the-badge)](https://libraries.io/npm/@gofunky%2Ftrumpet)
 [![Snyk Vulnerabilities for npm package](https://img.shields.io/snyk/vulnerabilities/npm/@gofunky/trumpet?style=for-the-badge)](https://snyk.io/test/github/gofunky/trumpet)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-purple.svg?style=for-the-badge)](https://standardjs.com)
 [![CodeFactor](https://www.codefactor.io/repository/github/gofunky/trumpet/badge?style=for-the-badge)](https://www.codefactor.io/repository/github/gofunky/trumpet)
