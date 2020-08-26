@@ -10,5 +10,5 @@ collections:
     output: true
 remote_theme: chromatical/jekyll-materialdocs
 copyright: gofunky
-mdl_colors: yellow-orange
+mdl_colors: blue_grey-orange
 search: false
