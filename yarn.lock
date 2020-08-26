@@ -1538,7 +1538,7 @@ html-tokenize@^2.0.1:
     readable-stream "~1.0.27-1"
     through2 "~0.4.1"
 
-htmlclean@3.0.8:
+htmlclean@^3.0.8:
   version "3.0.8"
   resolved "https://registry.yarnpkg.com/htmlclean/-/htmlclean-3.0.8.tgz#cea451cf5399d4018386a57129489f2d630e62b0"
   integrity sha1-zqRRz1OZ1AGDhqVxKUifLWMOYrA=
