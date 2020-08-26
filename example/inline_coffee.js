@@ -8,7 +8,7 @@ const coffee = require('coffeescript')
 const coffeeStream = (() => {
   const output = through()
   const input = concat((body) => {
-    output.queue(coffee.compile(body.toString()))
+    output.queue(coffee.compile(String(body)))
     output.queue(null)
   })
   return duplexer(input, output)

@@ -17,7 +17,7 @@ test('comment write stream', (t) => {
   const res = '<!-- test --><html></html>'
   tr.pipe(concat((body) => {
     t.equal(
-      body.toString(),
+      String(body),
       res
     )
   }))
@@ -38,7 +38,7 @@ test('comment write stream variant', (t) => {
   const res = '<!--test   --><html></html>'
   tr.pipe(concat((body) => {
     t.equal(
-      body.toString(),
+      String(body),
       res
     )
   }))

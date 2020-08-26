@@ -5,16 +5,15 @@ const concat = require('concat-stream')
 const fs = require('fs')
 const expected = fs.readFileSync(`${__dirname}/loud_expected.html`, 'utf8')
 
-test('loud delay cb', function (t) {
+test('loud delay cb', (t) => {
   t.plan(1)
   const tr = trumpet()
 
-  tr.select('.loud', function (elem) {
+  tr.select('.loud', (elem) => {
     const loud = elem.createStream()
-    loud.pipe(through(function (buf, enc, next) {
-      const self = this
-      setTimeout(function () {
-        self.push(buf.toString().toUpperCase())
+    loud.pipe(through((buf, enc, next) => {
+      setTimeout(() => {
+        this.push(buf.toString().toUpperCase())
         next()
       }, 10)
     })).pipe(loud)
@@ -22,7 +21,7 @@ test('loud delay cb', function (t) {
 
   fs.createReadStream(`${__dirname}/loud.html`)
     .pipe(tr)
-    .pipe(concat(function (src) {
+    .pipe(concat((src) => {
       t.equal(String(src), expected)
     }))
 })

@@ -171,7 +171,7 @@ Parse errors are emitted by `tr` in an `'error'` event.
 
 Return a result object `elem` for the first element matching `selector`.
 
-### `tr.selectAll(selector, function (elem) {})`
+### `tr.selectAll(selector, (elem) => {})`
 
 Get a result object `elem` for every element matching `selector`.
 

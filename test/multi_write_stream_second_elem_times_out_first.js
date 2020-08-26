@@ -32,7 +32,7 @@ test('multi write stream out of order', (t) => {
 
   tr.pipe(concat((body) => {
     t.equal(
-      htmlClean(body.toString()),
+      htmlClean(String(body)),
       '<!doctype html>' +
       '<html><body><div class="x">beep boop.</div>' +
       '<div class="y">beep beep boop.</div>' +

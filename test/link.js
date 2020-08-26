@@ -3,7 +3,7 @@ const through = require('through2')
 const test = require('tape')
 const concat = require('concat-stream')
 
-test('write stream', function (t) {
+test('write stream', (t) => {
   t.plan(1)
 
   const tr = trumpet()
@@ -16,14 +16,14 @@ test('write stream', function (t) {
 
   s.write('beep')
 
-  setTimeout(function () {
+  setTimeout(() => {
     s.write(' boop.')
     s.end()
   }, 500)
 
-  tr.pipe(concat(function (body) {
+  tr.pipe(concat((body) => {
     t.equal(
-      body.toString(),
+      String(body),
       '<html><body><a href="/beep">beep boop.</a></body></html>'
     )
   }))

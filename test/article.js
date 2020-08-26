@@ -8,11 +8,11 @@ test((t) => {
 
   const tr = trumpet()
   tr.createReadStream('article username').pipe(concat((body) => {
-    t.equal(body.toString(), '<a href="/user/echojs">echojs</a>')
+    t.equal(String(body), '<a href="/user/echojs">echojs</a>')
   }))
 
   tr.createReadStream('article span').pipe(concat((body) => {
-    t.equal(body.toString(), '2')
+    t.equal(String(body), '2')
   }))
 
   fs.createReadStream(`${__dirname}/article.html`).pipe(tr)
