@@ -8,4 +8,7 @@ collections:
   uploads:
     title: Uploads
     output: true
-theme: jekyll-theme-leap-day
+remote_theme: chromatical/jekyll-materialdocs
+copyright: gofunky
+mdl_colors: yellow-orange
+search: false
