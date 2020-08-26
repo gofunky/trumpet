@@ -1,0 +1,25 @@
+name: pages
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  pages:
+    name: update pages
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v2.3.2
+      - name: update siteleaf pages
+        id: siteleaf
+        uses: gofunky/siteleaf-updater@v2.0.0
+        with:
+          api-key: ${{ secrets.SITELEAF_API_KEY }}
+          api-secret: ${{ secrets.SITELEAF_API_SECRET }}
+          site: ${{ secrets.SITELEAF_SITE_ID }}
+      - name: Check outputs
+        run: |
+          echo "Siteleaf Page Name: ${{ steps.siteleaf.outputs.name }}"
