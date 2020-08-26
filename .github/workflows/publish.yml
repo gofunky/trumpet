@@ -66,6 +66,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           registry-url: https://registry.npmjs.org/
+          scope: '@gofunky'  
       - name: caching node modules
         uses: actions/cache@v2.1.1
         with:
@@ -79,7 +80,7 @@ jobs:
         env:
           CI: true
       - name: publish
-        run: $(yarn bin)/npm-deploy-git-tag
+        run: yarn deploy
         env:
           CI: true
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -116,10 +117,7 @@ jobs:
         env:
           CI: true
       - name: publish
-        # workaround until https://github.com/actions/setup-node/issues/67 is solved
-        run: |
-          $(yarn bin)/json -I -f package.json -e "this.name=\"@${{ github.repository }}\""
-          $(yarn bin)/npm-deploy-git-tag
+        run: yarn deploy
         env:
           CI: true
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
