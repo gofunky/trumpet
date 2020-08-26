@@ -1,6 +1,6 @@
 ---
-title: Trumpet
-timezone: UTC
+title: trumpet
+timezone: Europe/Berlin
 collections:
   posts:
     title: Posts
