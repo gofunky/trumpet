@@ -34,7 +34,7 @@ test('uppercase script outer', async (t) => {
     callback(null, String(chunk).toUpperCase())
   })).pipe(ts)
 
-  tr.pipe(concat(function (body) {
+  tr.pipe(concat((body) => {
     t.equal(
       body.toString(),
       '<html><head>' +

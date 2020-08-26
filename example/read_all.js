@@ -1,9 +1,9 @@
 const trumpet = require('../')
-const tr = trumpet()
+const fs = require('fs')
 
-tr.selectAll('.b span', function (span) {
+const tr = trumpet()
+tr.selectAll('.b span', (span) => {
   span.createReadStream().pipe(process.stdout)
 })
 
-const fs = require('fs')
 fs.createReadStream(`${__dirname}/html/read_all.html`).pipe(tr)

@@ -5,9 +5,9 @@ const duplexer = require('duplexer2')
 const concat = require('concat-stream')
 const coffee = require('coffeescript')
 
-const coffeeStream = (function () {
+const coffeeStream = (() => {
   const output = through()
-  const input = concat(function (body) {
+  const input = concat((body) => {
     output.queue(coffee.compile(body.toString()))
     output.queue(null)
   })

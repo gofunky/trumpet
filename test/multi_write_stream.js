@@ -5,7 +5,7 @@ const test = require('tape')
 const concat = require('concat-stream')
 const htmlclean = require('htmlclean')
 
-test('multi write stream in order', function (t) {
+test('multi write stream in order', (t) => {
   t.plan(1)
 
   const tr = trumpet()
@@ -20,17 +20,17 @@ test('multi write stream in order', function (t) {
   sx.write('beep')
   sy.write('beep')
 
-  setTimeout(function () {
+  setTimeout(() => {
     sx.write(' boop.')
     sx.end()
   }, 500)
 
-  setTimeout(function () {
+  setTimeout(() => {
     sy.write(' beep boop.')
     sy.end()
   }, 600)
 
-  tr.pipe(concat(function (body) {
+  tr.pipe(concat((body) => {
     t.equal(
       htmlclean(body.toString()),
       '<!doctype html>' +

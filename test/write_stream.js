@@ -14,12 +14,12 @@ test('outer write stream', async (t) => {
 
   s.write('<B>beep')
 
-  setTimeout(function () {
+  setTimeout(() => {
     s.write(' boop.</B>')
     s.end()
   }, 500)
 
-  tr.pipe(concat(function (body) {
+  tr.pipe(concat((body) => {
     t.equal(
       htmlclean(String(body)),
       '<!doctype html>' +
@@ -39,12 +39,12 @@ test('write stream', async (t) => {
 
   s.write('beep')
 
-  setTimeout(function () {
+  setTimeout(() => {
     s.write(' boop.')
     s.end()
   }, 500)
 
-  tr.pipe(concat(function (body) {
+  tr.pipe(concat((body) => {
     t.equal(
       htmlclean(String(body)),
       '<!doctype html>' +

@@ -13,7 +13,7 @@ test('outer through stream', async (t) => {
     callback(null, String(chunk).toUpperCase())
   })).pipe(ts)
 
-  tr.pipe(concat(function (body) {
+  tr.pipe(concat((body) => {
     t.equal(
       htmlclean(String(body)),
       '<html><body><DIV>XYZ</DIV></body></html>'
@@ -31,7 +31,7 @@ test('through stream', async (t) => {
     callback(null, String(chunk).toUpperCase())
   })).pipe(ts)
 
-  tr.pipe(concat(function (body) {
+  tr.pipe(concat((body) => {
     t.equal(
       htmlclean(String(body)),
       '<html><body><div>XYZ</div></body></html>'

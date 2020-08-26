@@ -3,7 +3,7 @@ const through = require('through2')
 const test = require('tape')
 const concat = require('concat-stream')
 
-test('comment write stream', function (t) {
+test('comment write stream', (t) => {
   t.plan(1)
 
   const tr = trumpet()
@@ -15,7 +15,7 @@ test('comment write stream', function (t) {
   s.end()
 
   const res = '<!-- test --><html></html>'
-  tr.pipe(concat(function (body) {
+  tr.pipe(concat((body) => {
     t.equal(
       body.toString(),
       res
@@ -24,7 +24,7 @@ test('comment write stream', function (t) {
   tr.end(res)
 })
 
-test('comment write stream variant', function (t) {
+test('comment write stream variant', (t) => {
   t.plan(1)
 
   const tr = trumpet()
@@ -36,7 +36,7 @@ test('comment write stream variant', function (t) {
   s.end()
 
   const res = '<!--test   --><html></html>'
-  tr.pipe(concat(function (body) {
+  tr.pipe(concat((body) => {
     t.equal(
       body.toString(),
       res

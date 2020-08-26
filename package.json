@@ -17,6 +17,7 @@
     "concat-stream": "2.0.0",
     "eslint": "7.7.0",
     "eslint-config-standard": "14.1.1",
+    "eslint-plugin-html": "^6.0.3",
     "eslint-plugin-import": "2.22.0",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "4.2.1",
@@ -34,7 +35,7 @@
     "test": "tape test/*.js | tap-spec",
     "coverage": "nyc --reporter=lcov tape test/*.js | tap-nyc",
     "report": "nyc report --reporter=html",
-    "lint": "standard",
+    "lint": "eslint",
     "deploy": "npm-deploy-git-tag"
   },
   "repository": {
@@ -56,13 +57,17 @@
     "url": "https://github.com/gofunky/trumpet"
   },
   "license": "MIT",
-  "engine": {
+  "engines": {
     "node": ">= 12.18.3 <15"
   },
   "publishConfig": {
     "access": "public"
   },
   "standard": {
-    "parser": "babel-eslint"
+    "parser": "babel-eslint",
+    "filename": "**./*.html **/*.js",
+    "plugins": [
+      "html"
+    ]
   }
 }
