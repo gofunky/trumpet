@@ -19,7 +19,7 @@ the maintained version of [trumpet](https://github.com/substack/node-trumpet)
 
 ### Replace inner
 
-input html:
+#### Input HTML
 
 ```html
 <table>
@@ -30,7 +30,7 @@ input html:
 </table>
 ```
 
-code:
+#### Code
 
 ```js
 const trumpet = require('@gofunky/trumpet')
@@ -44,7 +44,7 @@ const fs = require('fs')
 fs.createReadStream(__dirname + '/html/table.html').pipe(tr)
 ```
 
-output:
+#### Output
 
 ```html
 <table>
@@ -57,7 +57,7 @@ output:
 
 ### Read all
 
-Input html:
+#### Input HTML
 
 ```html
 <html>
@@ -76,7 +76,7 @@ Input html:
 </html>
 ```
 
-code:
+#### Code
 
 ```js
 const trumpet = require('@gofunky/trumpet')
@@ -90,7 +90,7 @@ const fs = require('fs')
 fs.createReadStream(__dirname + '/html/read_all.html').pipe(tr)
 ```
 
-output:
+#### Output
 
 ```html
 tacos y burritos
@@ -98,7 +98,7 @@ tacos y burritos
 
 ### Read, modify, and write
 
-input html:
+#### Input HTML
 
 ```html
 <html>
@@ -112,7 +112,7 @@ input html:
 </html>
 ```
 
-code:
+#### Code
 
 ```js
 const trumpet = require('@gofunky/trumpet')
@@ -140,7 +140,7 @@ const fs = require('fs')
 fs.createReadStream(__dirname + '/html/uppercase.html').pipe(tr).pipe(process.stdout)
 ```
 
-output:
+#### Output
 
 ```html
 <html>
