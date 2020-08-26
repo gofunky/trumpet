@@ -6,7 +6,7 @@ const test = tryToTape(require('tape'))
 test('wonky duplicated classes selector', async (t) => {
   const tr = trumpet()
   const elem = tr.select('.c')
-  elem.getAttribute('class', function (value) {
+  elem.getAttribute('class', (value) => {
     t.equal(value, 'c')
     t.end()
   })
@@ -16,7 +16,7 @@ test('wonky duplicated classes selector', async (t) => {
 test('rebase selector', async (t) => {
   const tr = trumpet()
   const elem = tr.select('.a > .b > * > .d')
-  elem.getAttribute('class', function (value) {
+  elem.getAttribute('class', (value) => {
     t.equal(value, 'd')
     t.end()
   })

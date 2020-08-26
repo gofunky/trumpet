@@ -1,25 +1,19 @@
-# node-trumpet2
+# trumpet
 
-[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/gofunky/node-trumpet2/build/master?style=for-the-badge)](https://github.com/gofunky/node-trumpet2/actions)
-[![Codecov](https://img.shields.io/codecov/c/github/gofunky/node-trumpet2?style=for-the-badge)](https://codecov.io/gh/gofunky/node-trumpet2)
-[![Renovate Status](https://img.shields.io/badge/renovate-enabled-green?style=for-the-badge&logo=renovatebot&color=1a1f6c)](https://app.renovatebot.com/dashboard#github/gofunky/node-trumpet2)
-[![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/node-trumpet2?style=for-the-badge)](https://libraries.io/npm/node-trumpet2)
-[![Snyk Vulnerabilities for npm package](https://img.shields.io/snyk/vulnerabilities/npm/node-trumpet2?style=for-the-badge)](https://snyk.io/test/github/gofunky/node-trumpet2)
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/gofunky/trumpet/build/master?style=for-the-badge)](https://github.com/gofunky/trumpet/actions)
+[![Codecov](https://img.shields.io/codecov/c/github/gofunky/trumpet?style=for-the-badge)](https://codecov.io/gh/gofunky/trumpet)
+[![Renovate Status](https://img.shields.io/badge/renovate-enabled-green?style=for-the-badge&logo=renovatebot&color=1a1f6c)](https://app.renovatebot.com/dashboard#github/gofunky/trumpet)
+[![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/@gofunky/trumpet?style=for-the-badge)](https://libraries.io/npm/@gofunky/trumpet)
+[![Snyk Vulnerabilities for npm package](https://img.shields.io/snyk/vulnerabilities/npm/@gofunky/trumpet?style=for-the-badge)](https://snyk.io/test/github/gofunky/trumpet)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-purple.svg?style=for-the-badge)](https://standardjs.com)
-[![CodeFactor](https://www.codefactor.io/repository/github/gofunky/node-trumpet2/badge?style=for-the-badge)](https://www.codefactor.io/repository/github/gofunky/node-trumpet2)
-[![node-current](https://img.shields.io/node/v/node-trumpet2?style=for-the-badge)](https://www.npmjs.com/package/node-trumpet2)
-[![NPM version](https://img.shields.io/npm/v/node-trumpet2?style=for-the-badge)](https://www.npmjs.com/package/node-trumpet2)
-[![NPM Downloads](https://img.shields.io/npm/dm/node-trumpet2?style=for-the-badge&color=ff69b4)](https://www.npmjs.com/package/node-trumpet2)
-[![GitHub License](https://img.shields.io/github/license/gofunky/node-trumpet2.svg?style=for-the-badge)](https://github.com/gofunky/node-trumpet2/blob/master/LICENSE)
-[![GitHub last commit](https://img.shields.io/github/last-commit/gofunky/node-trumpet2.svg?style=for-the-badge&color=9cf)](https://github.com/gofunky/node-trumpet2/commits/master)
+[![CodeFactor](https://www.codefactor.io/repository/github/gofunky/trumpet/badge?style=for-the-badge)](https://www.codefactor.io/repository/github/gofunky/trumpet)
+[![node-current](https://img.shields.io/node/v/@gofunky/trumpet?style=for-the-badge)](https://www.npmjs.com/package/@gofunky/trumpet)
+[![NPM version](https://img.shields.io/npm/v/@gofunky/trumpet?style=for-the-badge)](https://www.npmjs.com/package/@gofunky/trumpet)
+[![NPM Downloads](https://img.shields.io/npm/dm/@gofunky/trumpet?style=for-the-badge&color=ff69b4)](https://www.npmjs.com/package/@gofunky/trumpet)
+[![GitHub License](https://img.shields.io/github/license/gofunky/trumpet.svg?style=for-the-badge)](https://github.com/gofunky/trumpet/blob/master/LICENSE)
+[![GitHub last commit](https://img.shields.io/github/last-commit/gofunky/trumpet.svg?style=for-the-badge&color=9cf)](https://github.com/gofunky/trumpet/commits/master)
 
 the maintained version of [trumpet](https://github.com/substack/node-trumpet)
-
-## Install
-
-With [npm](http://npmjs.org) do:
-
-    npm install node-trumpet2
 
 ## Examples
 
@@ -39,15 +33,15 @@ input html:
 code:
 
 ```js
-const trumpet = require('node-trumpet2');
-const tr = trumpet();
-tr.pipe(process.stdout);
+const trumpet = require('@gofunky/trumpet')
+const tr = trumpet()
+tr.pipe(process.stdout)
  
-const ws = tr.select('tbody').createWriteStream();
-ws.end('<tr><td>rawr</td></tr>');
+const ws = tr.select('tbody').createWriteStream()
+ws.end('<tr><td>rawr</td></tr>')
 
-const fs = require('fs');
-fs.createReadStream(__dirname + '/html/table.html').pipe(tr);
+const fs = require('fs')
+fs.createReadStream(__dirname + '/html/table.html').pipe(tr)
 ```
 
 output:
@@ -85,15 +79,15 @@ Input html:
 code:
 
 ```js
-const trumpet = require('node-trumpet2');
-const tr = trumpet();
+const trumpet = require('@gofunky/trumpet')
+const tr = trumpet()
 
-tr.selectAll('.b span', function (span) {
-    span.createReadStream().pipe(process.stdout);
-});
+tr.selectAll('.b span', (span) => {
+  span.createReadStream().pipe(process.stdout)
+})
 
-const fs = require('fs');
-fs.createReadStream(__dirname + '/html/read_all.html').pipe(tr);
+const fs = require('fs')
+fs.createReadStream(__dirname + '/html/read_all.html').pipe(tr)
 ```
 
 output:
@@ -121,29 +115,29 @@ input html:
 code:
 
 ```js
-const trumpet = require('node-trumpet2');
-const through = require('through2');
+const trumpet = require('@gofunky/trumpet')
+const through = require('through2')
 
-const tr = trumpet();
+const tr = trumpet()
 
 //select all element and apply transformation function to selections
-tr.selectAll('.x span', function (element) {
+tr.selectAll('.x span', (element) => {
+ 
     //define function to transform input
-    const upper = through(function (buf) {
-        this.queue(buf.toString().toUpperCase());
-    });
-
+    const upper = through((buf) => {
+      this.queue(String(buf).toUpperCase())
+    })
+    
     //create a read/write stream for selected selement
-    const estream = element.createStream();
-
+    const stream = element.createStream()
+    
     //stream the element's inner html to transformation function
     //then stream the transformed output back into the element stream
-    estream.pipe(upper).pipe(estream);
-});
+    stream.pipe(upper).pipe(stream)
 
 //stream in html to trumpet and stream processed output to stdout
-const fs = require('fs');
-fs.createReadStream(__dirname + '/html/uppercase.html').pipe(tr).pipe(process.stdout);
+const fs = require('fs')
+fs.createReadStream(__dirname + '/html/uppercase.html').pipe(tr).pipe(process.stdout)
 ```
 
 output:
@@ -163,39 +157,39 @@ output:
 ## Methods
 
 ```js
-const trumpet = require('node-trumpet2')
+const trumpet = require('@gofunky/trumpet')
 ```
 
-### const tr = trumpet(opts)
+### `const tr = trumpet(opts)`
 
 Create a new trumpet stream. This stream is readable and writable.
 Pipe an html stream into `tr` and get back a transformed html stream.
 
 Parse errors are emitted by `tr` in an `'error'` event.
 
-### const elem = tr.select(selector)
+### `const elem = tr.select(selector)`
 
 Return a result object `elem` for the first element matching `selector`.
 
-### tr.selectAll(selector, function (elem) {})
+### `tr.selectAll(selector, (elem) => {})`
 
 Get a result object `elem` for every element matching `selector`.
 
-### elem.getAttribute(name, cb)
+### `elem.getAttribute(name, cb)`
 
 When the selector for `elem` matches, query the case-insensitive attribute
 called `name` with `cb(value)`.
 
 Returns `elem`.
 
-### elem.getAttributes(name, cb)
+### `elem.getAttributes(name, cb)`
 
 Get all the elements in `cb(attributes)` as an object `attributes` with
 lower-case keys.
 
 Returns `elem`.
 
-### elem.setAttribute(name, value)
+### `elem.setAttribute(name, value)`
 
 When the selector for `elem` matches, replace the case-insensitive attribute
 called `name` with `value`.
@@ -204,47 +198,47 @@ If the attribute doesn't exist, it will be created in the output stream.
 
 Returns `elem`.
 
-### elem.removeAttribute(name)
+### `elem.removeAttribute(name)`
 
 When the selector for `elem` matches, remove the attribute called `name` if it
 exists.
 
 Returns `elem`.
 
-### elem.createReadStream(opts)
+### `elem.createReadStream(opts)`
 
 Create a new readable stream with the inner html content under `elem`.
 
 To use the outer html content instead of the inner, set `opts.outer` to `true`.
 
-### elem.createWriteStream(opts)
+### `elem.createWriteStream(opts)`
 
 Create a new write stream to replace the inner html content under `elem`.
 
 To use the outer html content instead of the inner, set `opts.outer` to `true`.
 
-### elem.createStream(opts)
+### `elem.createStream(opts)`
 
 Create a new readable writable stream that outputs the content under `elem` and
 replaces the content with the data written to it.
 
 To use the outer html content instead of the inner, set `opts.outer` to `true`.
 
-### tr.createStream(sel, opts)
+### `tr.createStream(sel, opts)`
 
 Short-hand for `tr.select(sel).createStream(opts)`.
 
-### tr.createReadStream(sel, opts)
+### `tr.createReadStream(sel, opts)`
 
 Short-hand for `tr.select(sel).createReadStream(opts)`.
 
-### tr.createWriteStream(sel, opts)
+### `tr.createWriteStream(sel, opts)`
 
 Short-hand for `tr.select(sel).createWriteStream(opts)`.
 
 ## Attributes
 
-### elem.name
+### `elem.name`
 
 The element name as a lower-case string. For example: `'div'`.
 

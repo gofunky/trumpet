@@ -13,7 +13,7 @@ test('uppercase script contents', async (t) => {
 
   tr.pipe(concat((body) => {
     t.equal(
-      body.toString(),
+      String(body),
       '<html><head>' +
       '<script type="robots">BEEPITY BOOP</script>' +
       '</head></html>'
@@ -34,9 +34,9 @@ test('uppercase script outer', async (t) => {
     callback(null, String(chunk).toUpperCase())
   })).pipe(ts)
 
-  tr.pipe(concat(function (body) {
+  tr.pipe(concat((body) => {
     t.equal(
-      body.toString(),
+      String(body),
       '<html><head>' +
       '<SCRIPT TYPE="ROBOTS">BEEPITY BOOP</SCRIPT>' +
       '</head></html>'

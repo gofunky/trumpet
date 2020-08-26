@@ -3,7 +3,7 @@ const fs = require('fs')
 const tryToTape = require('try-to-tape')
 const test = tryToTape(require('tape'))
 const concat = require('concat-stream')
-const htmlclean = require('htmlclean')
+const htmlClean = require('htmlclean')
 
 test('set attribute', async (t) => {
   const tr = trumpet()
@@ -12,7 +12,7 @@ test('set attribute', async (t) => {
 
   tr.pipe(concat(src => {
     t.equal(
-      htmlclean(String(src)),
+      htmlClean(String(src)),
       '<div class="a"><input type="text" value="abc"></div>'
     )
     t.end()
@@ -27,7 +27,7 @@ test('create attribute', async (t) => {
 
   tr.pipe(concat(src => {
     t.equal(
-      htmlclean(String(src)),
+      htmlClean(String(src)),
       '<div class="a"><input type="text" value="xyz" beep="boop"></div>'
     )
     t.end()

@@ -13,17 +13,17 @@ test('multiple read streams', async (t) => {
     'burritos'
   ]
   const output = through2()
-  output.pipe(concat(function (src) {
-    t.equal(src.toString(), 'tacosyburritos')
+  output.pipe(concat((src) => {
+    t.equal(String(src), 'tacosyburritos')
     t.end()
   }))
 
   const tr = trumpet()
-  tr.selectAll('.b span', function (span) {
+  tr.selectAll('.b span', (span) => {
     t.equal(span.name, 'span')
     const rs = span.createReadStream()
     rs.pipe(output, { end: false })
-    rs.pipe(concat(function (src) {
+    rs.pipe(concat((src) => {
       t.equal(String(src), html.shift())
     }))
   })

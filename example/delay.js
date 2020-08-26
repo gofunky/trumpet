@@ -1,26 +1,21 @@
 const trumpet = require('../')
-const tr = trumpet()
 const through = require('through2')
+const fs = require('fs')
+
+const tr = trumpet()
 tr.pipe(process.stdout)
-
-tr.selectAll('.x span', function (span) {
+tr.selectAll('.x span', (span) => {
   const stream = span.createStream()
-  stream.pipe(through(write, end)).pipe(stream)
-
-  function write (buf) {
-    const self = this
-    setTimeout(function () {
-      self.queue(buf.toString().toUpperCase())
-    }, 100)
-  }
-
-  function end () {
-    const self = this
-    setTimeout(function () {
-      self.queue(null)
-    }, 100)
-  }
+  stream.pipe(through(
+    (buf) => {
+      setTimeout(() => {
+        this.queue(String(buf).toUpperCase())
+      }, 100)
+    }, () => {
+      setTimeout(() => {
+        this.queue(null)
+      }, 100)
+    })).pipe(stream)
 })
 
-const fs = require('fs')
 fs.createReadStream(`${__dirname}/html/uppercase.html`).pipe(tr)

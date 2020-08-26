@@ -3,18 +3,18 @@ const fs = require('fs')
 const tryToTape = require('try-to-tape')
 const test = tryToTape(require('tape'))
 const concat = require('concat-stream')
-const htmlclean = require('htmlclean')
+const htmlClean = require('htmlclean')
 
 test('write end', async (t) => {
   const tr = trumpet()
-  tr.select('.x b', function (elem) {
+  tr.select('.x b', (elem) => {
     const ws = elem.createWriteStream()
     ws.end('beep boop')
   })
 
-  tr.pipe(concat(function (body) {
+  tr.pipe(concat((body) => {
     t.equal(
-      htmlclean(String(body)),
+      htmlClean(String(body)),
       '<!doctype html>' +
       '<html><body><div class="x"><b>beep boop</b></div>' +
       '</body></html>'
@@ -27,14 +27,14 @@ test('write end', async (t) => {
 
 test('write end string', async (t) => {
   const tr = trumpet()
-  tr.select('.x b', function (elem) {
+  tr.select('.x b', (elem) => {
     const ws = elem.createWriteStream()
     ws.end('beep boop')
   })
 
-  tr.pipe(concat(function (body) {
+  tr.pipe(concat((body) => {
     t.equal(
-      htmlclean(String(body)),
+      htmlClean(String(body)),
       '<!doctype html>' +
       '<html><body><div class="x"><b>beep boop</b></div>' +
       '</body></html>'

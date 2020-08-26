@@ -3,9 +3,9 @@ const fs = require('fs')
 const through = require('through2')
 const test = require('tape')
 const concat = require('concat-stream')
-const htmlclean = require('htmlclean')
+const htmlClean = require('htmlclean')
 
-test('multi write stream out of order', function (t) {
+test('multi write stream out of order', (t) => {
   t.plan(1)
 
   const tr = trumpet()
@@ -20,19 +20,19 @@ test('multi write stream out of order', function (t) {
   sx.write('beep')
   sy.write('beep')
 
-  setTimeout(function () {
+  setTimeout(() => {
     sx.write(' boop.')
     sx.end()
   }, 500)
 
-  setTimeout(function () {
+  setTimeout(() => {
     sy.write(' beep boop.')
     sy.end()
   }, 400)
 
-  tr.pipe(concat(function (body) {
+  tr.pipe(concat((body) => {
     t.equal(
-      htmlclean(body.toString()),
+      htmlClean(String(body)),
       '<!doctype html>' +
       '<html><body><div class="x">beep boop.</div>' +
       '<div class="y">beep beep boop.</div>' +
