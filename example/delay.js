@@ -9,7 +9,7 @@ tr.selectAll('.x span', (span) => {
   stream.pipe(through(
     (buf) => {
       setTimeout(() => {
-        this.queue(buf.toString().toUpperCase())
+        this.queue(String(buf).toUpperCase())
       }, 100)
     }, () => {
       setTimeout(() => {

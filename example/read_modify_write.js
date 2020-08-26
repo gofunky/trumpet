@@ -8,7 +8,7 @@ const tr = trumpet()
 tr.selectAll('.x span', (element) => {
   // define function to transform input
   const upper = through((buf) => {
-    this.queue(buf.toString().toUpperCase())
+    this.queue(String(buf).toUpperCase())
   })
 
   // create a read/write stream for selected element

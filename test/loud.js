@@ -10,8 +10,8 @@ test('loud', (t) => {
   const tr = trumpet()
 
   const loud = tr.select('.loud').createStream()
-  loud.pipe(through((buf, enc, next) => {
-    this.push(buf.toString().toUpperCase())
+  loud.pipe(through(function (buf, enc, next) {
+    this.push(String(buf).toUpperCase())
     next()
   })).pipe(loud)
 

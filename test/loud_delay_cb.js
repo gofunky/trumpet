@@ -11,9 +11,9 @@ test('loud delay cb', (t) => {
 
   tr.select('.loud', (elem) => {
     const loud = elem.createStream()
-    loud.pipe(through((buf, enc, next) => {
+    loud.pipe(through(function (buf, enc, next) {
       setTimeout(() => {
-        this.push(buf.toString().toUpperCase())
+        this.push(String(buf).toUpperCase())
         next()
       }, 10)
     })).pipe(loud)

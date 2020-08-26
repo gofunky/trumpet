@@ -10,9 +10,9 @@ test('loud delay', (t) => {
   const tr = trumpet()
 
   const loud = tr.select('.loud').createStream()
-  loud.pipe(through((buf, enc, next) => {
+  loud.pipe(through(function (buf, enc, next) {
     setTimeout(() => {
-      this.push(buf.toString().toUpperCase())
+      this.push(String(buf).toUpperCase())
       next()
     }, 10)
   })).pipe(loud)
