@@ -1,0 +1,16 @@
+version = 1
+
+test_patterns = ["*/test/*.js"]
+
+[[analyzers]]
+name = "javascript"
+enabled = true
+
+  [analyzers.meta]
+  module_system = "commonjs"
+  environment = ["nodejs"]
+  style_guide = "standard"
+
+[[transformers]]
+name = "standardjs"
+enabled = true
