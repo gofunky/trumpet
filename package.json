@@ -23,7 +23,7 @@
     "eslint-plugin-promise": "4.2.1",
     "eslint-plugin-standard": "4.0.2",
     "htmlclean": "3.0.8",
-    "json": "10.0.0",
+    "json": "11.0.0",
     "nyc": "15.1.0",
     "standard": "16.0.3",
     "tap-nyc": "1.0.3",
