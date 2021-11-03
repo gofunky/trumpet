@@ -15,7 +15,7 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v2.4.0
       - name: update siteleaf pages
         id: siteleaf
         uses: gofunky/siteleaf-updater@v2.0.2
