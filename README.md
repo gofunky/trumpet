@@ -134,6 +134,7 @@ tr.selectAll('.x span', (element) => {
     //stream the element's inner html to transformation function
     //then stream the transformed output back into the element stream
     stream.pipe(upper).pipe(stream)
+})
 
 //stream in html to trumpet and stream processed output to stdout
 const fs = require('fs')
